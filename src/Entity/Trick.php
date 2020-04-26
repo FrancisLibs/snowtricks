@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,6 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Trick
 {
+    public function __construct()
+    {
+        $this->created_at = new \DateTime();
+    }
+    
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -25,6 +31,11 @@ class Trick
      * @ORM\Column(type="text", nullable=true)
      */
     private $description;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $created_at;
 
     public function getId(): ?int
     {
@@ -43,6 +54,11 @@ class Trick
         return $this;
     }
 
+    public function getSlug(): string
+    {
+        return (new Slugify())->slugify($this->name);
+    }
+
     public function getDescription(): ?string
     {
         return $this->description;
@@ -51,6 +67,18 @@ class Trick
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $created_at): self
+    {
+        $this->created_at = $created_at;
 
         return $this;
     }

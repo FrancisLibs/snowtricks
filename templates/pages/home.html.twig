@@ -5,14 +5,12 @@
         <img src="https://via.placeholder.com/2000" alt="" class="imageFond">
     </div>
     <div class="container">
-        <div class="row">
+        <div class="row flex">
             {% for trick in tricks %}
                 <div class="col-md-3">
-                    {% include('tricks/_trick.html.twig') %}
+                    {% include('trick/_trick.html.twig') %}
                 </div>
             {% endfor %}
         </div>
     </div>
-    
-
 {% endblock %}
