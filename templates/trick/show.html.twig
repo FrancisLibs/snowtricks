@@ -1,5 +1,20 @@
 {%extends 'base.html.twig' %}
 
 {% block body %}
-
+    <div class="container text-center">
+        <div>
+            {{ trick.description | raw}}
+        </div>
+        <div class="row d-flex justify-content-center mt-2">
+            <div class="col-md-3">
+                <p>mis en ligne le : {{ trick.createdAt | date("m/d/Y") }}</p>
+            </div>
+            <div class="col-md-3">
+                <p>modifié le : {{ trick.modificationAt | date("m/d/Y") }}</p>
+            </div>
+            <div class="col-md-3">
+                <p>modifié le : {{ trick.modificationAt  | date("m/d/Y")}}</p>
+            </div>
+        </div>
+    </div>
 {% endblock %}

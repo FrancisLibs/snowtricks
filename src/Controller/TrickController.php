@@ -17,7 +17,7 @@ class TrickController extends AbstractController
      */
     public function index()
     {
-        
+        return null;
     }
 
     /**
@@ -35,9 +35,9 @@ class TrickController extends AbstractController
             ],
             301);
         }
-       return $this->render('trick/show.html.twig', [
-           'trick'  =>  $trick,
-           'current-menu'   =>  'tricks'
-       ]);
+        return $this->render('trick/show.html.twig', [
+            'trick'         =>  $trick,
+            'current-menu'  =>  'tricks'
+        ]);
     }
 }

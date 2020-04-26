@@ -37,6 +37,17 @@ class Trick
      */
     private $created_at;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $modification_at;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="trick")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $category;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -79,6 +90,30 @@ class Trick
     public function setCreatedAt(\DateTimeInterface $created_at): self
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getModificationAt(): ?\DateTimeInterface
+    {
+        return $this->modification_at;
+    }
+
+    public function setModificationAt(?\DateTimeInterface $modification_at): self
+    {
+        $this->modification_at = $modification_at;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

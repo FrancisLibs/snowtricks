@@ -11,16 +11,19 @@ class TricksFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
+        $faker = \Faker\Factory ::create('fr_FR');
+
         for($i =1; $i<=10; $i++)
         {
+            $descript = "<p>" . join("</p><p>", $faker->paragraphs) . "</p>";
             $trick = new Trick();
             $trick
-                ->setName('numéro'. $i)
-                ->setDescription('Ceci est la descritpion du trick n°' . $i);
-
+                ->setName($faker->name)
+                ->setDescription($descript)
+                ->setCreatedAt($faker->dateTimeBetween('-100 days'))
+                ->setModificationAt($faker->dateTimeBetween('-100 days'));
             $manager->persist($trick);
         }        
-
         $manager->flush();
     }
 }
