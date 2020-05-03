@@ -1,0 +1,18 @@
+.trick_image{
+    width: 20%;
+}
+
+#header {
+    background-image: url(../img/home_img.jpg);
+    background-color:white;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    height: 650px;
+}
+
+/* Couleur utilisée pour les liens */
+.navbar .navbar-dark > li > a {
+    color: white;
+   }

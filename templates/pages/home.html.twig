@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        {% include "_home_header.html.twig" %}
+        <div class="row flex">
+            {% for trick in tricks %}
+                <div class="col-md-3">
+                    <div class="card mb-4">
+                    {#
+                        {% for picture in trick.pictures %}
+                            <img class="card-img-top" src="{{ picture.url }}" alt="">
+                        {% endfor %}
+                    #}
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="{{ path('trick.show', {id : trick.id, slug : trick.slug}) }} ">{{ trick.name }}</a>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% if not page == 0 %}
+            <div class="more_button text-center">
+                <a href="{{ path('trick.more', { page_var : page }) }}" class="btn btn-primary">Plus de tricks</a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
