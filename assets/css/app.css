@@ -3,7 +3,7 @@
 }
 
 #header {
-    background-image: url(../img/home_img.jpg);
+    background-image: url("../img/home_img.jpg");
     background-color:white;
     background-attachment: fixed;
     background-repeat: no-repeat;
@@ -12,7 +12,24 @@
     height: 650px;
 }
 
+.content-block{
+    margin-bottom: 2em;
+}
+
 /* Couleur utilisée pour les liens */
 .navbar .navbar-dark > li > a {
     color: white;
-   }
+}
+
+.btn-haut{
+    background: url("../img/fleche_haut.png");
+}
+
+.anchor_arrow_down{
+    width: 22%;
+    text-align: right;
+}
+
+.anchor_arrow_hight{
+    width: 2%;
+}

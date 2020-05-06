@@ -1,0 +1,38 @@
+<section class="row flex" id="bas" >
+    {% for trick in tricks %}
+        <div class="col-md-3">
+            <div class="card mb-4">
+                {#
+                    {% for picture in trick.pictures %}
+                        <img class="card-img-top" src="{{ picture.url }}" alt="">
+                    {% endfor %}
+                #}
+                <div class="card-body">
+                    <h6 class="card-title">
+                        <div class="flex">
+                            <a href="{{ path('trick.show', {id : trick.id, slug : trick.slug}) }}">{{ trick.name }}</a>
+                            <a href="{{ path('trick.edit', {id : trick.id}) }}">
+                                <img src="{{ asset('build/edit.png') }}" alt="Editer"> 
+                            </a>
+                             <a href="{{ path('trick.delete', {id : trick.id}) }}">
+                                <img src="{{ asset('build/effacer.png') }}" alt="Effacer"> 
+                            </a>
+                        </div>
+                    </h6>
+                </div>
+            </div>
+                </div>
+    {% endfor %}
+</section>
+<div class="button">
+    {% if not page == 0 %}
+        <div class="row">
+            <div class="mx-auto">
+                <a href="{{ path('trick.more', { page_var : page }) }}" class="btn btn-primary">Plus de tricks</a>
+            </div>
+            <div class ="arrow">
+                <a href="#haut"><img class="arrow_high" src="{{ asset('build/fleche_haut.png') }}" alt="Fleche haut"></a>
+            </div>
+        </div>
+    {% endif %}
+</div>
