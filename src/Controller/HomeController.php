@@ -21,7 +21,7 @@ class HomeController
 
     /**
      * @Route("/", name="home")
-     * @Route("/home/tricks/{page_var}", name="trick.more")
+     * @Route("/home/tricks/{page_var}", name="tricks.more")
      */
     public function index(TrickRepository $repository, $page_var = 1): Response
     {

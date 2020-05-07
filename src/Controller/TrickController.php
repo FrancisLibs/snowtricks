@@ -37,7 +37,7 @@ class TrickController extends AbstractController
             ],
             301);
         }
-
+        
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
@@ -53,6 +53,7 @@ class TrickController extends AbstractController
 
             return $this->redirectToRoute('trick.show', ['slug'=>$trick->getSlug(), 'id' => $trick->getId()]);
         }
+        
 
         return $this->render('trick/show.html.twig', [
             'trick'         =>  $trick,

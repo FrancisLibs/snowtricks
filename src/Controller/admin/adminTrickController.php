@@ -12,6 +12,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AdminTrickController extends AbstractController
 {
     /**
+     * @var TrickRepository
+     */
+    private $repository;
+
+    public function __construct(TrickRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
+    /**
      * @Route("/admin/tricks/delete{id}", name="trick.delete")
      */
     public function delete(Trick $trick)

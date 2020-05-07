@@ -33,3 +33,42 @@
 .anchor_arrow_hight{
     width: 2%;
 }
+
+.show_picture{
+    width: 200px;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+.show_media{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+
+}
+
+.show_description{
+    font-size: 0.8em;
+    line-height: 1em;
+}
+
+.show_div_info{
+    display: flex;
+}   
+
+.show_info{
+    font-size: 0.8em;
+    border: 1px solid black;
+    border-radius: 5px;
+    text-align: center;
+    margin: auto;
+}
+
+.comment_form{
+    line-height: 1rem;
+}
+
+.commentaires > .row{
+    font-size: 0.8rem;
+}

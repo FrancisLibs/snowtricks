@@ -1,42 +1,55 @@
-{%extends 'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container text-center border">
-        <div class="description">
+    <div class="container">
+
+        <section class="show_media">
+            {% for picture in trick.pictures %}
+                <img class="card-img-top show_picture" src="{{ picture.url }}" alt="">
+            {% endfor %}
+        </section>
+
+        <section class="show_description mt-3">
             {{ trick.description | raw }}
-        </div>
-        <div class="row d-flex justify-content-center mt-2">
-            <div class="col-md-3 border m-2">
-                <p>mis en ligne le : <br />{{ trick.createdAt | date("m/d/Y à H:i") }}h</p>
+        </section>
+
+        <section class="row d-flex justify-content-center mt-2 show_div_info">
+            <div class="col-md-3 show_info">
+                <span>mis en ligne le : {{ trick.createdAt | date("m/d/Y à H:i") }}h</span>
             </div>
-            <div class="col-md-3 border m-2">
-                <p>modifié le : <br />{{ trick.modificationAt | date("m/d/Y") }} à {{ trick.modificationAt | date("H:i") }}h</p>
+            <div class="col-md-3 show_info">
+                <span>modifié le : {{ trick.updateAt | date("m/d/Y") }} à {{ trick.updateAt | date("H:i") }}h</span>
             </div>
-            <div class="col-md-3 border m-2">
-                <p>Catégorie : <br />{{ trick.category.name}}</p>
+            <div class="col-md-3 show_info">
+                <span>Catégorie : {{ trick.category.name}}</span>
             </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="form">
-                    {{ form_start(form) }}
-                    {{ form_widget(form) }}   
-                    <button type'submit' class="btn btn-success">Ajouter commentaire</button>     
-                    {{ form_end(form) }}
+        </section>
+
+        <div class="comment_form row justify-content-center mt-3">
+            {{ form_start(form, {'method': 'POST'}) }}
+            <div class="row">
+                <div class="col">
+                    {{ form_row(form.content) }}
+                </div>
+                <div class="col">
+                    <button type'submit' class="btn btn-success">Commenter</button>  
                 </div>
             </div>
+            {{ form_end(form) }}
         </div>
+
         <section class="commentaires">
             {% for comment in trick.comments %}
-                <div class="row justify-content-center border mb-3">
-                    <div class="col-md-3 h6 font-weight-bold mt-3">
+                <div class="row justify-content-center mb-3">
+                    <div class="col-md-3 font-weight-bold">
                         Créé le : {{ comment.createdAt | date("m/d/Y à H:i") }}
                     </div>
-                    <div class="col-md-8 h6">
+                    <div class="col-md-6">
                         {{ comment.content | raw }}
                     </div>
                 </div>
             {% endfor %}
         </section>
+
     </div>
 {% endblock %}

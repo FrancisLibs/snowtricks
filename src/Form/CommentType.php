@@ -14,6 +14,7 @@ class CommentType extends AbstractType
     {
         $builder
             ->add('content', TextType::class, [
+                'label' => false,
                 'attr' => [
                     'placeholder' => 'Commentaire'
                 ]

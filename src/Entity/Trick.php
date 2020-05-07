@@ -44,7 +44,7 @@ class Trick
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $modification_at;
+    private $update_at;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="trick")
@@ -61,6 +61,11 @@ class Trick
      * @ORM\OneToMany(targetEntity="App\Entity\Picture", mappedBy="trick", orphanRemoval=true)
      */
     private $pictures;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Picture", cascade={"persist", "remove"})
+     */
+    private $main_picture;
 
     public function getId(): ?int
     {
@@ -108,14 +113,14 @@ class Trick
         return $this;
     }
 
-    public function getModificationAt(): ?\DateTimeInterface
+    public function getUpdateAt(): ?\DateTimeInterface
     {
-        return $this->modification_at;
+        return $this->update_at;
     }
 
-    public function setModificationAt(?\DateTimeInterface $modification_at): self
+    public function setUpdateAt(?\DateTimeInterface $update_at): self
     {
-        $this->modification_at = $modification_at;
+        $this->update_at = $update_at;
 
         return $this;
     }
@@ -190,6 +195,18 @@ class Trick
                 $picture->setTrick(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getMainPicture(): ?Picture
+    {
+        return $this->main_picture;
+    }
+
+    public function setMainPicture(?Picture $main_picture): self
+    {
+        $this->main_picture = $main_picture;
 
         return $this;
     }
