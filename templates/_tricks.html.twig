@@ -2,20 +2,18 @@
     {% for trick in tricks %}
         <div class="col-md-3">
             <div class="card mb-4">
-                {#
-                    {% for picture in trick.pictures %}
-                        <img class="card-img-top" src="{{ picture.url }}" alt="">
-                    {% endfor %}
-                #}
+                <div>
+                    <img class="card-img-top" src="{{ trick.mainPicture.url }}" alt="">
+                </div>
                 <div class="card-body">
                     <h6 class="card-title">
                         <div class="flex">
                             <a href="{{ path('trick.show', {id : trick.id, slug : trick.slug}) }}">{{ trick.name }}</a>
                             <a href="{{ path('trick.edit', {id : trick.id}) }}">
-                                <img src="{{ asset('build/edit.png') }}" alt="Editer"> 
+                                <img class="icone_editer" src="{{ asset('build/edit.png') }}" alt="Editer"> 
                             </a>
                              <a href="{{ path('trick.delete', {id : trick.id}) }}">
-                                <img src="{{ asset('build/effacer.png') }}" alt="Effacer"> 
+                                <img class="icone_effacer" src="{{ asset('build/effacer.png') }}" alt="Effacer"> 
                             </a>
                         </div>
                     </h6>

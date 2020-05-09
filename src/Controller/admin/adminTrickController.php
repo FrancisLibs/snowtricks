@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
 
 class AdminTrickController extends AbstractController
 {
@@ -22,7 +23,7 @@ class AdminTrickController extends AbstractController
     }
 
     /**
-     * @Route("/admin/tricks/delete{id}", name="trick.delete")
+     * @Route("/admin/tricks/delete/{id}", name="trick.delete")
      */
     public function delete(Trick $trick)
     {

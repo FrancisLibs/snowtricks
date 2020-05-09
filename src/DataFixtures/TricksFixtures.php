@@ -36,7 +36,7 @@ class TricksFixtures extends Fixture
                 $trick  ->setName($faker->name)
                         ->setDescription($descript)
                         ->setCreatedAt($faker->dateTimeBetween('-100 days'))
-                        ->setModificationAt($faker->dateTimeBetween('-6 months'))
+                        ->setUpdateAt($faker->dateTimeBetween('-6 months'))
                         ->setCategory($category);
                 $manager->persist($trick);
 
@@ -60,7 +60,7 @@ class TricksFixtures extends Fixture
                     $picture = new Picture();
                     
                     $picture->setName($faker->word)
-                            ->setUrl("https://via.placeholder.com/300")
+                            ->setUrl("https://via.placeholder.com/2000")
                             ->setCreatedAt($faker->dateTimeBetween('-100 days'))
                             ->setTrick($trick);
                     $manager->persist($picture);

@@ -2,14 +2,14 @@
     width: 20%;
 }
 
-#header {
+.header {
     background-image: url("../img/home_img.jpg");
     background-color:white;
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
-    height: 650px;
+    height: 620px;
 }
 
 .content-block{
@@ -33,9 +33,19 @@
 .anchor_arrow_hight{
     width: 2%;
 }
+.show_page{
+    width: 80%;
+}
+.show_main_picture{
+    background-color:white;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 450px;
+}
 
 .show_picture{
-    width: 200px;
+    width: 150px;
     margin-left: 8px;
     margin-right: 8px;
 }
@@ -49,26 +59,41 @@
 }
 
 .show_description{
+    width: 70%;
     font-size: 0.8em;
     line-height: 1em;
 }
 
 .show_div_info{
     display: flex;
+    width: 45%;
+    font-size: 0.6em;
+    font-weight: bold;
 }   
 
 .show_info{
-    font-size: 0.8em;
-    border: 1px solid black;
-    border-radius: 5px;
     text-align: center;
+    width: 30%;
     margin: auto;
 }
 
-.comment_form{
-    line-height: 1rem;
+.show_comment_form{
+    width: 45%;
 }
 
-.commentaires > .row{
+.show_commentaires{
     font-size: 0.8rem;
+    width:45%;
+}
+
+.icone_effacer{
+    width: 20px;
+}
+
+.icone_editer{
+    width: 25px;
+}
+
+.show_barre{
+    width: 70%;
 }
