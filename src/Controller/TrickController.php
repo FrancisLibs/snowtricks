@@ -25,14 +25,27 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/tricks/{slug}-{id}", name="trick.show", requirements={"slug": "[a-z0-9\-]*"} )
-     * @Route("/tricks/comments/{page_var}", name="comments.more")
+     * @Route(
+     *      "/trick/comments/{slug}-{id}/{nbComments}",
+     *      name="trick.show",
+     *      requirements={"slug": "[a-z0-9\-]*"}
+     * )
+     * 
      * @param Trick $trick
-     * @param page_var
+     * @param page
      * @return Response
      */
-    public function show(Request $request, Trick $trick, string $slug, CommentRepository $repository, $page_var=1): Response
+    public function show(
+        Request $request, 
+        Trick $trick,  
+        TrickRepository $trickRepository, 
+        CommentRepository $commentRepository,
+        string $slug,
+        int $nbComments = 3,
+        int $id
+        ): Response
     {
+        
         if($trick->getSlug() !== $slug)
         {
             return $this->redirectToRoute('trick.show', [
@@ -55,22 +68,28 @@ class TrickController extends AbstractController
             $entityManager->persist($comment);
             $entityManager->flush();
 
-            return $this->redirectToRoute('trick.show', ['slug'=>$trick->getSlug(), 'id' => $trick->getId()]);
+            return $this->redirectToRoute('trick.show', ['slug'=>$trick->getSlug(), 'id'=>$trick->getId()]);
         }
 
         // Pagination des commentaires
-        $nbComments = $page_var * 1;
-        $comments = $repository->findBy(['trick' => $trick], ['createdAt' => 'DESC'], $nbComments, 0);
-        
-        $page = $page_var;
-        
-        dump($comments);
+        $comments= $commentRepository->findPaginateComments($trick, $nbComments);
+        $nbCom = $commentRepository->countTrikComments($trick);
+
+        if($nbComments >= $nbCom)
+        {
+            $nbComments = 0;
+        }
+        else
+        {
+            $nbComments++;
+        }
+
         return $this->render('trick/show.html.twig', [
             'trick'         =>  $trick,
+            'comments'      =>  $comments,
             'current-menu'  =>  'tricks',
             'form'          =>  $form->createView(),
-            'page'          =>  $page,
-            'comments'      =>  $comments
+            'nbComments'    =>  $nbComments
             ]);
     }
 }

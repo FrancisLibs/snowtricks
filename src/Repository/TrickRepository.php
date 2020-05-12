@@ -24,24 +24,25 @@ class TrickRepository extends ServiceEntityRepository
 		return intval($this->createQueryBuilder('t')
 			->select('COUNT(t)')
 			->getQuery()->getSingleScalarResult());
-	}
-
-    // /**
-    //  * @return Trick[] Returns an array of Trick objects
-    //  */
+    }
+   
     /*
-    public function findByExampleField($value)
+    * @return Trick[] Returns an array of Trick objects
+    
+    public function findPaginateComments($trickId, $nbComments)
     {
         return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('t.id = :trickId')
+            ->setParameter('trickId', $trickId )
+            ->leftJoin('t.comments' , 'c')
+            ->addSelect('c')
+            ->leftJoin('t.pictures', 'p')
+            ->addSelect('p')
+            ->orderBy('c.createdAt', 'DESC')
             ->getQuery()
             ->getResult()
         ;
-    }
-    */
+    } */
 
     /*
     public function findOneBySomeField($value): ?Trick

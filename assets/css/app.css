@@ -12,6 +12,15 @@
     height: 620px;
 }
 
+.card{
+    width: 20rem;
+    height: 16rem;
+}
+
+.card-img-top{
+    height: 12rem;
+}
+
 .content-block{
     margin-bottom: 2em;
 }
@@ -48,6 +57,11 @@
     width: 150px;
     margin-left: 8px;
     margin-right: 8px;
+}
+
+.show_div_icones,
+.show_div_titre{
+    height: 33%;
 }
 
 .show_media{
@@ -96,4 +110,12 @@
 
 .show_barre{
     width: 70%;
+}
+
+.show_more_comment_btn{
+    width: 17%;
+}
+
+.show_picture_title{
+
 }
