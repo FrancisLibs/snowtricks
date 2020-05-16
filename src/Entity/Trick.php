@@ -44,7 +44,7 @@ class Trick
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $modification_at;
+    private $update_at;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="trick")
@@ -108,14 +108,14 @@ class Trick
         return $this;
     }
 
-    public function getModificationAt(): ?\DateTimeInterface
+    public function getUpdateAt(): ?\DateTimeInterface
     {
-        return $this->modification_at;
+        return $this->update_at;
     }
 
-    public function setModificationAt(?\DateTimeInterface $modification_at): self
+    public function setUpdateAt(?\DateTimeInterface $update_at): self
     {
-        $this->modification_at = $modification_at;
+        $this->update_at = $update_at;
 
         return $this;
     }
