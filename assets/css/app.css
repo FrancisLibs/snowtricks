@@ -13,12 +13,30 @@
 }
 
 .card{
-    width: 20rem;
+    width: 17rem;
     height: 16rem;
 }
 
 .card-img-top{
     height: 12rem;
+}
+.card-body, .card-body > .liens{
+    display: flex;
+}
+
+.card-title{
+    width: 80%;
+    display: inline-block;
+}
+
+.card-title > a{
+    color: #4ec9ff;
+    display: inline-block;
+    font-size: 1rem;
+}
+
+.card-body > .liens{
+    width: 12%;
 }
 
 .content-block{
@@ -43,6 +61,7 @@
     width: 2%;
 }
 .show_page{
+    background-color : white;
     width: 80%;
 }
 .show_main_picture{

@@ -1,17 +1,28 @@
 <section class="d-flex flex-row justify-content-center flex-wrap home_tricks" id="bas" >
     {% for trick in tricks %}
         <div class="card m-4 text-white bg-secondary mb-3">
-            <img class="card-img-top" src="{{ trick.mainPicture.url }}" alt="{{ trick.mainPicture.name }}">
+            <img class="card-img-top" src="
+                {% for picture in trick.pictures %}
+                    {{ picture.mainPicture ? picture.url : '' }}
+                {% endfor %}
+            ">
             <div class="card-body">
-                <h5 class="card-title">
-                    <a href="{{ path('trick.show', {'id' : trick.id, 'slug' : trick.slug, 'page' : 1 }) }}">{{ trick.name }}</a>
-                    <a href="{{ path('trick.edit', {'id' : trick.id}) }}">
-                        <img class="icone_editer" src="{{ asset('build/edit.png') }}" alt="Editer"> 
+                <div class="card-title">
+                    <a href="{{ path('trick.show', {id : trick.id, slug : trick.slug, page : 1 }) }}">{{ trick.name }}</a>
+                </div>
+                <div class="liens">
+                    <a href="{{ path('admin.trick.edit', {id : trick.id}) }}">
+                        <img class="icone_editer" src="{{ asset('build/stylo.png') }}" alt="Editer"> 
                     </a>
-                    <a href="{{ path('trick.delete', {'id' : trick.id}) }}">
-                        <img class="icone_effacer" src="{{ asset('build/effacer.png') }}" alt="Effacer"> 
-                    </a>
-                </h5>
+                    <form class="delete_form" method="post" action="{{ path('admin.trick.delete', {id : trick.id}) }}" 
+                        onsubmit="return confirm('Voulez-vous supprimer ce trick ?')">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.id) }}">
+                        <button class="btn">
+                            <img class="icone_effacer" src="{{ asset('build/poubelle3.png') }}" alt="Effacer">
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     {% endfor %}
@@ -20,7 +31,7 @@
     {% if not page == 0 %}
         <div class="row">
             <div class="mx-auto">
-                <a href="{{ path('tricks.more', { page_var : page }) }}" class="btn btn-primary">Plus de tricks</a>
+                <a href="{{ path('tricks.index', { page_var : page }) }}" class="btn btn-primary">Plus de tricks</a>
             </div>
             <div class ="arrow">
                 <a href="#haut"><img class="arrow_high" src="{{ asset('build/fleche_haut.png') }}" alt="Fleche haut"></a>

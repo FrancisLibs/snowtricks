@@ -33,9 +33,13 @@ class Picture
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="pictures")
-     * @ORM\JoinColumn(nullable=false)
      */
     private $trick;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $main_picture;
 
     public function getId(): ?int
     {
@@ -89,4 +93,28 @@ class Picture
 
         return $this;
     }
+
+    public function getMainPicture(): ?bool
+    {
+        return $this->main_picture;
+    }
+
+    public function setMainPicture(?bool $main_picture): self
+    {
+        $this->main_picture = $main_picture;
+
+        return $this;
+    }
+
+     /**
+     * Transform to string
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getUrl();
+    }
+
+    
 }

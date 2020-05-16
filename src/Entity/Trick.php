@@ -62,11 +62,6 @@ class Trick
      */
     private $pictures;
 
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Picture", cascade={"persist", "remove"})
-     */
-    private $main_picture;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -195,18 +190,6 @@ class Trick
                 $picture->setTrick(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getMainPicture(): ?Picture
-    {
-        return $this->main_picture;
-    }
-
-    public function setMainPicture(?Picture $main_picture): self
-    {
-        $this->main_picture = $main_picture;
 
         return $this;
     }

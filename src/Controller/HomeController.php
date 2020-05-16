@@ -24,7 +24,8 @@ class HomeController extends AbstractController
 
     /**
      * @Route("/", name="home")
-     * @Route("/home/tricks/{page_var}", name="tricks.more")
+     * @Route("/home/tricks/{page_var}", name="tricks.index")
+     * @param $page_var
      * @return Response
      */
     public function index(TrickRepository $repository, $page_var = 1): Response
@@ -35,14 +36,12 @@ class HomeController extends AbstractController
 
         foreach($tricks as $trick)
         {
-            if($trick->getMainPicture() == NULL)
-            {
-                $pictures=$trick->getPictures();
-                $trick->setMainPicture($pictures->first());// Première image de la liste d'images
+            $pictures = $trick->getPictures();
+            $picture = $pictures->first();
+            $picture->setMainPicture(TRUE);
 
-                $entityManager->persist($trick);
-                $entityManager->flush();
-            }
+            $entityManager->persist($trick);
+            $entityManager->flush();
         }
         
         // Mise à zéro de la variable page si plus de tricks à afficher
