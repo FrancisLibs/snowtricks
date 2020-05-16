@@ -2,9 +2,13 @@
     width: 20%;
 }
 
+.home_page{
+    background-color:rgba(190, 223, 218, 0.979);
+}
+
 .header {
     background-image: url("../img/home_img.jpg");
-    background-color:white;
+    background-color: white;
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-position: center center;

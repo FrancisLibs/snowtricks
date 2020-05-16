@@ -10,7 +10,7 @@
                 <div class="card-title">
                     <a href="{{ path('trick.show', {id : trick.id, slug : trick.slug, page : 1 }) }}">{{ trick.name }}</a>
                 </div>
-                <div class="liens">
+                <div class="liens mr-2">
                     <a href="{{ path('admin.trick.edit', {id : trick.id}) }}">
                         <img class="icone_editer" src="{{ asset('build/stylo.png') }}" alt="Editer"> 
                     </a>
@@ -19,7 +19,7 @@
                         <input type="hidden" name="_method" value="DELETE">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.id) }}">
                         <button class="btn">
-                            <img class="icone_effacer" src="{{ asset('build/poubelle3.png') }}" alt="Effacer">
+                            <img class="icone_effacer" src="{{ asset('build/Poubelle.png') }}" alt="Effacer">
                         </button>
                     </form>
                 </div>
