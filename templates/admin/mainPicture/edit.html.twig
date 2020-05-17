@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+ <div class="header">
+        {% include "_navBar.html.twig" %}
+        <div class="container" id="haut">
+            <div class="show_page mx-auto mt-3">
+                <h1 class="text-center mt-5 mb-3">{{ trick.name }}</h1>
+                {# Image à la une #}
+                <div class="edit_main_picture" >
+                    {% for picture in trick.pictures %}
+                        <div class="picture_group">
+                            <img class="main_picture_img mb-2" src="{{ asset(picture.url) }}" alt="{{ picture.name }}">
+                            {% if picture.mainPicture %}
+                                <a class="btn btn-success btn_main_picture mx-auto" href="{{ path('admin.mainPicture.choice', {id : trick.id, pictureId: picture.id }) }}">Selection</a>
+                            {% else %}
+                                <a class="btn btn-primary btn_main_picture mx-auto" href="{{ path('admin.mainPicture.choice', {id : trick.id, pictureId: picture.id }) }}">Selection</a>
+                            {% endif %}
+                        </div>
+                    {%  endfor %}
+                </div>
+                <h4 class="main_picture_text">Selection de l'image principale</h4>
+            </div>
+        </div>
+    </div>
+{% endblock %}
