@@ -4,37 +4,54 @@
    <div class="header">
         {% include "_navBar.html.twig" %}
         <div class="container" id="haut">
-            <div class="show_page mx-auto">
-                <div class="show_main_picture d-flex flex-column" style="background-image: url('{{ trick.mainPicture.url }}');" >
-                   <div class="show_div_icones d-flex flex-row justify-content-end">
+            <div class="show_page mx-auto mt-3">
+
+                {# Définition de l'image à la une ou l'image vide #}
+                {% set url = "build/empty.jpg" %}
+                {% for picture in trick.pictures %}
+                    {% if picture.mainPicture %}
+                        {% set url = picture.url %}
+                    {% endif %}
+                {% endfor %}
+
+                {# Image à la une #}
+                <div class="show_main_picture d-flex flex-column" style="background-image: url('{{ asset(url) }}');">
+
+                    {# boutons d'édition #}
+                    <div class="show_div_icones d-flex flex-row justify-content-end">
                         <div class="text-right d-flex flex-row justify-content-end">
-                            <a href="{{ path('admin.trick.edit', {'id' : trick.id}) }}">
-                                <img class="icone_editer" src="{{ asset('build/edit.png') }}" alt="Editer"> 
-                            </a>
-                            <a href="{{ path('admin.trick.delete', {'id' : trick.id}) }}">
-                                <img class="icone_effacer" src="{{ asset('build/effacer.png') }}" alt="Effacer"> 
+                            <a href="{{ path('admin.mainPicture.edit', {id : trick.id}) }}">
+                                <img class="icone_editer" src="{{ asset('build/stylo.png') }}" alt="Editer"> 
+                            </a>                            
+                            <a href="{{ path('admin.mainPicture.delete', {'id' : trick.id}) }}">
+                                <img class="icone_effacer" src="{{ asset('build/Poubelle.png') }}" alt="Effacer"> 
                             </a>
                         </div>
                     </div>
-                    
+
+                    {# Nom du trick #}
                     <div class="show_div_titre d-flex flex-column justify-content-center align-items-center">
                         <div class="show_picture_title text-center">
                             <h1>{{ trick.name }}</h1>
                         </div>
                     </div>
-                
                 </div>
+
+                {# Photos et vidéos #}
                 <div class="show_media justify-content-center mt-3">
                     {% for picture in trick.pictures %}
-                        <img class="card-img-top show_picture" src="{{ picture.url }}" alt="{{ picture.name }}">
+                        {% if not picture.mainPicture %}
+                            <img class="card-img-top show_picture" src="{{ picture.url }}" alt="{{ picture.name }}">
+                        {% endif %}
                     {% endfor %}
                 </div>
             
-        
+                {# Description #}
                 <div class="show_description mx-auto mt-3">
                     {{ trick.description | raw }}
                 </div>
 
+                {# Infos diverses #}
                 <div class="show_div_info justify-content-center mx-auto">
                     <div class="show_info border rounded">
                         <span>mis en ligne le : {{ trick.createdAt | date("m/d/Y à H:i") }}h</span>
@@ -47,8 +64,9 @@
                     </div>
                 </div>
 
-                <div class="show_barre mx-auto pb-3"><hr></div>
+                <div class="show_barre mx-auto"><hr></div>
 
+                {# Formulaire de commentaires #}
                 <div class="show_comment_form mx-auto">
                     {{ form_start(form, {'method': 'POST'}) }}
                     <div class="row">
@@ -63,18 +81,21 @@
                 </div>
                 <div class="show_barre mx-auto"><hr></div>
                 
+                {# Commentaires #}
                 <section class="show_commentaires mx-auto">
                     {% for comment in comments %}
-                        <div class="row justify-content-center mb-3">
+                        <div class="row justify-content-center mb-1">
                             <div class="col-md-3 font-weight-bold">
                                 Créé le : {{ comment.createdAt | date("m/d/Y à H:i") }}
                             </div>
-                            <div class="col-md-9 border">
+                            <div class="col-md-9 border text-justify">
                                 {{ comment.content | raw }}
                             </div>
                         </div>
                     {% endfor %}
                 </section>
+
+                {# button more #}
                 {% if not nbComments == 0 %}
                     <div class="show_more_comment_btn mx-auto mb-3">
                         <a href="{{ path('trick.show', { 'slug' : trick.slug, 'id' : trick.id, 'nbComments' : nbComments }) }}" class="btn btn-primary">Load More...</a>

@@ -83,7 +83,6 @@ class TrickController extends AbstractController
         {
             $nbComments++;
         }
-
         return $this->render('trick/show.html.twig', [
             'trick'         =>  $trick,
             'comments'      =>  $comments,

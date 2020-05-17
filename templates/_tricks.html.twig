@@ -14,7 +14,7 @@
                     <a href="{{ path('admin.trick.edit', {id : trick.id}) }}">
                         <img class="icone_editer" src="{{ asset('build/stylo.png') }}" alt="Editer"> 
                     </a>
-                    <form class="delete_form" method="post" action="{{ path('admin.trick.delete', {id : trick.id}) }}" 
+                    <form class="tricks_delete_form" method="post" action="{{ path('admin.trick.delete', {id : trick.id}) }}" 
                         onsubmit="return confirm('Voulez-vous supprimer ce trick ?')">
                         <input type="hidden" name="_method" value="DELETE">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.id) }}">

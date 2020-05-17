@@ -79,10 +79,8 @@ class AdminTrickController extends AbstractController
      * @param Trick $trick
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function delete(Trick $trick, Request $request, Trick $tricks)
+    public function delete(Trick $trick, Trick $tricks, Request $request)
     {
-        
-
         if($this->isCsrfTokenValid('delete' . $trick->getId(), $request->get('_token')))
         {
             $entityManager = $this->getDoctrine()->getManager();
