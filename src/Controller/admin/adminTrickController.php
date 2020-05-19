@@ -56,7 +56,7 @@ class AdminTrickController extends AbstractController
      * @return Symfony\Component\HttpFoundation\Response
      */
     public function edit(Trick $trick, Request $request)
-    {
+    {   
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
 
@@ -64,13 +64,13 @@ class AdminTrickController extends AbstractController
         {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
+
             return $this->redirectToRoute('tricks.index');
         }
-
-
+        
         return $this->render('admin/trick/edit.html.twig', [
-            'trick'     =>  $trick,
-            'form'      =>  $form->createView()
+            'trick' =>  $trick,
+            'form'  =>  $form->createView()
         ]);
     }
 
