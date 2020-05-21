@@ -1,8 +1,8 @@
-.trick_image{
+.trick_image {
     width: 20%;
 }
 
-.home_page{
+.home_page {
     background-color:rgba(190, 223, 218, 0.979);
 }
 
@@ -16,35 +16,36 @@
     height: 620px;
 }
 
-.card{
+.card {
     width: 17rem;
     height: 16rem;
     border-radius: .5rem;
 }
 
-.card-img-top{
+.card-img-top {
     height: 12rem;
 }
+
 .card-body, .card-body > .liens{
     display: flex;
 }
 
-.card-title{
+.card-title {
     width: 80%;
     display: inline-block;
 }
 
-.card-title > a{
+.card-title > a {
     color: #4ec9ff;
     display: inline-block;
     font-size: 1rem;
 }
 
-.card-body > .liens{
+.card-body > .liens {
     width: 12%;
 }
 
-.content-block{
+.content-block {
     margin-bottom: 2em;
 }
 
@@ -53,23 +54,25 @@
     color: white;
 }
 
-.btn-haut{
+.btn-haut {
     background: url("../img/fleche_haut.png");
 }
 
-.anchor_arrow_down{
+.anchor_arrow_down {
     width: 22%;
     text-align: right;
 }
 
-.anchor_arrow_hight{
+.anchor_arrow_hight {
     width: 2%;
 }
-.show_page{
+
+.show_page {
     background-color :  #d9e0ee;
     width: 86%;
 }
-.show_main_picture{
+
+.show_main_picture {
     background-color:white;
     background-repeat: no-repeat;
     background-position: center;
@@ -77,18 +80,18 @@
     height: 450px;
 }
 
-.show_picture{
+.show_picture {
     width: 150px;
     margin-left: 8px;
     margin-right: 8px;
 }
 
 .show_div_icones,
-.show_div_titre{
+.show_div_titre {
     height: 33%;
 }
 
-.medias{
+.medias {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -96,63 +99,63 @@
 
 }
 
-.show_description{
+.show_description {
     width: 70%;
     font-size: 0.8em;
     line-height: 1em;
 }
 
-.show_div_info{
+.show_div_info {
     display: flex;
     width: 45%;
     font-size: 0.6em;
     font-weight: bold;
 }   
 
-.show_info{
+.show_info {
     text-align: center;
     width: 30%;
     margin: auto;
     border: 1px solid white!important;
 }
 
-.show_comment_form{
+.show_comment_form {
     width: 45%;
 }
 
-.show_commentaires{
+.show_commentaires {
     width:45%;
     font-size: 0.65rem;
     line-height: 1;
 }
 
-.icone_effacer{
+.icone_effacer {
     width: 20px;
     margin-top: -13px;
 }
 
-.icone_editer{
+.icone_editer {
     width: 16px;
 }
 
-.show_barre{
+.show_barre {
     width: 70%;
 }
 
-.show_more_comment_btn{
+.show_more_comment_btn {
     width: 17%;
 }
 
-.main_picture_img{
+.main_picture_img {
     width: 100%;
 }
 
-.btn_main_picture{
+.btn_main_picture {
     width:40%;
     margin-bottom: 8px;
 }
 
-.picture_group{
+.picture_group {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -160,13 +163,13 @@
     width: 30%;
 }
 
-.edit_medias{
+.edit_medias {
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
 }
 
-.edit_cards{
+.edit_cards  {
     width: 24%;
     display: flex;
     flex-flow: column nowrap;
@@ -174,11 +177,11 @@
     align-items: flex-end;
 }
 
-.edit_card_img{
+.edit_card_img {
     width: 100%;
 }
 
-.edit_icones{
+.edit_icones {
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
@@ -190,22 +193,22 @@
     border-radius: 5px;
 }
 
-.main_picture_text{
+.main_picture_text {
     text-align: center;
     padding-top: 35px;
     padding-bottom: 43px;
 }
 
-.edit_form{
+.edit_form {
     width: 60%;
 }
 
-.edit_delete_btn{
+.edit_delete_btn {
     line-height: 1rem;
     font-size: 1.0rem;
 }
 
-.edit_save_btn{
+.edit_save_btn {
     font-size: 1.0rem;
     line-height: 1rem;
 }

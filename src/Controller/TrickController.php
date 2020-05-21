@@ -35,11 +35,9 @@ class TrickController extends AbstractController
     public function show(
         Request $request, 
         Trick $trick,  
-        TrickRepository $trickRepository, 
         CommentRepository $commentRepository,
         string $slug,
-        int $nbComments = 3,
-        int $id
+        int $nbComments = 3
         ): Response
     {
         
