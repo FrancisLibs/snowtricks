@@ -20,10 +20,10 @@
                     {# boutons d'édition #}
                     <div class="show_div_icones d-flex flex-row justify-content-end">
                         <div class="text-right d-flex flex-row justify-content-end">
-                            <a href="{{ path('admin.picture.edit', {id : trick.id}) }}">
+                            <a href="{{ path('admin.mainPicture.edit', {id : trick.id}) }}">
                                 <img class="icone_editer" src="{{ asset('build/stylo.png') }}" alt="Editer"> 
-                            </a>                            
-                            <a href="{{ path('admin.picture.delete', {'id' : trick.id}) }}">
+                            </a>
+                            <a href="{{ path('admin.mainPicture.delete', {'id' : trick.id}) }}">
                                 <img class="icone_effacer" src="{{ asset('build/Poubelle.png') }}" alt="Effacer"> 
                             </a>
                         </div>
@@ -44,12 +44,17 @@
                             <div class="edit_cards m-2">
                                 <img class="edit_card_img show_picture" src="{{ picture.url }}" alt="{{ picture.name }}">
                                 <div class="edit_icones mt-2 mr-2">
-                                    <a href="{{ path('admin.mainPicture.edit', {id : trick.id}) }}">
+                                    <a href="{{ path('admin.picture.edit', {idPicture : picture.id, id : trick.id}) }}">
                                         <img class="icone_editer mt-n3 mr-3" src="{{ asset('build/stylo.png') }}" alt="Editer"> 
-                                    </a>                            
-                                    <a href="{{ path('admin.mainPicture.delete', {'id' : trick.id}) }}">
-                                        <img class="icone_effacer mr-2" src="{{ asset('build/Poubelle.png') }}" alt="Effacer"> 
-                                    </a>
+                                    </a>  
+                                    <form class="tricks_delete_form" method="post" 
+                                        action="{{ path('admin.picture.delete', 
+                                        {idPicture : picture.id, id: trick.id}) }}" 
+                                        onsubmit="return confirm('Voulez-vous supprimer cette image ?')">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.id) }}">
+                                        <button class="btn"><img class="icone_effacer" src="{{ asset('build/Poubelle.png') }}" alt="Effacer"></button>
+                                    </form>
                                 </div>
                             </div>
                         {% endif %}
