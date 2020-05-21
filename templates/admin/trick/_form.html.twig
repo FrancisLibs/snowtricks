@@ -1,8 +1,39 @@
 {{form_start(form)}}
+
     <div class="row">
-        <div class="col-md-5">{{form_row(form.name)}}</div>
-        <div class="col-md-4">{{form_row(form.category)}}</div>
+        <div class="col-md-6 mb-3">
+             {{ form_label(form.name, FALSE ) }}
+            {{ form_widget(form.name) }}
+        </div>
     </div>
+
+    <div class="row edit_form_descritpion">
+        <div class="col-md-12 mb-3">
+            {{ form_label(form.description, '') }}
+            {{ form_widget(form.description,{ 'attr': {'rows': '7'} }) }}
+        </div>
+    </div>
+    
+    <div class="d-flex flex-row justify-content-between align-items-baseline">
+        <div class="row">
+            <div class="col-md-9">
+                {{form_row(form.category)}}
+            </div>
+        </div>
+        <div class="d-flex flex-row pr-2 align-items-baseline">
+            <div class="col-md-6">
+                <a href="{{ path('admin.trick.edit', {id : trick.id}) }}" class="btn btn-danger edit_delete_btn">Supprimer</a>
+            </div>
+            <div class="col-md-6">
+                <button class="btn btn-primary edit_save_btn">
+                    {{ button | default('Enregistrer') }}
+                </button>
+            </div>
+        </div>
+    </div>
+
     {{form_widget(form)}}
-    <button class="btn btn-primary">{{ button | default('Enregistrer') }}</button>
+
+    
+
 {{form_end(form)}}

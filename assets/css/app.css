@@ -19,6 +19,7 @@
 .card{
     width: 17rem;
     height: 16rem;
+    border-radius: .5rem;
 }
 
 .card-img-top{
@@ -66,7 +67,7 @@
 }
 .show_page{
     background-color :  #d9e0ee;
-    width: 80%;
+    width: 86%;
 }
 .show_main_picture{
     background-color:white;
@@ -87,11 +88,11 @@
     height: 33%;
 }
 
-.show_media{
+.medias{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: center;
 
 }
 
@@ -159,16 +160,52 @@
     width: 30%;
 }
 
-.edit_main_picture{
-    width: 100%;
+.edit_medias{
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-around;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+
+.edit_cards{
+    width: 24%;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.edit_card_img{
+    width: 100%;
+}
+
+.edit_icones{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    width: 40%;
+    padding: 3px;
+    padding-top: 10px;
+    border: 1px solid;
+    border-color: #64d3fa;
+    border-radius: 5px;
 }
 
 .main_picture_text{
     text-align: center;
     padding-top: 35px;
     padding-bottom: 43px;
+}
+
+.edit_form{
+    width: 60%;
+}
+
+.edit_delete_btn{
+    line-height: 1rem;
+    font-size: 1.0rem;
+}
+
+.edit_save_btn{
+    font-size: 1.0rem;
+    line-height: 1rem;
 }
