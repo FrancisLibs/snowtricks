@@ -89,6 +89,7 @@ class AdminTrickController extends AbstractController
 
             return $this->redirectToRoute('tricks.index');
         }
+        
         return $this->render('pages/home.html.twig');
     }
 }

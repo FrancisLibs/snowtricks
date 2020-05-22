@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\User;
 use App\Entity\Trick;
 use App\Entity\Comment;
 use App\Entity\Picture;
@@ -9,11 +10,32 @@ use App\Entity\Category;
 use App\DataFixtures\TricksFixtures;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class TricksFixtures extends Fixture
 {
+    private $passwordEncoder;
+
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $this->passwordEncoder = $passwordEncoder;
+    }
+    
     public function load(ObjectManager $manager)
     {
+        $user = new User();
+        $user->setUsername('fips');
+
+        $user->setPassword($this->passwordEncoder->encodePassword(
+            $user,
+            'mdp'
+        ));
+        $user->setEmail('fr.libs@gmail.com');
+
+        $user->setRoles(array('ROLE_ADMIN'));
+
+        $manager->persist($user);
+
         $faker = \Faker\Factory ::create('fr_FR');
 
         // Tableau catégories
@@ -37,7 +59,8 @@ class TricksFixtures extends Fixture
                         ->setDescription($descript)
                         ->setCreatedAt($faker->dateTimeBetween('-100 days'))
                         ->setUpdateAt($faker->dateTimeBetween('-6 months'))
-                        ->setCategory($category);
+                        ->setCategory($category)
+                        ->setUser($user);
                 $manager->persist($trick);
 
                 // Ajout entre 1 et 4 commentaires
