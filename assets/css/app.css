@@ -31,18 +31,16 @@
 }
 
 .card-title {
-    width: 80%;
-    display: inline-block;
+    width: 90%;
 }
 
 .card-title > a {
     color: #4ec9ff;
-    display: inline-block;
     font-size: 1rem;
 }
 
 .card-body > .liens {
-    width: 12%;
+    width: 22%;
 }
 
 .content-block {
@@ -131,19 +129,24 @@
 
 .icone_effacer {
     width: 20px;
-    margin-top: -13px;
 }
 
 .icone_editer {
     width: 16px;
+    height: 24px;
 }
 
 .show_barre {
     width: 70%;
 }
 
+.div_show_more_comment_btn{
+    height: 4rem;
+}
+
 .show_more_comment_btn {
-    width: 17%;
+   height: 50%;
+   vertical-align: center;
 }
 
 .main_picture_img {
@@ -211,4 +214,38 @@
 .edit_save_btn {
     font-size: 1.0rem;
     line-height: 1rem;
+}
+
+.registration_box {
+    background:rgba(19, 70, 117, 0.5);
+    border: 1px solid white;
+    border-radius: 5px;
+    color : white;
+}
+
+.registration_title{
+    color: white;
+}
+
+.login_box {
+    background:rgba(19, 70, 117, 0.5);
+    border: 1px solid white;
+    border-radius: 5px;
+    color : white;
+}
+
+.login_label {
+    display: inline-block;
+    width: 100%;
+}
+
+.login_btn_line {
+    height: 50px;
+    margin: auto;
+}
+
+.login_btn {
+    display: inline-block;
+    height: 2rem;
+    margin:auto;
 }

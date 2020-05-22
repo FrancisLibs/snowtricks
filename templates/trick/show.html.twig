@@ -19,16 +19,18 @@
 
                     {# boutons d'édition #}
                     <div class="show_div_icones d-flex flex-row justify-content-end">
-                        <div class="text-right d-flex flex-row justify-content-end">
-                            <a href="{{ path('admin.mainPicture.edit', {id : trick.id}) }}">
-                                <img class="icone_editer" src="{{ asset('build/stylo.png') }}" alt="Editer"> 
-                            </a>                            
-                            <a href="{{ path('admin.mainPicture.delete', {'id' : trick.id}) }}">
-                                <img class="icone_effacer" src="{{ asset('build/Poubelle.png') }}" alt="Effacer"> 
-                            </a>
-                        </div>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <div class="text-right d-flex flex-row justify-content-end">
+                                <a href="{{ path('admin.mainPicture.edit', {id : trick.id}) }}">
+                                    <img class="icone_editer mt-2" src="{{ asset('build/stylo.png') }}" alt="Editer"> 
+                                </a>                            
+                                <a href="{{ path('admin.mainPicture.delete', {'id' : trick.id}) }}">
+                                    <img class="icone_effacer m-2" src="{{ asset('build/Poubelle.png') }}" alt="Effacer"> 
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
-
+                    
                     {# Nom du trick #}
                     <div class="show_div_titre d-flex flex-column justify-content-center align-items-center">
                         <div class="show_picture_title text-center">
@@ -97,8 +99,11 @@
 
                 {# button more #}
                 {% if not nbComments == 0 %}
-                    <div class="show_more_comment_btn mx-auto mb-3">
-                        <a href="{{ path('trick.show', { 'slug' : trick.slug, 'id' : trick.id, 'nbComments' : nbComments }) }}" class="btn btn-primary">Load More...</a>
+                    <div class="div_show_more_comment_btn mx-auto mb-3 d-flex justify-content-center">
+                        <a href="{{ path('trick.show', 
+                            { 'slug' : trick.slug, 'id' : trick.id, 'nbComments' : nbComments }) }}">
+                            <img class="show_more_comment_btn" src="{{ asset('build/plus3.png') }}" alt="Plus">
+                        </a>
                     </div>
                 {% endif %}
             </div>

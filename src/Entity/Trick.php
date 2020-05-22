@@ -62,6 +62,12 @@ class Trick
      */
     private $pictures;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tricks")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -190,6 +196,18 @@ class Trick
                 $picture->setTrick(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
