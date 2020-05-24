@@ -28,7 +28,7 @@ class AdminTrickController extends AbstractController
      * @Route("/admin/trick/create", name="admin.trick.new")
      * @return Symfony\Component\HttpFoundation\Response
      */
-    public function new(Request $request)
+    public function new(Request $request, EntityManagerInterface $manager)
     {
         $trick = new Trick();
 
@@ -37,8 +37,8 @@ class AdminTrickController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid())
         {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($trick);
+            $manager = $this->getDoctrine()->getManager();
+            $manager->persist($trick);
             $entityManager->flush();
             return $this->redirectToRoute('tricks.index');
         }
@@ -52,18 +52,17 @@ class AdminTrickController extends AbstractController
     /**
      * @Route("/admin/trick/{id}", name="admin.trick.edit", methods="GET|POST")
      * @param Trick $trick
-     * @param Request $request
      * @return Symfony\Component\HttpFoundation\Response
      */
-    public function edit(Trick $trick, Request $request)
+    public function edit(Trick $trick, Request $request, EntityManagerInterface $manager): Reponse
     {   
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid())
         {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->flush();
+            $manager = $this->getDoctrine()->getManager();
+            $manager->flush();
 
             return $this->redirectToRoute('tricks.index');
         }
@@ -79,13 +78,13 @@ class AdminTrickController extends AbstractController
      * @param Trick $trick
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function delete(Trick $trick, Trick $tricks, Request $request)
+    public function delete(Trick $tricks, Request $request, EntityManagerInterface $manager): Response
     {
         if($this->isCsrfTokenValid('delete' . $trick->getId(), $request->get('_token')))
         {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($trick);
-            $entityManager->flush();
+            $manager = $this->getDoctrine()->getManager();
+            $manager->remove($trick);
+            $manager->flush();
 
             return $this->redirectToRoute('tricks.index');
         }

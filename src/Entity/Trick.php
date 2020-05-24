@@ -58,15 +58,20 @@ class Trick
     private $comments;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Picture", mappedBy="trick", orphanRemoval=true)
-     */
-    private $pictures;
-
-    /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tricks")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Picture::class, inversedBy="tricks")
+     */
+    private $pictures;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $main_picture;
 
     public function getId(): ?int
     {
@@ -169,6 +174,18 @@ class Trick
         return $this;
     }
 
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
     /**
      * @return Collection|Picture[]
      */
@@ -181,7 +198,6 @@ class Trick
     {
         if (!$this->pictures->contains($picture)) {
             $this->pictures[] = $picture;
-            $picture->setTrick($this);
         }
 
         return $this;
@@ -191,23 +207,19 @@ class Trick
     {
         if ($this->pictures->contains($picture)) {
             $this->pictures->removeElement($picture);
-            // set the owning side to null (unless already changed)
-            if ($picture->getTrick() === $this) {
-                $picture->setTrick(null);
-            }
         }
 
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getMainPicture(): ?string
     {
-        return $this->user;
+        return $this->main_picture;
     }
 
-    public function setUser(?User $user): self
+    public function setMainPicture(?string $main_picture): self
     {
-        $this->user = $user;
+        $this->main_picture = $main_picture;
 
         return $this;
     }

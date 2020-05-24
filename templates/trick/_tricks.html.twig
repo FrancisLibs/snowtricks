@@ -1,26 +1,22 @@
 <section class="d-flex flex-row justify-content-center flex-wrap home_tricks" id="bas" >
     {% for trick in tricks %}
         <div class="card m-4 text-white bg-secondary mb-3">
-            <img class="card-img-top" src="
-                {% for picture in trick.pictures %}
-                    {{ picture.mainPicture ? picture.url : '' }}
-                {% endfor %}
-            ">
+            <img class="card-img-top" src="{{ asset(trick.mainPicture) }}" alt="">
             <div class="card-body d-flex justify-content-between">
                 <div class="card-title">
                     <a href="{{ path('trick.show', {id : trick.id, slug : trick.slug, page : 1 }) }}">{{ trick.name }}</a>
                 </div>
-                 <div class="liens mr-2">
+                 <div class="liens">
                     {% if is_granted('ROLE_ADMIN') %}
                         <a href="{{ path('admin.trick.edit', {id : trick.id}) }}">
-                            <img class="icone_editer mt-2" src="{{ asset('build/stylo.png') }}" alt="Editer"> 
+                            <i class="fas fa-pencil-alt mt-2"></i>
                         </a>
                         <form class="tricks_delete_form" method="post" action="{{ path('admin.trick.delete', {id : trick.id}) }}" 
                             onsubmit="return confirm('Voulez-vous supprimer ce trick ?')">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.id) }}">
                             <button class="btn">
-                                <img class="icone_effacer" src="{{ asset('build/Poubelle.png') }}" alt="Effacer">
+                                <i class="far fa-trash-alt"></i>
                             </button>
                         </form>
                     {% endif %}
@@ -34,7 +30,7 @@
         <div class="row">
             <div class="mx-auto">
                 <a href="{{ path('tricks.index', { page_var : page }) }}">
-                    <img class="icone_plus" src="{{ asset('build/plus3.png') }}" alt="Plus"> 
+                    <img class="icone_plus" src="{{ asset('build/plus.png') }}" alt="Plus"> 
                 </a>
             </div>            
             <div class ="arrow">

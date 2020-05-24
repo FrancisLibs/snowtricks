@@ -31,7 +31,7 @@ final class Version20200515214621 extends AbstractMigration
         $this->addSql('ALTER TABLE picture ADD CONSTRAINT FK_16DB4F89B281BE2E FOREIGN KEY (trick_id) REFERENCES trick (id)');
         $this->addSql('ALTER TABLE trick ADD CONSTRAINT FK_D8F0A91E12469DE2 FOREIGN KEY (category_id) REFERENCES category (id)');
         $this->addSql('ALTER TABLE trick ADD CONSTRAINT FK_D8F0A91EA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
-        $this->addSql('CREATE INDEX IDX_D8F0A91EA76ED395 ON trick (user_id)');
+        $this->addSql('CREATE UNIQUE INDEX IDX_D8F0A91EA76ED395 ON trick (user_id)');
    
    
     }

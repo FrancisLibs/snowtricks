@@ -1,3 +1,7 @@
+.far, .fas {
+    color: black;
+}
+
 .trick_image {
     width: 20%;
 }
@@ -19,7 +23,7 @@
 .card {
     width: 17rem;
     height: 16rem;
-    border-radius: .5rem;
+    border-radius: 0.5rem;
 }
 
 .card-img-top {
@@ -66,7 +70,7 @@
 }
 
 .show_page {
-    background-color :  #d9e0ee;
+    background-color : #d9e0ee;
     width: 86%;
 }
 
@@ -158,12 +162,15 @@
     margin-bottom: 8px;
 }
 
-.picture_group {
+.edit_main_picture{
     display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
+    flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-around;
-    width: 30%;
+}
+
+.picture_group {
+    width: 22%;
 }
 
 .edit_medias {
@@ -248,4 +255,12 @@
     display: inline-block;
     height: 2rem;
     margin:auto;
+}
+
+.main_picture_form{
+    background-color: white;
+}
+
+.main_picture_edit_form{
+    width: 100%;
 }

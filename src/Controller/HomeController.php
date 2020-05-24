@@ -28,21 +28,35 @@ class HomeController extends AbstractController
      * @param $page_var
      * @return Response
      */
-    public function index(TrickRepository $repository, $page_var = 1): Response
+    public function index(TrickRepository $repository, $page_var = 1, EntityManagerInterface $manager): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-
         $tricks = $repository->findBy([], [], $page_var*4, 0);
 
+        //Image à la une...
         foreach($tricks as $trick)
         {
             $pictures = $trick->getPictures();
-            $picture = $pictures->first();
-            $picture->setMainPicture(TRUE);
+            $mainPicture = $trick->getMainPicture();
 
-            $entityManager->persist($trick);
-            $entityManager->flush();
+            if(!isset($mainPicture) && empty($pictures))
+            {
+                $trick->setMainPicture('build/empty.jpg');
+            }
+            else
+            {
+                $mainPicture = $pictures->first();
+                $trick->setMainPicture('build/' . $mainPicture->getFileName());
+
+                if(is_null($mainPicture->getFileName()))
+                {
+                    $trick->setMainPicture("build/empty.jpg");
+                }
+            }
+        
+            $manager->persist($trick);
         }
+
+        $manager->flush();
         
         // Mise à zéro de la variable page si plus de tricks à afficher
         $nbTricks = $repository->countAll();
@@ -56,8 +70,8 @@ class HomeController extends AbstractController
         }
 
         return new Response($this->twig->render('pages/home.html.twig', [
-            'tricks'    =>  $tricks,
-            'page'      =>  $page_var,
+            'tricks'        =>  $tricks,
+            'page'          =>  $page_var,
         ]));
     }
 }

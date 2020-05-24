@@ -5,27 +5,21 @@
         {% include "_navBar.html.twig" %}
         <div class="container" id="haut">
             <div class="show_page mx-auto mt-3">
-
-                {# Définition de l'image à la une ou l'image vide #}
-                {% set url = "build/empty.jpg" %}
-                {% for picture in trick.pictures %}
-                    {% if picture.mainPicture %}
-                        {% set url = picture.url %}
-                    {% endif %}
-                {% endfor %}
-
+        
                 {# Image à la une #}
-                <div class="show_main_picture d-flex flex-column" style="background-image: url('{{ asset(url) }}');">
+                <div class="show_main_picture d-flex flex-column" 
+                    style="background-image: url('{{ asset(trick.mainPicture) }}');"
+                >
 
                     {# boutons d'édition #}
                     <div class="show_div_icones d-flex flex-row justify-content-end">
                         {% if is_granted('ROLE_ADMIN') %}
                             <div class="text-right d-flex flex-row justify-content-end">
                                 <a href="{{ path('admin.mainPicture.edit', {id : trick.id}) }}">
-                                    <img class="icone_editer mt-2" src="{{ asset('build/stylo.png') }}" alt="Editer"> 
+                                    <i class="fas fa-pencil-alt mr-2"></i> 
                                 </a>                            
                                 <a href="{{ path('admin.mainPicture.delete', {'id' : trick.id}) }}">
-                                    <img class="icone_effacer m-2" src="{{ asset('build/Poubelle.png') }}" alt="Effacer"> 
+                                    <i class="far fa-trash-alt mr-2"></i> 
                                 </a>
                             </div>
                         {% endif %}
@@ -42,8 +36,8 @@
                 {# Photos et vidéos #}
                 <div class="medias mt-3">
                     {% for picture in trick.pictures %}
-                        {% if not picture.mainPicture %}
-                            <img class="card-img-top show_picture" src="{{ picture.url }}" alt="{{ picture.name }}">
+                        {% if picture.fileName %}
+                            <img class="card-img-top show_picture" src="{{ picture.fileName }}">
                         {% endif %}
                     {% endfor %}
                 </div>
@@ -102,7 +96,7 @@
                     <div class="div_show_more_comment_btn mx-auto mb-3 d-flex justify-content-center">
                         <a href="{{ path('trick.show', 
                             { 'slug' : trick.slug, 'id' : trick.id, 'nbComments' : nbComments }) }}">
-                            <img class="show_more_comment_btn" src="{{ asset('build/plus3.png') }}" alt="Plus">
+                            <img class="show_more_comment_btn" src="{{ asset('build/plus.png') }}" alt="Plus">
                         </a>
                     </div>
                 {% endif %}

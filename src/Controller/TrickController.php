@@ -25,9 +25,7 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route(
-     *      "/trick/comments/{slug}-{id}/{nbComments}", name="trick.show", requirements={"slug": "[a-z0-9\-]*"})
-     * 
+     * @Route("/trick/comments/{slug}-{id}/{nbComments}", name="trick.show", requirements={"slug": "[a-z0-9\-]*"})
      * @param Trick $trick
      * @param page
      * @return Response

@@ -13,9 +13,8 @@ class AdminPictureController extends AbstractController
     /**
      * @Route("admin/picture/edit/{id}/{idPicture}", name="admin.picture.edit")
      */
-    public function edit(Trick $trick, int $idPicture, Request $request)
+    public function edit(int $idPicture, Request $request)
     {
-        
         return $this->render('admin/picture/edit.html.twig');
     }
 
@@ -25,11 +24,10 @@ class AdminPictureController extends AbstractController
      * @param int $idPicture
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function delete(Trick $trick, int $idPicture, Request $request)
+    public function delete(Trick $trick, int $idPicture, Request $request, EntityManagerInterface $manager)
     {
         if($this->isCsrfTokenValid('delete' . $trick->getId(), $request->get('_token')))
         {
-            $entityManager = $this->getDoctrine()->getManager();
             $pictures = $trick->getPictures();
             foreach($pictures as $picture)
             { 
@@ -38,7 +36,7 @@ class AdminPictureController extends AbstractController
                     $trick->removePicture($picture);
                 }
             }
-            $entityManager->flush();
+            $manager->flush();
 
             return $this->redirectToRoute("admin.trick.edit", [
                 'id' =>  $trick->getId(),

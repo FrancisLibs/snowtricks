@@ -77,15 +77,12 @@ class TricksFixtures extends Fixture
                     $manager->persist($comment);
                 }
 
-                // Ajout entre 1 et 10 images
+                // Ajout entre 1 et 5 images
                 for($l = 1; $l <= mt_rand(1, 5); $l++)
                 {
                     $picture = new Picture();
-                    
-                    $picture->setName($faker->word)
-                            ->setUrl("https://via.placeholder.com/2000")
-                            ->setCreatedAt($faker->dateTimeBetween('-100 days'))
-                            ->setTrick($trick);
+                    $picture->addTrick($trick);
+                    $picture->setFileName($faker->image($dir = 'assets/img/', $width = 50, $height = 50));
                     $manager->persist($picture);
                 }
             }
