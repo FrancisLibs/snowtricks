@@ -61,6 +61,7 @@ class TricksFixtures extends Fixture
                         ->setUpdateAt($faker->dateTimeBetween('-6 months'))
                         ->setCategory($category)
                         ->setUser($user);
+
                 $manager->persist($trick);
 
                 // Ajout entre 1 et 4 commentaires
@@ -75,15 +76,6 @@ class TricksFixtures extends Fixture
                             ->setCreatedAt($faker->dateTimeBetween('-' . $days .'days'))
                             ->setTrick($trick);
                     $manager->persist($comment);
-                }
-
-                // Ajout entre 1 et 5 images
-                for($l = 1; $l <= mt_rand(1, 5); $l++)
-                {
-                    $picture = new Picture();
-                    $picture->addTrick($trick);
-                    $picture->setFileName($faker->image($dir = 'assets/img/', $width = 50, $height = 50));
-                    $manager->persist($picture);
                 }
             }
         }        

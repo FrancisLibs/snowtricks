@@ -26,12 +26,16 @@
                         {% endfor %}
                     {% endif %}
                 </div>
-                <div>
-                    <p>Ajouter des photos</p>
+                <div class="main_picture_edit_form">
+                   {{ form_start(form) }}
+                    {{ form_row(form) }}
+                    <input type="submit">
+                   {{ form_end(form) }}
+
                 </div>
-                <div class="main_picture_edit_form d-flex justify-content-center">
-                    {{ form(form) }}
-                </div>
+                <p>Progress: <span id="progress-value"></span>%</p>
+                <p id="upload-complete"></p>
+                <p id="errors"></p>
             </div>
         </div>
     </div>
@@ -40,10 +44,28 @@
 {% block javascripts %}
     <script>
         $('.custom-file-input').on('change', function (e) {
-        let inputFile = e.currentTarget;
-        $(inputFile).parent()
-        .find('.custom-file-label')
-        .html(inputFile.files[0].name);
+        get inputFile = e.currentTarget;
+        $(inputFile).parent().find('.custom-file-label').html("essai");
         });
     </script>
+
+    <script>
+        document.getElementsByName('upload').addEventListener('submit', onSubmit);
+                
+        function onSubmit(event) {
+            event.preventDefault();
+
+            var formData = new FormData();
+            formData.append("upload[file]", document.getElementById("upload_file").files[0]);
+            formData.append("upload[name]", document.getElementById("upload_name").value);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/admin/mainPicture/delete?id=");
+            xhr.addEventListener('load', onRequestComplete, false);
+            xhr.upload.addEventListener("load", onUploadComplete, false);
+            xhr.upload.addEventListener("progress", onUploadProgress, false);
+            xhr.send(formData);
+        }
+    </script>
+
 {% endblock %}

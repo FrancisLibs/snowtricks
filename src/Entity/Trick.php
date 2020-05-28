@@ -64,14 +64,14 @@ class Trick
     private $user;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Picture::class, inversedBy="tricks")
-     */
-    private $pictures;
-
-    /**
      * @ORM\Column(type="string", nullable=true)
      */
     private $main_picture;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Picture::class, mappedBy="trick")
+     */
+    private $pictures;
 
     public function getId(): ?int
     {
@@ -186,6 +186,18 @@ class Trick
         return $this;
     }
 
+    public function getMainPicture(): ?string
+    {
+        return $this->main_picture;
+    }
+
+    public function setMainPicture(?string $main_picture): self
+    {
+        $this->main_picture = $main_picture;
+
+        return $this;
+    }
+
     /**
      * @return Collection|Picture[]
      */
@@ -198,6 +210,7 @@ class Trick
     {
         if (!$this->pictures->contains($picture)) {
             $this->pictures[] = $picture;
+            $picture->setTrick($this);
         }
 
         return $this;
@@ -207,19 +220,11 @@ class Trick
     {
         if ($this->pictures->contains($picture)) {
             $this->pictures->removeElement($picture);
+            // set the owning side to null (unless already changed)
+            if ($picture->getTrick() === $this) {
+                $picture->setTrick(null);
+            }
         }
-
-        return $this;
-    }
-
-    public function getMainPicture(): ?string
-    {
-        return $this->main_picture;
-    }
-
-    public function setMainPicture(?string $main_picture): self
-    {
-        $this->main_picture = $main_picture;
 
         return $this;
     }

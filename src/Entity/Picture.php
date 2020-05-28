@@ -22,23 +22,49 @@ class Picture
     
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\File(mimeTypes={ "image/png", "image/jpg" })
+     * @Assert\NotBlank(message="File should not be blank.")
+     * @Assert\File(
+     *      mimeTypes={ "image/png", "image/jpeg", "image/gif" },
+     *      maxSize="1074000000"
+     * )
+     * @var UploadedFile
      */
-    private $file_name;
+    private $file;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Trick::class, mappedBy="pictures")
+     * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="pictures")
+     *
+     * @var string
      */
-    private $tricks;
-
-    public function __construct()
-    {
-        $this->tricks = new ArrayCollection();
-    }
+    private $trick;
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    public function setFile($file): self
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
+    public function getTrick(): ?Trick
+    {
+        return $this->trick;
+    }
+
+    public function setTrick(?Trick $trick): self
+    {
+        $this->trick = $trick;
+
+        return $this;
     }
 
     /**
@@ -50,44 +76,4 @@ class Picture
     {
         return (string) $this->getUrl();
     }
-
-    public function getFileName()
-    {
-        return $this->file_name;
-    }
-
-    public function setFileName($file_name): self
-    {
-        $this->file_name = $file_name;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Trick[]
-     */
-    public function getTricks(): Collection
-    {
-        return $this->tricks;
-    }
-
-    public function addTrick(Trick $trick): self
-    {
-        if (!$this->tricks->contains($trick)) {
-            $this->tricks[] = $trick;
-            $trick->addPicture($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTrick(Trick $trick): self
-    {
-        if ($this->tricks->contains($trick)) {
-            $this->tricks->removeElement($trick);
-            $trick->removePicture($this);
-        }
-
-        return $this;
-    }    
 }

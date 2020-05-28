@@ -38,21 +38,18 @@ class HomeController extends AbstractController
             $pictures = $trick->getPictures();
             $mainPicture = $trick->getMainPicture();
 
-            if(!isset($mainPicture) && empty($pictures))
+            if(!empty($mainPicture))
             {
-                $trick->setMainPicture('build/empty.jpg');
-            }
-            else
-            {
-                $mainPicture = $pictures->first();
-                $trick->setMainPicture('build/' . $mainPicture->getFileName());
-
-                if(is_null($mainPicture->getFileName()))
+                if($pictures->isEmpty())
                 {
-                    $trick->setMainPicture("build/empty.jpg");
+                    $trick->setMainPicture('build/empty.jpg');
+                }
+                else
+                {
+                    $mainPicture = $pictures->first()->getFileName();
+                    $trick->setMainPicture($mainPicture);
                 }
             }
-        
             $manager->persist($trick);
         }
 

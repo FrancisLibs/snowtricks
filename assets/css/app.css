@@ -264,3 +264,19 @@
 .main_picture_edit_form{
     width: 100%;
 }
+
+ul.photos{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    width: 70%;
+}
+
+.custom-file-input{
+    opacity: 1;
+}
+
+#ajout_photo {
+    border: 1px solid red;
+    height: 2rem;
+}

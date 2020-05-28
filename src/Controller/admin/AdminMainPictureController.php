@@ -4,11 +4,15 @@ namespace App\Controller\admin;
 
 use App\Entity\Trick;
 use App\Entity\Picture;
+use App\Form\UploadType;
 use App\Form\PictureType;
+use App\Form\TrickPictureType;
+use App\Repository\PictureRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminMainPictureController extends AbstractController
@@ -16,37 +20,18 @@ class AdminMainPictureController extends AbstractController
     /**
      * @Route("/admin/mainPicture/edit/{id}", name="admin.mainPicture.edit")
      * @param Trick $trick
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function mainPictureEdit(Trick $trick, Request $request, EntityManagerInterface $manager): Response
+    public function mainPictureEdit(Trick $trick, Request $request, EntityManagerInterface $manager, PictureRepository $repository): Response
     {
-        $picture = new Picture();
-        $form = $this->createForm(PictureType::class, $picture);
+        $form = $this->createForm(UploadType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) 
         {
-            $pictureFileName = $form->get('picture')->getData();
             
-            if($pictureFileName)
-            {
-                $originalFilename = pathinfo($pictureFileName->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$pictureFileName->guessExtension();
-                
-
-                $pictureFileName->move($this->getParameter('pictures_directory'), $newFilename);
-
-                $picture->setFileName($pictureFileName);
-
-                $manager->persist($picture);
-                $manager->flush();
-
-                return $this->redirectToRoute('admin.mainPicture.edit',[
-                    'trick' =>  $trick,
-                    'id'    =>  $trick->getId()
-                ]);
-            }
+            return new JsonResponse([], 201);
         }
 
         return $this->render('admin/mainPicture/edit.html.twig', [
