@@ -7,15 +7,14 @@
             <div class="show_page mx-auto mt-3">
         
                 {# Image à la une #}
-                <div class="show_main_picture d-flex flex-column" 
+                <div id="visibility" class="show_main_picture d-flex flex-column" 
                     style="background-image: url('{{ asset(trick.mainPicture) }}');"
                 >
-
                     {# boutons d'édition #}
                     <div class="show_div_icones d-flex flex-row justify-content-end">
                         {% if is_granted('ROLE_ADMIN') %}
                             <div class="text-right d-flex flex-row justify-content-end">
-                                <a href="{{ path('admin.mainPicture.edit', {id : trick.id}) }}">
+                                <a id="btn_edit_main_picture" class="edit" href="#">
                                     <i class="fas fa-pencil-alt mr-2"></i> 
                                 </a>                            
                                 <a href="{{ path('admin.mainPicture.delete', {'id' : trick.id}) }}">
@@ -26,11 +25,19 @@
                     </div>
                     
                     {# Nom du trick #}
-                    <div class="show_div_titre d-flex flex-column justify-content-center align-items-center">
+                    <div id="titre_trick" class="show_div_titre d-flex flex-column justify-content-center align-items-center">
                         <div class="show_picture_title text-center">
                             <h1>{{ trick.name }}</h1>
                         </div>
                     </div>
+                </div>
+                
+                {# formulaire téléchargement image #}
+                <div id="main_picture_upload_form" class="main_picture_edit_form">
+                   {{ form_start(form1) }}
+                    {{ form_row(form1) }}
+                    <input type="submit">
+                   {{ form_end(form1) }}
                 </div>
 
                 {# Photos et vidéos #}
@@ -63,19 +70,21 @@
                 <div class="show_barre mx-auto"><hr></div>
 
                 {# Formulaire de commentaires #}
-                <div class="show_comment_form mx-auto">
-                    {{ form_start(form, {'method': 'POST'}) }}
-                    <div class="row">
-                        <div class="col-9">
-                            {{ form_row(form.content) }}
+                {% if app.user %}
+                    <div class="show_comment_form mx-auto">
+                        {{ form_start(form2, {'method': 'POST'}) }}
+                        <div class="row">
+                            <div class="col-9">
+                                {{ form_row(form2.content) }}
+                            </div>
+                            <div class="col-3">
+                                <button type'submit' class="btn btn-success">Commenter</button>
+                            </div>
                         </div>
-                        <div class="col-3">
-                            <button type'submit' class="btn btn-success">Commenter</button>
-                        </div>
+                        {{ form_end(form2) }}
                     </div>
-                    {{ form_end(form) }}
-                </div>
-                <div class="show_barre mx-auto"><hr></div>
+                    <div class="show_barre mx-auto"><hr></div>
+                {% endif %}
                 
                 {# Commentaires #}
                 <section class="show_commentaires mx-auto">
@@ -103,4 +112,15 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block javascripts %}
+
+<script>
+    $(document).ready(function(){     
+        //Dès qu'on clique sur #b1, on applique hide() au titre
+        $("#btn_edit_main_picture").click(function(){
+            $("#main_picture_upload_form").show();
+        });
+    });
+</script>
 {% endblock %}

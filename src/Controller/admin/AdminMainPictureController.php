@@ -6,6 +6,7 @@ use App\Entity\Trick;
 use App\Entity\Picture;
 use App\Form\UploadType;
 use App\Form\PictureType;
+use Cocur\Slugify\Slugify;
 use App\Form\TrickPictureType;
 use App\Repository\PictureRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,15 +24,32 @@ class AdminMainPictureController extends AbstractController
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function mainPictureEdit(Trick $trick, Request $request, EntityManagerInterface $manager, PictureRepository $repository): Response
+    public function mainPictureEdit(Trick $trick, Request $request, EntityManagerInterface $manager, 
+    PictureRepository $repository): Response
     {
         $form = $this->createForm(UploadType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) 
         {
-            
-            return new JsonResponse([], 201);
+            $pictureFile = $form->get('file')->getData();
+            if ($pictureFile) {
+                $originalFilename = pathinfo($pictureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename =(new Slugify())->slugify($originalFilename);
+                $newFilename = '/build/'.$safeFilename.'-'.uniqid().'.'.$pictureFile->guessExtension();
+
+                $pictureFile->move($this->getParameter('pictures_directory'), $newFilename);
+
+                $trick->setMainPicture($newFilename);
+                
+                $manager->flush();
+
+                return $this->redirectToRoute('trick.show', [
+                    'id'    =>  $trick->getId(),
+                    'slug'  =>  $trick->getSlug()
+                ]);
+            }
         }
 
         return $this->render('admin/mainPicture/edit.html.twig', [

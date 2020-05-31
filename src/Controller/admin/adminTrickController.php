@@ -38,7 +38,7 @@ class AdminTrickController extends AbstractController
         if($form->isSubmitted() && $form->isValid())
         {
             $manager->persist($trick);
-            $entityManager->flush();
+            $manager->flush();
             return $this->redirectToRoute('tricks.index');
         }
 
@@ -77,7 +77,7 @@ class AdminTrickController extends AbstractController
      * @param Trick $trick
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function delete(Trick $tricks, Request $request, EntityManagerInterface $manager): Response
+    public function delete(Trick $trick, Request $request, EntityManagerInterface $manager): Response
     {
         if($this->isCsrfTokenValid('delete' . $trick->getId(), $request->get('_token')))
         {

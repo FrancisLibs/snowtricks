@@ -262,7 +262,9 @@
 }
 
 .main_picture_edit_form{
-    width: 100%;
+    width: 50%;
+    margin: auto;
+    display: none;
 }
 
 ul.photos{

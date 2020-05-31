@@ -4,7 +4,7 @@
             <img class="card-img-top" src="{{ asset(trick.mainPicture) }}" alt="">
             <div class="card-body d-flex justify-content-between">
                 <div class="card-title">
-                    <a href="{{ path('trick.show', {id : trick.id, slug : trick.slug, page : 1 }) }}">{{ trick.name }}</a>
+                    <a href="{{ path('trick.show', {slug:trick.slug, id:trick.id,  page:1 }) }}">{{ trick.name }}</a>
                 </div>
                  <div class="liens">
                     {% if is_granted('ROLE_ADMIN') %}

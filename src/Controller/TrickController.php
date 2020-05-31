@@ -4,13 +4,16 @@ namespace App\Controller;
 
 use App\Entity\Trick;
 use App\Entity\Comment;
+use App\Form\UploadType;
 use App\Form\CommentType;
+use Cocur\Slugify\Slugify;
 use App\Repository\TrickRepository;
 use App\Repository\CommentRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
 
 
 class TrickController extends AbstractController
@@ -30,15 +33,9 @@ class TrickController extends AbstractController
      * @param page
      * @return Response
      */
-    public function show(
-        Request $request, 
-        Trick $trick,  
-        CommentRepository $commentRepository,
-        string $slug,
-        int $nbComments = 3
-        ): Response
+    public function show(Trick $trick, string $slug, int $nbComments = 3, CommentRepository $commentRepository, 
+    EntityManagerInterface $manager,  Request $request): Response
     {
-        
         if($trick->getSlug() !== $slug)
         {
             return $this->redirectToRoute('trick.show', [
@@ -47,12 +44,34 @@ class TrickController extends AbstractController
             ],
             301);
         }
-        
-        $comment = new Comment();
-        $form = $this->createForm(CommentType::class, $comment);
-        $form->handleRequest($request);
+        // form 1
+        $form1 = $this->createForm(UploadType::class);
 
-        if($form->isSubmitted() && $form->IsValid())
+        // form 2
+        $comment = new Comment();
+        $form2 = $this->createForm(CommentType::class, $comment);
+
+        $form1->handleRequest($request);
+        if ($form1->isSubmitted() && $form1->isValid()) 
+        {
+            $pictureFile = $form1->get('file')->getData();
+            if ($pictureFile) {
+                $originalFilename = pathinfo($pictureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename =(new Slugify())->slugify($originalFilename);
+                $newFilename = '/build/'.$safeFilename.'-'.uniqid().'.'.$pictureFile->guessExtension();
+
+                $pictureFile->move($this->getParameter('pictures_directory'), $newFilename);
+
+                $trick->setMainPicture($newFilename);
+                
+                $manager->flush();
+            }
+            return $this->redirectToRoute('trick.show', ['slug'=>$trick->getSlug(), 'id'=>$trick->getId()]);
+        }
+
+        $form2->handleRequest($request);
+        if($form2->isSubmitted() && $form2->IsValid())
         {
             $comment->setCreatedAt(new \DateTime());
             $comment->setTrick($trick);
@@ -80,7 +99,8 @@ class TrickController extends AbstractController
             'trick'         =>  $trick,
             'comments'      =>  $comments,
             'current-menu'  =>  'tricks',
-            'form'          =>  $form->createView(),
+            'form1'          =>  $form1->createView(),
+            'form2'          =>  $form2->createView(),
             'nbComments'    =>  $nbComments
             ]);
     }

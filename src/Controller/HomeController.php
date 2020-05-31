@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Trick;
 use Twig\Environment;
+use App\Entity\Trick;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,13 +24,13 @@ class HomeController extends AbstractController
 
     /**
      * @Route("/", name="home")
-     * @Route("/home/tricks/{page_var}", name="tricks.index")
+     * @Route("/home/trick/{page_var}", name="tricks.index")
      * @param $page_var
      * @return Response
      */
     public function index(TrickRepository $repository, $page_var = 1, EntityManagerInterface $manager): Response
     {
-        $tricks = $repository->findBy([], [], $page_var*4, 0);
+        $tricks = $repository->findBy([], [], $page_var * 4, 0);
 
         //Image à la une...
         foreach($tricks as $trick)
@@ -38,7 +38,7 @@ class HomeController extends AbstractController
             $pictures = $trick->getPictures();
             $mainPicture = $trick->getMainPicture();
 
-            if(!empty($mainPicture))
+            if(empty($mainPicture))
             {
                 if($pictures->isEmpty())
                 {
@@ -50,6 +50,7 @@ class HomeController extends AbstractController
                     $trick->setMainPicture($mainPicture);
                 }
             }
+            
             $manager->persist($trick);
         }
 

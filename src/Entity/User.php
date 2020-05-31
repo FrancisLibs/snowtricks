@@ -49,6 +49,16 @@ class User implements UserInterface
      */
     private $tricks;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $status;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $profile_image;
+
     public function __construct()
     {
         $this->tricks = new ArrayCollection();
@@ -166,6 +176,30 @@ class User implements UserInterface
                 $trick->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStatus(): ?int
+    {
+        return $this->status;
+    }
+
+    public function setStatus(int $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getProfileImage(): ?string
+    {
+        return $this->profile_image;
+    }
+
+    public function setProfileImage(?string $profile_image): self
+    {
+        $this->profile_image = $profile_image;
 
         return $this;
     }
