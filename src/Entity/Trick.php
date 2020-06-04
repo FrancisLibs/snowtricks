@@ -17,6 +17,7 @@ class Trick
         $this->created_at = new \DateTime();
         $this->comments = new ArrayCollection();
         $this->pictures = new ArrayCollection();
+        $this->videos = new ArrayCollection();
     }
     
     /**
@@ -72,6 +73,11 @@ class Trick
      * @ORM\OneToMany(targetEntity=Picture::class, mappedBy="trick")
      */
     private $pictures;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick")
+     */
+    private $videos;
 
     public function getId(): ?int
     {
@@ -223,6 +229,37 @@ class Trick
             // set the owning side to null (unless already changed)
             if ($picture->getTrick() === $this) {
                 $picture->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Video[]
+     */
+    public function getVideos(): Collection
+    {
+        return $this->videos;
+    }
+
+    public function addVideo(Video $video): self
+    {
+        if (!$this->videos->contains($video)) {
+            $this->videos[] = $video;
+            $video->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVideo(Video $video): self
+    {
+        if ($this->videos->contains($video)) {
+            $this->videos->removeElement($video);
+            // set the owning side to null (unless already changed)
+            if ($video->getTrick() === $this) {
+                $video->setTrick(null);
             }
         }
 

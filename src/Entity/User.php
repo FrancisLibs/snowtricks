@@ -8,11 +8,12 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"username"}, message="Le nom proposé n'est plus disponible")
- * @UniqueEntity(fields={"email"}, message="Votre adresse mail existe déjà")
+ * @UniqueEntity(fields={"email"}, message="Cette adresse mail existe déjà")
  */
 class User implements UserInterface
 {
@@ -29,20 +30,33 @@ class User implements UserInterface
     private $username;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\Email()
      */
-    private $roles = [];
+    private $email;
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\Length(
+     *      min = 6,
+     *      minMessage = "Votre mot de passe doit faire {{ limit }} caractères minimum",
+     *      allowEmptyString = false
+     * )
      */
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @var string 
+     * @Assert\EqualTo(propertyPath="password", message ="Les deux mots de passe ne sont pas identiques")
      */
-    private $email;
+    private $confirm_password;
+
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
+
 
     /**
      * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="user")
@@ -58,6 +72,17 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $profile_image;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $token;
+
+    /**
+     * @var string le token qui servira lors de l'oubli de mot de passe
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $resetToken;
 
     public function __construct()
     {
@@ -89,20 +114,15 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function getRoles(): array
-    {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+    public function getRoles() {
+        if (empty($this->roles)) {
+            return ['ROLE_USER'];
+        }
+        return $this->roles;
     }
 
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
-
-        return $this;
+    function setRoles($role) {
+        $this->roles[] = $role;
     }
 
     /**
@@ -116,6 +136,21 @@ class User implements UserInterface
     public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getConfirmPassword(): string
+    {
+        return (string) $this->confirm_password;
+    }
+
+    public function setConfirmPassword(string $confirmPassword): self
+    {
+        $this->confirm_password = $confirmPassword;
 
         return $this;
     }
@@ -203,4 +238,18 @@ class User implements UserInterface
 
         return $this;
     }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): self
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    
 }
