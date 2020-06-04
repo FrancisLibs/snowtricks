@@ -21,10 +21,10 @@
                     <div class="show_div_icones d-flex flex-row justify-content-end">
                         <div class="text-right d-flex flex-row justify-content-end">
                             <a href="{{ path('admin.mainPicture.edit', {id : trick.id}) }}">
-                                <img class="icone_editer" src="{{ asset('build/stylo.png') }}" alt="Editer"> 
+                                <i class="fas fa-pencil-alt mt-1 mr-2"></i> 
                             </a>
                             <a href="{{ path('admin.mainPicture.delete', {'id' : trick.id}) }}">
-                                <img class="icone_effacer" src="{{ asset('build/Poubelle.png') }}" alt="Effacer"> 
+                                <i class="far fa-trash-alt mr-2"></i> 
                             </a>
                         </div>
                     </div>
@@ -61,7 +61,7 @@
                     {% endfor %}
                 </div>
                 <div class="edit_form mx-auto">
-                    {{ include('admin/trick/_form.html.twig', {button: 'Enregistrer'}) }}
+                    {{ include('admin/trick/_editform.html.twig', {button: 'Enregistrer'}) }}
                 </div>
             </div>
         </div>
