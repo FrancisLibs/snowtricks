@@ -1,10 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="container mt-4">
-    <h1>Créer un trick</h1>
+    <div class="container bckgnd_blue mt-5">
+        <h1>Créer un trick</h1>
+        <div class="edit_form mx-auto">
+            {{ include('admin/trick/_editform.html.twig') }}
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+       
+    </script>
 
-    {{ include('admin/trick/_newform.html.twig', {button: 'Créer'}) }}
-
-</div>
 {% endblock %}

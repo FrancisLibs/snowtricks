@@ -1,41 +1,38 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="header">
-        {% include "_navBar.html.twig" %}
-        <div class="container" id="haut">
-            <div class="show_page mx-auto mt-3">
-                <h1 class="text-center mt-5 mb-3">{{ trick.name }}</h1>
-                {# Image à la une #}
-                <div class="edit_main_picture" >
-                    {% set pictures = trick.pictures %}
-                    {% if pictures is empty %}
-                        <p>Il n'y a pas d'image associée à ce trick</p>
-                    {% else %}
-                        {% for picture in pictures %}
-                            {% if not picture.fileName is empty %}
-                                <div class="picture_group">
-                                    <img class="main_picture_img mb-2" src="{{ asset(picture.fileName) }}" alt="">
-                                    {% if picture.mainPicture %}
-                                        <a class="btn btn-success btn_main_picture mx-auto" href="{{ path('admin.mainPicture.choice', {id : trick.id, pictureId: picture.id }) }}">Selection</a>
-                                    {% else %}
-                                        <a class="btn btn-primary btn_main_picture mx-auto" href="{{ path('admin.mainPicture.choice', {id : trick.id, pictureId: picture.id }) }}">Selection</a>
-                                    {% endif %}
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                </div>
-                <div class="main_picture_edit_form">
-                   {{ form_start(form1) }}
-                    {{ form_row(form1) }}
-                    <input type="submit">
-                   {{ form_end(form1) }}
-                </div>
-                <p>Progress: <span id="progress-value"></span>%</p>
-                <p id="upload-complete"></p>
-                <p id="errors"></p>
+    <div class="container" id="haut">
+        <div class="show_page mx-auto mt-3">
+            <h1 class="text-center mt-5 mb-3">{{ trick.name }}</h1>
+            {# Image à la une #}
+            <div class="edit_main_picture" >
+                {% set pictures = trick.pictures %}
+                {% if pictures is empty %}
+                    <p>Il n'y a pas d'image associée à ce trick</p>
+                {% else %}
+                    {% for picture in pictures %}
+                        {% if not picture.fileName is empty %}
+                            <div class="picture_group">
+                                <img class="main_picture_img mb-2" src="{{ asset(picture.fileName) }}" alt="">
+                                {% if picture.mainPicture %}
+                                    <a class="btn btn-success btn_main_picture mx-auto" href="{{ path('admin.mainPicture.choice', {id : trick.id, pictureId: picture.id }) }}">Selection</a>
+                                {% else %}
+                                    <a class="btn btn-primary btn_main_picture mx-auto" href="{{ path('admin.mainPicture.choice', {id : trick.id, pictureId: picture.id }) }}">Selection</a>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
             </div>
+            <div class="main_picture_edit_form mt-2">
+                {{ form_start(form1) }}
+                {{ form_row(form1) }}
+                <input type="submit">
+                {{ form_end(form1) }}
+            </div>
+            <p>Progress: <span id="progress-value"></span>%</p>
+            <p id="upload-complete"></p>
+            <p id="errors"></p>
         </div>
     </div>
 {% endblock %}

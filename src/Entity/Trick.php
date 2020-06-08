@@ -19,7 +19,7 @@ class Trick
         $this->pictures = new ArrayCollection();
         $this->videos = new ArrayCollection();
     }
-    
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -70,7 +70,7 @@ class Trick
     private $main_picture;
 
     /**
-     * @ORM\OneToMany(targetEntity=Picture::class, mappedBy="trick")
+     * @ORM\OneToMany(targetEntity=Picture::class, mappedBy="trick", cascade={"persist"})
      */
     private $pictures;
 

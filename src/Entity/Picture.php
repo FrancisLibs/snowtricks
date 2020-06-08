@@ -38,6 +38,18 @@ class Picture
      */
     private $trick;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Name should not be blank.")
+     * @Assert\Type("string")
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $path;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,5 +87,29 @@ class Picture
     public function __toString()
     {
         return (string) $this->getUrl();
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getPath(): ?string
+    {
+        return $this->path;
+    }
+
+    public function setPath(?string $path): self
+    {
+        $this->path = $path;
+
+        return $this;
     }
 }

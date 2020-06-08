@@ -2,10 +2,12 @@
 namespace App\Controller\admin;
 
 use App\Entity\Trick;
+use App\Form\PictureUploadType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminPictureController extends AbstractController
@@ -43,5 +45,53 @@ class AdminPictureController extends AbstractController
             ]);
         }
         return $this->redirectToRoute('pages/home.html.twig');
+    }
+
+    /**
+     * Route("/admin/upload/picture/{id}", name="admin.trick.upload.picture", methods={"post"})
+     * @param Request $request
+     * @return JsonResponse|FormInterface
+     */
+    public function uploadFile(Trick $trick, Request $request)
+    {
+        $form = $this->createForm(PictureUploadType::class);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) 
+        {
+            $this->getDoctrine()
+                ->getRepository('AppBundle:File')
+                ->store($form->getData());
+
+            return new JsonResponse([], 201);
+        }
+
+        return $form;
+    }
+
+    /**
+     * @Route("/admin/upload/picture/", name="upload.picture", methods={"POST"})
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse|FormInterface
+     */
+    public function uploadAction(Request $request)
+    {
+        //$this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
+        dump('ok controller');
+        $form = $this->createForm(PictureUploadType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $file = $form->getData();
+            //$this->getDoctrine()
+             //   ->getRepository('AppBundle:File')
+             //   ->store($file);
+
+            return new JsonResponse(["key" => $file->getDocumentKey()], 201);
+        }
+
+        return $form;
     }
 }

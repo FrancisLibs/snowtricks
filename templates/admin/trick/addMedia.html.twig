@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container bckgnd_blue" id="haut">
+        <h1> add media </h1>
+        <div class="row">
+            <div class="col-md-3">
+                <h5>Nom :  {{ trick.name }}</h5>
+            </div>
+            <div>
+                <h5>Catégorie : {{ trick.category }}</h5> 
+            </div>
+        </div>
+        <div>
+            <h5>Descritpion : </h5>
+            {{ trick.description }}
+        </div>
+    
+        <div class="addmedia_liens">
+            <a id="addPhoto" class="btn btn-primary" href="#">Ajouter une photo</a>
+            <a id="addvideo" class="btn btn-primary" href="#">Ajouter une video</a>
+        </div>
+
+        <div class="row" id="fileUpload" style="display: none;">
+            <div class="col-md-5">
+               {{ form_start(form) }}
+               {{ form_widget(form) }}
+                 <input class="btn btn-primary" type="submit"> 
+               {{ form_end(form) }}
+            </div>
+            
+        </div>
+       
+    
+
+{% endblock %}
+{% block javascripts %}
+<script>
+
+    $(function() {
+        $("#addPhoto").on('click', function(event) {
+        event.preventDefault();
+        $('#file').val('');
+        $("#fileUpload").show('slow');
+        })
+    });
+
+    $(function () {   
+        var form = $("form[name='picture_upload']");
+        
+        function onSubmit(event) {
+            event.preventDefault();
+            
+            $.ajax({
+                url:{{url(admin.trick.addMedia, {idTrick : trick.id}) }},
+                data: new FormData(form),// the formData function is available in almost all new browsers.
+                type:"post",
+                contentType:false,
+                processData:false,
+                cache:false,
+                dataType:"json", 
+                error:function(err){
+                    console.error(err);
+                },
+                success:function(data){
+                    console.log(data);      
+                },
+                complete:function(){
+                console.log("Request finished.");
+                }
+            })
+        });
+    })
+
+</script>
+      
+{% endblock %}

@@ -20,6 +20,14 @@
     height: 47rem;
 }
 
+.container{
+    border-radius: 10px;
+}
+
+.bckgnd_blue{
+    background-color: #566dea9e;
+}
+
 .card {
     width: 17rem;
     height: 16rem;
@@ -105,6 +113,7 @@
     width: 70%;
     font-size: 0.8em;
     line-height: 1em;
+    min-height: 2rem;
 }
 
 .show_div_info {
@@ -280,4 +289,13 @@ ul.photos{
 #ajout_photo {
     border: 1px solid red;
     height: 2rem;
+}
+
+fieldset .col-form-label {
+    display: none;
+}
+
+/* Saisie image */
+.champ_saisie_image{
+    display: none;
 }

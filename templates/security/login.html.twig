@@ -1,44 +1,40 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="header">
-        {% include "_navBar.html.twig" %}
-        <div class="container" id="haut">
-            <div class="mx-auto">
-                <h2 class="registration_title text-center mt-3">Inscription</h2>
-                <div class="row">
-                    <div class="col-md-4 mx-auto mt-4 registration_box">
-                        <form method="post">
-                            {% if error %}
-                                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                            {% endif %}
+    <div class="container" id="haut">
+        <div class="mx-auto">
+            <h2 class="registration_title text-center mt-3">Inscription</h2>
+            <div class="row">
+                <div class="col-md-4 mx-auto mt-4 registration_box">
+                    <form method="post">
+                        {% if error %}
+                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                        {% endif %}
 
-                            {% if app.user %}
-                                <div class="mb-3">
-                                    You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
-                                </div>
-                            {% endif %}
-
-                            <div class="form-group">
-                                <input type="text" value="{{ last_username }}" name="username" 
-                                    class="form-control" placeholder="Nom d'utilisateur..."required>
+                        {% if app.user %}
+                            <div class="mb-3">
+                                You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
                             </div>
+                        {% endif %}
 
-                            <div class="form-group">
-                                <input type="password" name="password" placeholder="Mot de passe..."   
-                                    class="form-control" required>
-                            </div>
+                        <div class="form-group">
+                            <input type="text" value="{{ last_username }}" name="username" 
+                                class="form-control" placeholder="Nom d'utilisateur..."required>
+                        </div>
 
-                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"
+                        <div class="form-group">
+                            <input type="password" name="password" placeholder="Mot de passe..."   
+                                class="form-control" required>
+                        </div>
 
-                            <div class="form-group">
-                                <button type="submmit" class="btn btn-primary">Connexion !</button>
-                            </div>
-                        </form>
-                    </div>
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"
+
+                        <div class="form-group">
+                            <button type="submmit" class="btn btn-primary">Connexion !</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-
 {% endblock %}
