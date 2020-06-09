@@ -84,7 +84,6 @@ class AdminTrickController extends AbstractController
                     'id'    =>  $trick->getId(),
                 ]);
             }
-
             if ($form->getClickedButton() === $form->get('saveAndAdd')) {
                 return $this->redirectToRoute('admin.trick.addMedia', [
                     'id' => $trick->getId(),
@@ -127,14 +126,15 @@ class AdminTrickController extends AbstractController
         $form = $this->createForm(PictureUploadType::class, $picture);
 
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        dump('1');
+        if ($form->isSubmitted()) {
+            dump('2');
             $file = $form->get('file')->getData();
 
             $filename = md5(uniqid()) . '.' . $file->guessExtension();
 
             $file->move($this->getParameter('pictures_directory'), $filename);
 
-            $picture = new Picture();
             $picture
                 ->setFile($filename)
                 ->setTrick($trick);
@@ -143,9 +143,7 @@ class AdminTrickController extends AbstractController
 
             $manager->flush();
 
-            return $this->render('admin/picture/picture.html.twig', [
-                'image' =>  $filename,
-            ]);
+            return $this->redirectToRoute('home');
         }
 
 

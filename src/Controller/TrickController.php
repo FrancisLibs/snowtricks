@@ -33,46 +33,32 @@ class TrickController extends AbstractController
      * @param page
      * @return Response
      */
-    public function show(Trick $trick, string $slug, int $nbComments = 3, CommentRepository $commentRepository, 
-    EntityManagerInterface $manager,  Request $request): Response
-    {
-        if($trick->getSlug() !== $slug)
-        {
-            return $this->redirectToRoute('trick.show', [
-                'id'    =>  $trick->getId(),
-                'slug'  =>  $trick->getSlug()
-            ],
-            301);
+    public function show(
+        Trick $trick,
+        string $slug,
+        int $nbComments = 3,
+        CommentRepository $commentRepository,
+        EntityManagerInterface $manager,
+        Request $request
+    ): Response {
+        if ($trick->getSlug() !== $slug) {
+            return $this->redirectToRoute(
+                'trick.show',
+                [
+                    'id'    =>  $trick->getId(),
+                    'slug'  =>  $trick->getSlug()
+                ],
+                301
+            );
         }
-        // form 1
-        $form1 = $this->createForm(UploadType::class);
 
-        // form 2
         $comment = new Comment();
-        $form2 = $this->createForm(CommentType::class, $comment);
+        $form = $this->createForm(CommentType::class, $comment);
 
-        $form1->handleRequest($request);
-        if ($form1->isSubmitted() && $form1->isValid()) 
-        {
-            $pictureFile = $form1->get('file')->getData();
-            if ($pictureFile) {
-                $originalFilename = pathinfo($pictureFile->getClientOriginalName(), PATHINFO_FILENAME);
-                // this is needed to safely include the file name as part of the URL
-                $safeFilename =(new Slugify())->slugify($originalFilename);
-                $newFilename = '/build/'.$safeFilename.'-'.uniqid().'.'.$pictureFile->guessExtension();
+        $form->handleRequest($request);
 
-                $pictureFile->move($this->getParameter('pictures_directory'), $newFilename);
-
-                $trick->setMainPicture($newFilename);
-                
-                $manager->flush();
-            }
-            return $this->redirectToRoute('trick.show', ['slug'=>$trick->getSlug(), 'id'=>$trick->getId()]);
-        }
-
-        $form2->handleRequest($request);
-        if($form2->isSubmitted() && $form2->IsValid())
-        {
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form2->IsValid()) {
             $comment->setCreatedAt(new \DateTime());
             $comment->setTrick($trick);
 
@@ -80,28 +66,24 @@ class TrickController extends AbstractController
             $entityManager->persist($comment);
             $entityManager->flush();
 
-            return $this->redirectToRoute('trick.show', ['slug'=>$trick->getSlug(), 'id'=>$trick->getId()]);
+            return $this->redirectToRoute('trick.show', ['slug' => $trick->getSlug(), 'id' => $trick->getId()]);
         }
 
         // Pagination des commentaires
-        $comments= $commentRepository->findPaginateComments($trick, $nbComments);
+        $comments = $commentRepository->findPaginateComments($trick, $nbComments);
         $nbCom = $commentRepository->countTrikComments($trick);
 
-        if($nbComments >= $nbCom)
-        {
+        if ($nbComments >= $nbCom) {
             $nbComments = 0;
-        }
-        else
-        {
+        } else {
             $nbComments++;
         }
         return $this->render('trick/show.html.twig', [
             'trick'         =>  $trick,
             'comments'      =>  $comments,
             'current-menu'  =>  'tricks',
-            'form1'          =>  $form1->createView(),
-            'form2'          =>  $form2->createView(),
+            'form'          =>  $form->createView(),
             'nbComments'    =>  $nbComments
-            ]);
+        ]);
     }
 }

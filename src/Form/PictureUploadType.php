@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class PictureUploadType extends AbstractType
 {
@@ -17,6 +18,10 @@ class PictureUploadType extends AbstractType
             ->add('file', FileType::class, [
                 'label'     => false,
                 'mapped'    => false,
+                'required' => false,
+            ])
+            ->add('save', SubmitType::class, [
+                'attr' => ['class' => 'save'],
             ]);
     }
 

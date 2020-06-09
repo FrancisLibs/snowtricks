@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Trick;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\File\File;
@@ -19,10 +20,9 @@ class Picture
      * @ORM\Column(type="integer")
      */
     private $id;
-    
+
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\NotBlank(message="File should not be blank.")
      * @Assert\File(
      *      mimeTypes={ "image/png", "image/jpeg", "image/gif" },
      *      maxSize="1074000000"
@@ -37,18 +37,6 @@ class Picture
      * @var string
      */
     private $trick;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Name should not be blank.")
-     * @Assert\Type("string")
-     */
-    private $name;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $path;
 
     public function getId(): ?int
     {
@@ -75,40 +63,6 @@ class Picture
     public function setTrick(?Trick $trick): self
     {
         $this->trick = $trick;
-
-        return $this;
-    }
-
-    /**
-     * Transform to string
-     * 
-     * @return string
-     */
-    public function __toString()
-    {
-        return (string) $this->getUrl();
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function getPath(): ?string
-    {
-        return $this->path;
-    }
-
-    public function setPath(?string $path): self
-    {
-        $this->path = $path;
 
         return $this;
     }

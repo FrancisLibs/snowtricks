@@ -21,57 +21,64 @@
             <a id="addvideo" class="btn btn-primary" href="#">Ajouter une video</a>
         </div>
 
-        <div class="row" id="fileUpload" style="display: none;">
+        <div class="row" id="fileUpload">
             <div class="col-md-5">
-               {{ form_start(form) }}
-               {{ form_widget(form) }}
-                 <input class="btn btn-primary" type="submit"> 
-               {{ form_end(form) }}
+                <form method="post" id="upload_form">
+                    <input type="file" id="file" name="uploadFile">
+                    <input type="submit" id="picture_upload_save">
+                </form>
             </div>
-            
         </div>
+        <div id="linkToController" data-path="{{ path('admin.trick.addMedia', {id: trick.id}) }}"></div>
        
-    
-
 {% endblock %}
 {% block javascripts %}
+
 <script>
 
     $(function() {
         $("#addPhoto").on('click', function(event) {
         event.preventDefault();
-        $('#file').val('');
+        $('#picture_upload_file').val('');
         $("#fileUpload").show('slow');
         })
     });
 
     $(function () {   
-        var form = $("form[name='picture_upload']");
-        
-        function onSubmit(event) {
+        $("#picture_upload_save").click(function(){
             event.preventDefault();
+
+            var path = $("#linkToController").attr("data-path");
+            var myForm = $('#upload_form');
+            var formData = new FormData();
+            formData.append('file', document.getElementById("file").files[0]);
+            //formData.append('picture_upload[_token]', document.getElementById("picture_upload__token"));
             
             $.ajax({
-                url:{{url(admin.trick.addMedia, {idTrick : trick.id}) }},
-                data: new FormData(form),// the formData function is available in almost all new browsers.
-                type:"post",
+                type:"POST",
+                url:path,
+                data: formData,
+                cache:false,
                 contentType:false,
                 processData:false,
-                cache:false,
-                dataType:"json", 
+                async: false,
+                dataType:"html", 
                 error:function(err){
                     console.error(err);
                 },
                 success:function(data){
-                    console.log(data);      
+                    console.log('succès de la reqête !');      
                 },
                 complete:function(){
-                console.log("Request finished.");
+                    console.log("Request finished.");
                 }
-            })
+            });
+            
         });
-    })
+    });
 
 </script>
       
 {% endblock %}
+
+ 
