@@ -4,16 +4,18 @@ namespace App\Controller;
 
 use App\Entity\Trick;
 use App\Entity\Comment;
+use App\Entity\Picture;
 use App\Form\UploadType;
 use App\Form\CommentType;
+use App\Form\PictureType;
 use Cocur\Slugify\Slugify;
 use App\Repository\TrickRepository;
 use App\Repository\CommentRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Doctrine\ORM\EntityManagerInterface;
 
 
 class TrickController extends AbstractController
@@ -36,6 +38,7 @@ class TrickController extends AbstractController
     public function show(
         Trick $trick,
         string $slug,
+        int $nbComments,
         CommentRepository $commentRepository,
         EntityManagerInterface $manager,
         Request $request
@@ -51,7 +54,33 @@ class TrickController extends AbstractController
             );
         }
 
-        
+        // Modification de l'image à la une
+        $picture = new Picture();
+        $form1 = $this->createForm(PictureType::class, $picture);
+        $form1->handleRequest($request);
+
+        if ($form1->isSubmitted() && $form1->isValid()) {
+            $pictureFile = $form1->get('file')->getData();
+
+            if ($pictureFile) {
+                $originalFilename = pathinfo($pictureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = (new Slugify())->slugify($originalFilename);
+                $newFilename = '/build/' . $safeFilename . '-' . uniqid() . '.' . $pictureFile->guessExtension();
+
+                $pictureFile->move($this->getParameter('pictures_directory'), $newFilename);
+
+                $trick->setMainPicture($newFilename);
+
+                $manager->flush();
+
+                return $this->redirectToRoute('trick.show', [
+                    'slug' => $trick->getSlug(),
+                    'id' => $trick->getId(),
+                    'nbComments' => $nbComments,
+                ]);
+            }
+        }
 
         $comment = new Comment();
         $form2 = $this->createForm(CommentType::class, $comment);
@@ -65,7 +94,11 @@ class TrickController extends AbstractController
             $entityManager->persist($comment);
             $entityManager->flush();
 
-            return $this->redirectToRoute('trick.show', ['slug' => $trick->getSlug(), 'id' => $trick->getId()]);
+            return $this->redirectToRoute('trick.show', [
+                'slug' => $trick->getSlug(),
+                'id' => $trick->getId(),
+                'nbComments' => $nbComments,
+            ]);
         }
 
         // Affichage de 3 commentaires 
@@ -82,7 +115,8 @@ class TrickController extends AbstractController
             'current-menu'  =>  'tricks',
             'trick'         =>  $trick,
             'comments'      =>  $comments,
-            'form'          =>  $form->createView(),
+            'form1'         =>  $form1->createView(),
+            'form2'         =>  $form2->createView(),
             'nbComments'    =>  $nbComments,
         ]);
     }

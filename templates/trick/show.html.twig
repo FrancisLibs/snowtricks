@@ -28,6 +28,15 @@
                         <h1>{{ trick.name }}</h1>
                     </div>
                 </div>
+
+                {# Formulaire d'image à la une #}
+                <div id="main_picture_upload_form" class="main_picture_edit_form" style="display: none;">
+                    {{ form_start(form1) }}
+                        {{ form_row(form1.file) }}
+                        <button type'submit' class="btn btn-primary">Valider</button>
+                    {{ form_end(form1) }}
+                </div>
+
             </div>
 
             {# Photos et vidéos #}
@@ -62,16 +71,16 @@
             {# Formulaire de commentaires #}
             {% if app.user %}
                 <div class="show_comment_form mx-auto">
-                    {{ form_start(form, {'method': 'POST'}) }}
+                    {{ form_start(form2, {'method': 'POST'}) }}
                     <div class="row">
                         <div class="col-9">
-                            {{ form_row(form.content) }}
+                            {{ form_row(form2.content) }}
                         </div>
                         <div class="col-3">
                             <button type'submit' class="btn btn-success">Commenter</button>
                         </div>
                     </div>
-                    {{ form_end(form) }}
+                    {{ form_end(form2) }}
                 </div>
                 <div class="show_barre mx-auto"><hr></div>
             {% endif %}

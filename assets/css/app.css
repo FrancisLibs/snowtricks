@@ -272,7 +272,9 @@
 .main_picture_edit_form{
     width: 50%;
     margin: auto;
-    display: none;
+    background: white;
+    border: 1px solid blue;
+    border-radius: 10px;
 }
 
 ul.photos{

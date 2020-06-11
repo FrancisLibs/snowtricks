@@ -33,37 +33,29 @@ class HomeController extends AbstractController
         $tricks = $repository->findBy([], [], $page_var * 4, 0);
 
         //Image à la une...
-        foreach($tricks as $trick)
-        {
+        foreach ($tricks as $trick) {
             $pictures = $trick->getPictures();
             $mainPicture = $trick->getMainPicture();
 
-            if(empty($mainPicture))
-            {
-                if($pictures->isEmpty())
-                {
+            if (empty($mainPicture)) {
+                if ($pictures->isEmpty()) {
                     $trick->setMainPicture('build/empty.jpg');
-                }
-                else
-                {
-                    $mainPicture = $pictures->first()->getFileName();
+                } else {
+                    $mainPicture = $pictures->first()->getFile();
                     $trick->setMainPicture($mainPicture);
                 }
             }
-            
+
             $manager->persist($trick);
         }
 
         $manager->flush();
-        
+
         // Mise à zéro de la variable page si plus de tricks à afficher
         $nbTricks = $repository->countAll();
-        if( $nbTricks > ($page_var * 4) )
-        {
-            $page_var ++;
-        }
-        else
-        {
+        if ($nbTricks > ($page_var * 4)) {
+            $page_var++;
+        } else {
             $page_var = 0;
         }
 
@@ -73,4 +65,3 @@ class HomeController extends AbstractController
         ]));
     }
 }
-
