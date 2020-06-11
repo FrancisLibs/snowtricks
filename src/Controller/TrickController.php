@@ -28,7 +28,7 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/trick/comments/{slug}-{id}/{nbComments}", name="trick.show", requirements={"slug": "[a-z0-9\-]*"})
+     * @Route("/trick/{slug}-{id}/{nbComments}", name="trick.show", requirements={"slug": "[a-z0-9\-]*"})
      * @param Trick $trick
      * @param page
      * @return Response
@@ -36,7 +36,6 @@ class TrickController extends AbstractController
     public function show(
         Trick $trick,
         string $slug,
-        int $nbComments = 3,
         CommentRepository $commentRepository,
         EntityManagerInterface $manager,
         Request $request
@@ -52,13 +51,13 @@ class TrickController extends AbstractController
             );
         }
 
+        
+
         $comment = new Comment();
-        $form = $this->createForm(CommentType::class, $comment);
+        $form2 = $this->createForm(CommentType::class, $comment);
 
-        $form->handleRequest($request);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form2->IsValid()) {
+        $form2->handleRequest($request);
+        if ($form2->isSubmitted() && $form2->IsValid()) {
             $comment->setCreatedAt(new \DateTime());
             $comment->setTrick($trick);
 
@@ -69,21 +68,53 @@ class TrickController extends AbstractController
             return $this->redirectToRoute('trick.show', ['slug' => $trick->getSlug(), 'id' => $trick->getId()]);
         }
 
-        // Pagination des commentaires
-        $comments = $commentRepository->findPaginateComments($trick, $nbComments);
-        $nbCom = $commentRepository->countTrikComments($trick);
+        // Affichage de 3 commentaires 
+        $nbComments = $commentRepository->countTrikComments($trick);
+        $comments = $commentRepository->findPaginateComments($trick, 0, 3);
 
-        if ($nbComments >= $nbCom) {
+        if ($nbComments <= 3) {
             $nbComments = 0;
         } else {
-            $nbComments++;
+            $nbComments = 3;
         }
+
         return $this->render('trick/show.html.twig', [
+            'current-menu'  =>  'tricks',
             'trick'         =>  $trick,
             'comments'      =>  $comments,
-            'current-menu'  =>  'tricks',
             'form'          =>  $form->createView(),
-            'nbComments'    =>  $nbComments
+            'nbComments'    =>  $nbComments,
         ]);
+    }
+
+    /**
+     * @Route("/trick/comments/more/{id}/{nbComments}", name="comment.more")
+     */
+    public function commentMore(Trick $trick, int $nbComments, CommentRepository $commentRepository, Request $request)
+    {
+        $comments = $commentRepository->findPaginateComments($trick, $nbComments, $nbComments);
+        $nbCommentaires = $commentRepository->countTrikComments($trick);
+
+        if ($nbCommentaires <= $nbComments + 1) {
+            $nbComments = 0;
+        }
+
+        $commentArray = array();
+        $i = 0;
+        if ($comments) {
+            foreach ($comments as $comment) {
+                $commentArray[$i]['id'] = $comment->getId();
+                $commentArray[$i]['content'] = $comment->getContent();
+                $commentArray[$i]['date'] = $comment->getCreatedAt()->format('m-d-Y');
+                $commentArray[$i]['heure'] = $comment->getCreatedAt()->format('g\hi');
+                $commentArray[$i]['nbCommentaires'] = $nbComments;
+                $i++;
+            }
+        }
+        $results = array(
+            'comments'      => $commentArray,
+        );
+
+        return new Response(json_encode($results));
     }
 }

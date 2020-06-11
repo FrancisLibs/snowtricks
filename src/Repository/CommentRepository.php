@@ -21,26 +21,26 @@ class CommentRepository extends ServiceEntityRepository
     }
 
     public function countTrikComments($trick)
-	{
-		return intval(
+    {
+        return intval(
             $this->createQueryBuilder('c')
-            ->andWhere('c.trick = :trick')
-            ->setparameter('trick', $trick)
-			->select('COUNT(c)')
-            ->getQuery()->getSingleScalarResult()
+                ->andWhere('c.trick = :trick')
+                ->setparameter('trick', $trick)
+                ->select('COUNT(c)')
+                ->getQuery()->getSingleScalarResult()
         );
     }
 
-    public function findPaginateComments($trick, $nbComments)
+    public function findPaginateComments($trick, $offset, $limit)
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.trick = :trick')
-            ->setParameter('trick', $trick )
+            ->setParameter('trick', $trick)
             ->orderBy('c.createdAt', 'DESC')
-            ->setMaxResults($nbComments)
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     // /**

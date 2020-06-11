@@ -77,13 +77,13 @@
             {% endif %}
             
             {# Commentaires #}
-            <section class="show_commentaires mx-auto">
+            <section id="section_commentaires" class="show_commentaires mx-auto">
                 {% for comment in comments %}
-                    <div class="row justify-content-center mb-1">
-                        <div class="col-md-3 font-weight-bold">
-                            Créé le : {{ comment.createdAt | date("m/d/Y à H:i") }}
+                    <div id="ligne_commentaire" class="row justify-content-center mb-1">
+                        <div id="commentaire_date" class="col-md-3 font-weight-bold">
+                            Créé le : {{ comment.createdAt | date("m/d/Y à H:i") }}h
                         </div>
-                        <div class="col-md-9 border text-justify">
+                        <div id="commentaire_contenu" class="col-md-9 border text-justify">
                             {{ comment.content | raw }}
                         </div>
                     </div>
@@ -92,13 +92,14 @@
 
             {# button more #}
             {% if not nbComments == 0 %}
-                <div class="div_show_more_comment_btn mx-auto mb-3 d-flex justify-content-center">
-                    <a href="{{ path('trick.show', 
-                        { 'slug' : trick.slug, 'id' : trick.id, 'nbComments' : nbComments }) }}">
+                <div class="show_more_comment_btn mx-auto mb-3 d-flex justify-content-center">
+                    <a id='pathToController' href="{{ path('trick.show', { 'slug' : trick.slug, 'id' : trick.id, 'nbComments' : nbComments }) }}">
                         <img class="show_more_comment_btn" src="{{ asset('build/plus.png') }}" alt="Plus">
                     </a>
                 </div>
             {% endif %}
+            <span id="linkToController" data-path="{{ path('comment.more', { 'id' : trick.id, 'nbComments' : nbComments }) }}"></span>
+           
         </div>
     </div>
 {% endblock %}
@@ -108,5 +109,48 @@
     $('#btn_edit_main_picture').click(function() {  
         $('#main_picture_upload_form').show('slow');      
     });
+
+    $(function() {
+
+        $('#pathToController').click(function(e) {
+            e.preventDefault();
+            var path = $("#linkToController").attr("data-path");
+            $.ajax({
+                type: 'GET',    //envoie de la requête
+                url: path,
+                timeout: 3000,
+                dataType: 'json',
+
+                // réception du retour
+                success: function(data) {    
+                    var $content =(data.comments[0].content);
+                    var $date = (data.comments[0].date);
+                    var $heure = (data.comments[0].heure);
+                    var $nbCommentaires = (data.comments[0].nbCommentaires);
+                    var $section_commentaire = $('#section_commentaires');
+                    var $commentaire_date = $("#commentaireDate")[0];
+                    var $commentaire_contenu = $("#commentaire_contenu")[0];
+                    var $ligne_commentaire = $('#ligne_commentaire').clone();
+
+                    // Ajout du nouveau bloc de commentaire
+                    $($section_commentaire).append($ligne_commentaire);       
+                    var $ligneDate = $('#ligne_commentaire:last-child > #commentaire_date');
+                    $ligneDate.text('Crée le : ' + $date + ' à ' + $heure + 'h');
+                    var $contenu = $('#ligne_commentaire:last-child > #commentaire_contenu');
+                    $contenu.text($content);
+
+                    // Traitement affichage du bouton "plus"
+                    if(!$nbCommentaires) {
+                        $('.show_more_comment_btn').hide();
+                    }
+                },
+                error: function() {
+                    alert('La requête n\'a pas abouti');
+                 }
+            });    
+        });  
+    });
+       
 </script>
 {% endblock %}
+ 
