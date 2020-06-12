@@ -88,11 +88,11 @@
             {# Commentaires #}
             <section id="section_commentaires" class="show_commentaires mx-auto">
                 {% for comment in comments %}
-                    <div id="ligne_commentaire" class="row justify-content-center mb-1">
-                        <div id="commentaire_date" class="col-md-3 font-weight-bold">
+                    <div class="unCommentaire row justify-content-center mb-1">
+                        <div class="ligne_date col-md-3 font-weight-bold">
                             Créé le : {{ comment.createdAt | date("m/d/Y à H:i") }}h
                         </div>
-                        <div id="commentaire_contenu" class="col-md-9 border text-justify">
+                        <div class="ligne_content col-md-9 border text-justify">
                             {{ comment.content | raw }}
                         </div>
                     </div>
@@ -108,7 +108,7 @@
                 </div>
             {% endif %}
             <span id="linkToController" data-path="{{ path('comment.more', { 'id' : trick.id, 'nbComments' : nbComments }) }}"></span>
-           
+            
         </div>
     </div>
 {% endblock %}
@@ -120,37 +120,43 @@
     });
 
     $(function() {
-
         $('#pathToController').click(function(e) {
             e.preventDefault();
+            var nbCom = $('#section_commentaires').children().length;
+            console.log(nbCom);
             var path = $("#linkToController").attr("data-path");
             $.ajax({
                 type: 'GET',    //envoie de la requête
                 url: path,
+                data : 'nbCommentaires=' + nbCom,
                 timeout: 3000,
                 dataType: 'json',
 
                 // réception du retour
                 success: function(data) {    
-                    var $content =(data.comments[0].content);
-                    var $date = (data.comments[0].date);
-                    var $heure = (data.comments[0].heure);
-                    var $nbCommentaires = (data.comments[0].nbCommentaires);
-                    var $section_commentaire = $('#section_commentaires');
-                    var $commentaire_date = $("#commentaireDate")[0];
-                    var $commentaire_contenu = $("#commentaire_contenu")[0];
-                    var $ligne_commentaire = $('#ligne_commentaire').clone();
+                    var content =(data.comments[0].content);
+                    var date = (data.comments[0].date);
+                    var heure = (data.comments[0].heure);
+                    var displayBtn = (data.comments[0].displayBtn);
 
-                    // Ajout du nouveau bloc de commentaire
-                    $($section_commentaire).append($ligne_commentaire);       
-                    var $ligneDate = $('#ligne_commentaire:last-child > #commentaire_date');
-                    $ligneDate.text('Crée le : ' + $date + ' à ' + $heure + 'h');
-                    var $contenu = $('#ligne_commentaire:last-child > #commentaire_contenu');
-                    $contenu.text($content);
+                    console.log(displayBtn);
+                    
+
+                    var html ='';
+                    html += '<div class="unCommentaire row justify-content-center mb-1">';
+                    html += '<div class="col-md-3 font-weight-bold">';
+                    html += "Créé le : " + date + " à " + heure + "h";
+                    html += "</div>";
+                    html += "<div class='col-md-9 border text-justify'>";
+                    html += "<p>" + content + "</p>";
+                    html += "</div></div>";
+
+                    $('#section_commentaires').append(html);
 
                     // Traitement affichage du bouton "plus"
-                    if(!$nbCommentaires) {
+                    if(!displayBtn) {
                         $('.show_more_comment_btn').hide();
+                        
                     }
                 },
                 error: function() {

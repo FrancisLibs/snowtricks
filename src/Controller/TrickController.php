@@ -126,11 +126,15 @@ class TrickController extends AbstractController
      */
     public function commentMore(Trick $trick, int $nbComments, CommentRepository $commentRepository, Request $request)
     {
-        $comments = $commentRepository->findPaginateComments($trick, $nbComments, $nbComments);
-        $nbCommentaires = $commentRepository->countTrikComments($trick);
+        $nbComments = $commentRepository->countTrikComments($trick);
+        $commentsDisplaying = $request->query->get('nbCommentaires');
+        $comments = $commentRepository->findPaginateComments($trick, $commentsDisplaying, 1);
 
-        if ($nbCommentaires <= $nbComments + 1) {
-            $nbComments = 0;
+
+        if ($nbComments >= $commentsDisplaying + 2) {
+            $displayBtn = true;
+        } else {
+            $displayBtn = false;
         }
 
         $commentArray = array();
@@ -141,7 +145,7 @@ class TrickController extends AbstractController
                 $commentArray[$i]['content'] = $comment->getContent();
                 $commentArray[$i]['date'] = $comment->getCreatedAt()->format('m-d-Y');
                 $commentArray[$i]['heure'] = $comment->getCreatedAt()->format('g\hi');
-                $commentArray[$i]['nbCommentaires'] = $nbComments;
+                $commentArray[$i]['displayBtn'] = $displayBtn;
                 $i++;
             }
         }
