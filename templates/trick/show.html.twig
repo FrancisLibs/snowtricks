@@ -112,6 +112,7 @@
         </div>
     </div>
 {% endblock %}
+
 {% block javascripts %}
 
 <script>
@@ -123,7 +124,6 @@
         $('#pathToController').click(function(e) {
             e.preventDefault();
             var nbCom = $('#section_commentaires').children().length;
-            console.log(nbCom);
             var path = $("#linkToController").attr("data-path");
             $.ajax({
                 type: 'GET',    //envoie de la requête
@@ -139,9 +139,6 @@
                     var heure = (data.comments[0].heure);
                     var displayBtn = (data.comments[0].displayBtn);
 
-                    console.log(displayBtn);
-                    
-
                     var html ='';
                     html += '<div class="unCommentaire row justify-content-center mb-1">';
                     html += '<div class="col-md-3 font-weight-bold">';
@@ -155,8 +152,7 @@
 
                     // Traitement affichage du bouton "plus"
                     if(!displayBtn) {
-                        $('.show_more_comment_btn').hide();
-                        
+                        $('.show_more_comment_btn').hide(); 
                     }
                 },
                 error: function() {

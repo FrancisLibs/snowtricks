@@ -21,15 +21,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class TrickController extends AbstractController
 {
     /**
-     * @Route("/tricks", name="tricks")
-     * @return null
-     */
-    public function index()
-    {
-        return null;
-    }
-
-    /**
      * @Route("/trick/{slug}-{id}/{nbComments}", name="trick.show", requirements={"slug": "[a-z0-9\-]*"})
      * @param Trick $trick
      * @param page
@@ -123,6 +114,7 @@ class TrickController extends AbstractController
 
     /**
      * @Route("/trick/comments/more/{id}/{nbComments}", name="comment.more")
+     * 
      */
     public function commentMore(Trick $trick, int $nbComments, CommentRepository $commentRepository, Request $request)
     {

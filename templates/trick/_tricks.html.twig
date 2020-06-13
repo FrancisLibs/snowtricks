@@ -1,4 +1,4 @@
-<section class="d-flex flex-row justify-content-center flex-wrap home_tricks" id="bas" >
+<section class="d-flex flex-row justify-content-center flex-wrap home_tricks" id="tricksDisplay" >
     {% for trick in tricks %}
         <div class="card m-4 text-white bg-secondary mb-3">
             <img class="card-img-top" src="{{ asset(trick.mainPicture) }}" alt="">
@@ -26,11 +26,11 @@
     {% endfor %}
 </section>
 <div class="button">
-    {% if not page == 0 %}
+    {% if displayBtn %}
         <div class="row">
             <div class="mx-auto">
-                <a href="{{ path('tricks.index', { page_var : page }) }}">
-                    <img class="icone_plus" src="{{ asset('build/plus.png') }}" alt="Plus"> 
+                <a href="{{ path('tricks.index') }}">
+                    <img id="btnPlus" class="icone_plus" src="{{ asset('build/plus.png') }}" alt="Plus"> 
                 </a>
             </div>            
             <div class ="arrow">
