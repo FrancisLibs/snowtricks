@@ -79,7 +79,6 @@ class AdminPictureController extends AbstractController
     public function uploadAction(Request $request)
     {
         //$this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
-        dump('ok controller');
         $form = $this->createForm(PictureUploadType::class);
         $form->handleRequest($request);
 

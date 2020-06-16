@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
+use App\Entity\Picture;
 use Cocur\Slugify\Slugify;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
@@ -15,6 +16,7 @@ class Trick
     public function __construct()
     {
         $this->created_at = new \DateTime();
+        $this->updated_at = new \DateTime();
         $this->comments = new ArrayCollection();
         $this->pictures = new ArrayCollection();
         $this->videos = new ArrayCollection();
@@ -45,7 +47,7 @@ class Trick
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $update_at;
+    private $updated_at;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="trick")
@@ -70,7 +72,8 @@ class Trick
     private $main_picture;
 
     /**
-     * @ORM\OneToMany(targetEntity=Picture::class, mappedBy="trick", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Picture::class, mappedBy="trick", 
+     * cascade={"persist"}, orphanRemoval = true)
      */
     private $pictures;
 
@@ -125,14 +128,14 @@ class Trick
         return $this;
     }
 
-    public function getUpdateAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
-        return $this->update_at;
+        return $this->updated_at;
     }
 
-    public function setUpdateAt(?\DateTimeInterface $update_at): self
+    public function setUpdatedAt(?\DateTimeInterface $updated_at): self
     {
-        $this->update_at = $update_at;
+        $this->updated_at = $updated_at;
 
         return $this;
     }

@@ -21,23 +21,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class TrickController extends AbstractController
 {
     /**
-     * @Route("/trick/{slug}-{id}/{nbComments}", name="trick.show", requirements={"slug": "[a-z0-9\-]*"})
+     * @Route("/trick/{slug}-{id}/{nbComments=0}", name="trick.show", requirements={"slug": "[a-z0-9\-]*"})
      * @param Trick $trick
-     * @param page
+     * @param string $slug
+     * @param int $nbComments
      * @return Response
      */
-    public function show(
-        Trick $trick,
-        string $slug,
-        int $nbComments,
-        CommentRepository $commentRepository,
-        EntityManagerInterface $manager,
-        Request $request
-    ): Response {
+    public function trickShow( Trick $trick, string $slug, int $nbComments = 0, CommentRepository $commentRepository,
+        EntityManagerInterface $manager, Request $request): Response 
+    {
         if ($trick->getSlug() !== $slug) {
-            return $this->redirectToRoute(
-                'trick.show',
-                [
+            return $this->redirectToRoute('trick.show', [
                     'id'    =>  $trick->getId(),
                     'slug'  =>  $trick->getSlug()
                 ],
@@ -50,10 +44,12 @@ class TrickController extends AbstractController
         $form1 = $this->createForm(PictureType::class, $picture);
         $form1->handleRequest($request);
 
-        if ($form1->isSubmitted() && $form1->isValid()) {
+        if ($form1->isSubmitted() && $form1->isValid()) 
+        {
             $pictureFile = $form1->get('file')->getData();
 
-            if ($pictureFile) {
+            if ($pictureFile) 
+            {
                 $originalFilename = pathinfo($pictureFile->getClientOriginalName(), PATHINFO_FILENAME);
                 // this is needed to safely include the file name as part of the URL
                 $safeFilename = (new Slugify())->slugify($originalFilename);
@@ -77,7 +73,9 @@ class TrickController extends AbstractController
         $form2 = $this->createForm(CommentType::class, $comment);
 
         $form2->handleRequest($request);
-        if ($form2->isSubmitted() && $form2->IsValid()) {
+
+        if ($form2->isSubmitted() && $form2->IsValid()) 
+        {
             $comment->setCreatedAt(new \DateTime());
             $comment->setTrick($trick);
 
@@ -95,7 +93,6 @@ class TrickController extends AbstractController
         // Affichage de 3 commentaires 
         $nbComments = $commentRepository->countTrikComments($trick);
         $comments = $commentRepository->findPaginateComments($trick, 0, 3);
-
         if ($nbComments <= 3) {
             $nbComments = 0;
         } else {
@@ -103,11 +100,11 @@ class TrickController extends AbstractController
         }
 
         return $this->render('trick/show.html.twig', [
-            'current-menu'  =>  'tricks',
             'trick'         =>  $trick,
             'comments'      =>  $comments,
             'form1'         =>  $form1->createView(),
             'form2'         =>  $form2->createView(),
+            'current-menu'  =>  'tricks',
             'nbComments'    =>  $nbComments,
         ]);
     }

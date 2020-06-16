@@ -10,7 +10,7 @@
             >
                 {# boutons d'édition #}
                 <div class="show_div_icones d-flex flex-row justify-content-end">
-                    {% if is_granted('ROLE_ADMIN') %}
+                    {% if app.user %}
                         <div class="text-right d-flex flex-row justify-content-end">
                             <a id="btn_edit_main_picture" class="edit" href="#">
                                 <i class="fas fa-pencil-alt mr-2"></i> 
@@ -36,7 +36,6 @@
                         <button type'submit' class="btn btn-primary">Valider</button>
                     {{ form_end(form1) }}
                 </div>
-
             </div>
 
             {# Photos et vidéos #}
@@ -47,7 +46,7 @@
                     {% endif %}
                 {% endfor %}
             </div>
-        
+            
             {# Description #}
             <div class="show_description mx-auto mt-3 mb-3 p-2 border border-light rounded">
                 {{ trick.description | raw }}
@@ -59,7 +58,7 @@
                     <span>mis en ligne le : {{ trick.createdAt | date("m/d/Y à H:i") }}h</span>
                 </div>
                 <div class="show_info border rounded">
-                    <span>modifié le : <br >{{ trick.updateAt | date("m/d/Y") }} à {{ trick.updateAt | date("H:i") }}h</span>
+                    <span>modifié le : <br >{{ trick.updatedAt | date("m/d/Y") }} à {{ trick.updatedAt | date("H:i") }}h</span>
                 </div>
                 <div class="show_info border rounded">
                     <span>Catégorie : <br >{{ trick.category.name}}</span>
@@ -86,18 +85,20 @@
             {% endif %}
             
             {# Commentaires #}
-            <section id="section_commentaires" class="show_commentaires mx-auto">
-                {% for comment in comments %}
-                    <div class="unCommentaire row justify-content-center mb-1">
-                        <div class="ligne_date col-md-3 font-weight-bold">
-                            Créé le : {{ comment.createdAt | date("m/d/Y à H:i") }}h
+            {% if comments %}
+                <section id="section_commentaires" class="show_commentaires mx-auto">
+                    {% for comment in comments %}
+                        <div class="unCommentaire row justify-content-center mb-1">
+                            <div class="ligne_date col-md-3 font-weight-bold">
+                                Créé le : {{ comment.createdAt | date("m/d/Y à H:i") }}h
+                            </div>
+                            <div class="ligne_content col-md-9 border text-justify">
+                                {{ comment.content | raw }}
+                            </div>
                         </div>
-                        <div class="ligne_content col-md-9 border text-justify">
-                            {{ comment.content | raw }}
-                        </div>
-                    </div>
-                {% endfor %}
-            </section>
+                    {% endfor %}
+                </section>
+            {% endif %}
 
             {# button more #}
             {% if not nbComments == 0 %}

@@ -6,14 +6,12 @@ use App\Entity\Trick;
 use App\Entity\Picture;
 use App\Form\TrickType;
 use Cocur\Slugify\Slugify;
-use App\Form\CreateTrickType;
-use App\Form\PictureUploadType;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminTrickController extends AbstractController
@@ -29,34 +27,43 @@ class AdminTrickController extends AbstractController
     }
 
     /**
-     * @Route("/admin/trick/create", name="admin.trick.new")
+     * @Route("/admin/trick/new", name="admin.trick.create")
      * @return Symfony\Component\HttpFoundation\Response
      */
-    public function new(Request $request, EntityManagerInterface $manager)
+    public function new(Request $request, EntityManagerInterface $manager): Response
     {
         $trick = new Trick();
-
         $form = $this->createForm(TrickType::class, $trick);
 
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
+            
+            $pictures = $form->get('pictures')->getData();
+
+            foreach($pictures as $picture)
+            {
+                $originalFilename = pathinfo($picture->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = (new Slugify())->slugify($originalFilename);
+                $newFilename = '/build/' . $safeFilename . '-' . uniqid() . '.' . $picture->guessExtension();
+
+                $picture->move($this->getParameter('pictures_directory'), $newFilename);
+
+                $newPicture = new Picture();
+                $newPicture->setFile($newFilename);
+                $trick->addPicture($newPicture);
+            }
+
             $user = $this->getUser();
             $trick->setUser($user);
+            $trick->setMainPicture('build/empty.jpg');
             $manager->persist($trick);
             $manager->flush();
 
-            if ($form->getClickedButton() === $form->get('save')) {
-                return $this->redirectToRoute('trick.show', [
-                    'slug'  =>  $trick->getSlug(),
-                    'id'    =>  $trick->getId(),
-                ]);
-            }
-
-            if ($form->getClickedButton() === $form->get('saveAndAdd')) {
-                return $this->redirectToRoute('admin/trick/addMedia', [
-                    'id'    => $trick->getId(),
-                ]);
-            }
+            return $this->redirectToRoute('trick.show', [
+                'slug' => $trick->getSlug(),
+                'id' => $trick->getId(),
+            ]);
         }
 
         return $this->render('admin/trick/new.html.twig', [
@@ -75,20 +82,30 @@ class AdminTrickController extends AbstractController
         $form = $this->createForm(TrickType::class, $trick);
 
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) 
+        {
+            // Récupération des images transmises
+            $pictures = $form->get('pictures')->getData();
+
+            // Boucle de traitement
+            foreach ($pictures as $picture) {
+                $originalFilename = pathinfo($picture->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = (new Slugify())->slugify($originalFilename);
+                $newFilename = '/build/' . $safeFilename . '-' . uniqid() . '.' . $picture->guessExtension();
+
+                $picture->move($this->getParameter('pictures_directory'), $newFilename);
+
+                $newPicture = new Picture();
+                $newPicture->setFile($newFilename);
+                $trick->addPicture($newPicture);
+            }
+
             $manager->flush();
 
-            if ($form->getClickedButton() === $form->get('save')) {
-                return $this->redirectToRoute('trick.show', [
-                    'slug'  =>  $trick->getSlug(),
-                    'id'    =>  $trick->getId(),
-                ]);
-            }
-            if ($form->getClickedButton() === $form->get('saveAndAdd')) {
-                return $this->redirectToRoute('admin.trick.addMedia', [
-                    'id' => $trick->getId(),
-                ]);
-            }
+            return $this->redirectToRoute('trick.show', [
+                'slug'  =>  $trick->getSlug(),
+                'id'    =>  $trick->getId(),
+            ]);
         }
 
         return $this->render('admin/trick/edit.html.twig', [
@@ -116,40 +133,31 @@ class AdminTrickController extends AbstractController
     }
 
     /**
-     * @Route("/admin/trick/addMedia/{id}", name="admin.trick.addMedia")
-     * @param Trick $trick
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("admin/suppressPicture/{id}", name="admin.picture.delete", methods={"DELETE"})
+     *
+     * @param Picture $picture
+     * @param Request $request
      */
-    public function addmedia(Trick $trick, Request $request, EntityManagerInterface $manager)
+    public function deletePicture(Picture $picture, Request $request, EntityManagerInterface $manager)
     {
-        $picture = new Picture();
-        $form = $this->createForm(PictureUploadType::class, $picture);
+        $data = json_decode($request->getContent(), true);
 
-        $form->handleRequest($request);
-        dump('1');
-        if ($form->isSubmitted()) {
-            dump('2');
-            $file = $form->get('file')->getData();
+        // Vérification du token
+        if($this->isCsrfTokenValid('delete'.$picture->getId(), $data['_token']))
+        {
+            $nom = $picture->getFile();
+            // Suppression du fichier
+            unlink($this->getParameter('pictures_directory').'/'.$nom);
 
-            $filename = md5(uniqid()) . '.' . $file->guessExtension();
-
-            $file->move($this->getParameter('pictures_directory'), $filename);
-
-            $picture
-                ->setFile($filename)
-                ->setTrick($trick);
-
-            $trick->addPicture($picture);
-
+            $manager->remove($picture);
             $manager->flush();
 
-            return $this->redirectToRoute('home');
+             //Retour d'un tabelau json
+            return new JsonResponse(['success' => 1]);
         }
-
-
-        return $this->render('admin/trick/addMedia.html.twig', [
-            'trick' =>  $trick,
-            'form'  =>  $form->createView(),
-        ]);
+        else
+        {
+            return new JsonResponse(['error'=> 'Token invalid'], 400);
+        }
     }
 }

@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Csrf\CsrfTokenManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class HomeController extends AbstractController
@@ -25,13 +26,26 @@ class HomeController extends AbstractController
 
     /**
      * @Route("/", name="home")
-     * @Route("/home/trick", name="tricks.index")
+     * @Route("/home/trick/{nbTricks}", name="tricks.index")
      * @return Response
      */
-    public function index(TrickRepository $repository, EntityManagerInterface $manager): Response
+    public function index(TrickRepository $repository, int $nbTricks = 0, EntityManagerInterface $manager): Response
     {
-        $tricks = $repository->findBy([], [], 4);
-        $nbTricks = $repository->countAll();
+        $nbTricksCount = $repository->countAll();
+        $restTricks = $nbTricksCount - $nbTricks;
+
+        $tricksToRead = $nbTricks + 4;
+        // Mise à zéro de la variable page si plus de tricks à afficher
+        if ($restTricks > 4) {
+            $displayBtn = true;
+            $nbTricks = $nbTricks + 4;
+        } else {
+            $displayBtn = false;
+            $nbTricks = $nbTricks + $restTricks;
+        }
+
+        $tricks = $repository->findBy([], [], $tricksToRead, 0);
+
 
         //Image à la une...
         foreach ($tricks as $trick) {
@@ -50,16 +64,10 @@ class HomeController extends AbstractController
         }
         $manager->flush();
 
-        // Mise à zéro de la variable page si plus de tricks à afficher
-        if ($nbTricks > 4) {
-            $displayBtn = true;
-        } else {
-            $displayBtn = false;
-        }
-
         return new Response($this->twig->render('pages/home.html.twig', [
             'tricks'        =>  $tricks,
             'displayBtn'    =>  $displayBtn,
+            'nbTricks'      =>  $nbTricks
         ]));
     }
 
@@ -107,7 +115,6 @@ class HomeController extends AbstractController
                 $tricksArray[$i]['name'] = $trick->getName();
                 $tricksArray[$i]['slug'] = $trick->getSlug();
                 $tricksArray[$i]['mainPicture'] = $trick->getMainPicture();
-
                 $i++;
             }
         }
