@@ -79,7 +79,7 @@
 
 .show_page {
     background-color : #d9e0ee;
-    width: 86%;
+    width: 95%;
 }
 
 .show_main_picture {
@@ -189,7 +189,7 @@
 }
 
 .edit_cards  {
-    width: 24%;
+    width: 15%;
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
@@ -204,22 +204,19 @@
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
-    width: 40%;
+    width: 48%;
     padding: 3px;
     padding-top: 10px;
     border: 1px solid;
     border-color: #64d3fa;
     border-radius: 5px;
+    line-height: 1rem;
 }
 
 .main_picture_text {
     text-align: center;
     padding-top: 35px;
     padding-bottom: 43px;
-}
-
-.edit_form {
-    width: 60%;
 }
 
 .edit_delete_btn {

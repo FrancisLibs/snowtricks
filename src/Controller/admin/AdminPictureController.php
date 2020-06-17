@@ -21,33 +21,6 @@ class AdminPictureController extends AbstractController
     }
 
     /**
-     * @Route("/admin/picture/{id}/{idPicture}", name="admin.picture.delete", methods="DELETE")
-     * @param Trick $trick
-     * @param int $idPicture
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function delete(Trick $trick, int $idPicture, Request $request, EntityManagerInterface $manager)
-    {
-        if($this->isCsrfTokenValid('delete' . $trick->getId(), $request->get('_token')))
-        {
-            $pictures = $trick->getPictures();
-            foreach($pictures as $picture)
-            { 
-                if($picture->getId() == $idPicture)
-                {
-                    $trick->removePicture($picture);
-                }
-            }
-            $manager->flush();
-
-            return $this->redirectToRoute("admin.trick.edit", [
-                'id' =>  $trick->getId(),
-            ]);
-        }
-        return $this->redirectToRoute('pages/home.html.twig');
-    }
-
-    /**
      * Route("/admin/upload/picture/{id}", name="admin.trick.upload.picture", methods={"post"})
      * @param Request $request
      * @return JsonResponse|FormInterface
@@ -92,5 +65,34 @@ class AdminPictureController extends AbstractController
         }
 
         return $form;
+    }
+
+    /**
+     * @Route("/admin/suppressPicture/{id}", name="admin.picture.delete", methods={"DELETE"})
+     *
+     * @param Picture $picture
+     * @param Request $request
+     */
+    public function deletePicture(Picture $picture, Request $request, EntityManagerInterface $manager)
+    {
+        $data = json_decode($request->getContent(), true);
+
+        // Vérification du token
+        if ($this->isCsrfTokenValid('delete' . $picture->getId(), $data['_token'])) {
+            $nom = $picture->getFile();
+            // On enlève le "\build" du nom
+            $nom = substr($nom, 6);
+            // Suppression du fichier
+
+            unlink($this->getParameter('pictures_directory') . $nom);
+
+            $manager->remove($picture);
+            $manager->flush();
+
+            //Retour d'un tabelau json
+            return $this->json(['success' => 1]);
+        } else {
+            return new JsonResponse(['error' => 'Token invalid'], 400);
+        }
     }
 }

@@ -1,41 +1,57 @@
 {{form_start(form)}}
 
     {% if app.request.attributes.get('_route') == 'admin.trick.edit' %}
-        {# Photos et vidéos #}
+        <div class="edit_form_images">{# Photos et vidéos #}
             <div class="edit_medias mt-3">
                 {% for picture in trick.pictures %}
                     <div class="edit_cards m-2">
-                        <img class="edit_card_img show_picture" src="{{ picture.file }}" alt="image">
+                        <img class="edit_card_img show_picture" src="{{ asset(picture.file | imagine_filter('test')) }}" alt="image">
                         
                         <div class="edit_icones mt-2 mr-2">
                             <a href="{{ path('admin.picture.edit', {idPicture : picture.id, id : trick.id}) }}">
-                                editer
-                            </a>  
-
+                                
+                                <i class="fas fa-pencil-alt mb-1 mr-3"></i>
+                            </a> 
                             <a href="{{ path('admin.picture.delete', {id : picture.id}) }}"
                                 data-delete  data-token="{{csrf_token('delete' ~ picture.id) }}">
-                                Supprimer
-                            </a>
+                                <i class="far fa-trash-alt  mb-1 mr-1"></i>
+                            </a>                         
                         </div>
                     </div>
                 {% endfor %}
             </div>
+        </div>
     {% endif %}
-
-    <div class="d-flex flex-row justify-content-start align-items-end">
-        <div class="w-50 mb-3 mr-5">
-            {{ form_label(form.name) }}
-            {{ form_widget(form.name) }}
+    {# Partie texte du trick #}
+    <div class="w-75 mx-auto">
+        <div class="row">
+            <div class="col-md-5 mb-2">
+                {{ form_label(form.name) }}
+                {{ form_widget(form.name) }}
+            </div>
         </div>
-        <div class="w-50">
-            {{form_row(form.category)}}
+         <div class="row">
+            <div class="col-md-12 mb-3">
+                {{ form_row(form.description) }}
+            </div>
+        </div>
+        <div class="row">
+            {# Catégorie #}
+            <div class="col-md-3">
+                {{form_row(form.category)}}
+            </div>
+            {# Ajout photo #}
+            <div class="col-md-8 offset-md-1">
+                <div class="col-md-10 mb-3 mr-5">
+                    {{ form_label(form.pictures) }}
+                    {{ form_widget(form.pictures) }}
+                </div>
+                {# Ajout video #}
+                <div class="col-md-10 mb-3 mr-5">
+                    {{ form_row(form.videos) }}
+                </div>
+            </div>
         </div>
     </div>
-
-    <div class="row edit_form_descritpion w-100">
-        <div class="col-md-12 mb-3">
-            {{ form_row(form.description) }}
-        </div>
-    </div>
-
+    
 {{form_end(form)}}

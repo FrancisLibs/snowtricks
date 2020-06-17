@@ -102,9 +102,8 @@ class AdminTrickController extends AbstractController
 
             $manager->flush();
 
-            return $this->redirectToRoute('trick.show', [
-                'slug'  =>  $trick->getSlug(),
-                'id'    =>  $trick->getId(),
+            return $this->redirectToRoute('admin.trick.edit', [
+                'id' =>  $trick->getId(),
             ]);
         }
 
@@ -130,34 +129,5 @@ class AdminTrickController extends AbstractController
         }
 
         return $this->render('pages/home.html.twig');
-    }
-
-    /**
-     * @Route("admin/suppressPicture/{id}", name="admin.picture.delete", methods={"DELETE"})
-     *
-     * @param Picture $picture
-     * @param Request $request
-     */
-    public function deletePicture(Picture $picture, Request $request, EntityManagerInterface $manager)
-    {
-        $data = json_decode($request->getContent(), true);
-
-        // Vérification du token
-        if($this->isCsrfTokenValid('delete'.$picture->getId(), $data['_token']))
-        {
-            $nom = $picture->getFile();
-            // Suppression du fichier
-            unlink($this->getParameter('pictures_directory').'/'.$nom);
-
-            $manager->remove($picture);
-            $manager->flush();
-
-             //Retour d'un tabelau json
-            return new JsonResponse(['success' => 1]);
-        }
-        else
-        {
-            return new JsonResponse(['error'=> 'Token invalid'], 400);
-        }
     }
 }

@@ -36,11 +36,19 @@ class TrickType extends AbstractType
             ])
 
             ->add('pictures', FileType::class, [
-                'label'     => false,
+                'label'     => 'Ajout photo',
                 'multiple'  => true,
                 'mapped'    => false,
                 'required'  => false,
             ] )
+
+            ->add('videos',  TextType::class, [
+                'required'  => false,
+                'mapped'    => false,
+                'attr' => [
+                    'placeholder' => 'Vidéo....'
+                ]
+            ])
 
             ->add('save', SubmitType::class, [
                 'label' => 'Enregistrer'
