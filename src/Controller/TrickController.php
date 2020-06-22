@@ -50,16 +50,27 @@ class TrickController extends AbstractController
 
             if ($pictureFile) 
             {
+                // Effacement de l'ancien fichier
+                $nom = $trick->getMainPicture();
+
+                if(!empty($nom) && $nom != 'empty.jpg')
+                {
+                    unlink($this->getParameter('pictures_directory') . '/' . $nom);
+                }
+
+                // Traitement du nom du nouveau fichier
                 $originalFilename = pathinfo($pictureFile->getClientOriginalName(), PATHINFO_FILENAME);
                 // this is needed to safely include the file name as part of the URL
                 $safeFilename = (new Slugify())->slugify($originalFilename);
-                $newFilename = '/build/' . $safeFilename . '-' . uniqid() . '.' . $pictureFile->guessExtension();
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $pictureFile->guessExtension();
 
                 $pictureFile->move($this->getParameter('pictures_directory'), $newFilename);
 
                 $trick->setMainPicture($newFilename);
 
                 $manager->flush();
+
+                
 
                 return $this->redirectToRoute('trick.show', [
                     'slug' => $trick->getSlug(),

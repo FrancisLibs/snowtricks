@@ -4,14 +4,9 @@
     <div class="container" id="haut">
         <div class="show_page mx-auto mt-3 pb-5">
 
-            {# Définition de l'image à la une ou l'image vide #}
-            {% set url = "build/empty.jpg" %}
-            {% if trick.mainPicture %}
-                {% set url = trick.mainPicture %}
-            {% endif %}
-
             {# Image à la une #}
-            <div class="show_main_picture d-flex flex-column" style="background-image: url('{{ asset(url) }}');">
+            <div class="show_main_picture d-flex flex-column" 
+                style="background-image: url( /build{{ asset(trick.mainPicture) }} );">
                 {# Nom du trick #}
                 <div class="show_div_titre d-flex flex-column justify-content-center align-items-center">
                     <div class="show_picture_title text-center">
@@ -20,7 +15,6 @@
                 </div>
             </div>
 
-            
             <div class="edit_form mx-auto">
                 {{ include('admin/trick/_editform.html.twig') }}
             </div>

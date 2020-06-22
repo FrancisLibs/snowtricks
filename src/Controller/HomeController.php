@@ -54,7 +54,7 @@ class HomeController extends AbstractController
 
             if (empty($mainPicture)) {
                 if ($pictures->isEmpty()) {
-                    $trick->setMainPicture('build/empty.jpg');
+                    $trick->setMainPicture('empty.jpg');
                 } else {
                     $mainPicture = $pictures->first()->getFile();
                     $trick->setMainPicture($mainPicture);
@@ -90,7 +90,7 @@ class HomeController extends AbstractController
 
             if (empty($mainPicture)) {
                 if ($pictures->isEmpty()) {
-                    $trick->setMainPicture('build/empty.jpg');
+                    $trick->setMainPicture('empty.jpg');
                 } else {
                     $mainPicture = $pictures->first()->getFile();
                     $trick->setMainPicture($mainPicture);

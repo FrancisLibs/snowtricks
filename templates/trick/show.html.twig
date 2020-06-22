@@ -6,7 +6,7 @@
     
             {# Image à la une #}
             <div id="visibility" class="show_main_picture d-flex flex-column" 
-                style="background-image: url({{ asset(trick.mainPicture) }});"
+                style="background-image: url( /build{{ asset(trick.mainPicture) }} );"
             >
                 {# boutons d'édition #}
                 <div class="show_div_icones d-flex flex-row justify-content-end">
@@ -42,10 +42,13 @@
             <div class="medias mt-3">
                 {% for picture in trick.pictures %}
                     {% if picture.file %}
-                        <img class="card-img-top show_picture" src="{{ picture.file }}">
+                        {% set file = picture.file %} 
+                        {% set file = '/build/' ~ file %}
+                        <img class="card-img-top show_picture" src="{{ asset(file) | imagine_filter('test')}}"  alt="image">
                     {% endif %}
                 {% endfor %}
             </div>
+
             
             {# Description #}
             <div class="show_description mx-auto mt-3 mb-3 p-2 border border-light rounded">
@@ -117,10 +120,12 @@
 {% block javascripts %}
 
 <script>
+    // Affichage formulaire changement image à la une
     $('#btn_edit_main_picture').click(function() {  
         $('#main_picture_upload_form').show('slow');      
     });
 
+    // Gestion affichage des commentaires
     $(function() {
         $('#pathToController').click(function(e) {
             e.preventDefault();

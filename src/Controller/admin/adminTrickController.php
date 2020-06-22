@@ -45,7 +45,7 @@ class AdminTrickController extends AbstractController
             {
                 $originalFilename = pathinfo($picture->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = (new Slugify())->slugify($originalFilename);
-                $newFilename = '/build/' . $safeFilename . '-' . uniqid() . '.' . $picture->guessExtension();
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $picture->guessExtension();
 
                 $picture->move($this->getParameter('pictures_directory'), $newFilename);
 
@@ -56,7 +56,7 @@ class AdminTrickController extends AbstractController
 
             $user = $this->getUser();
             $trick->setUser($user);
-            $trick->setMainPicture('build/empty.jpg');
+            $trick->setMainPicture('empty.jpg');
             $manager->persist($trick);
             $manager->flush();
 
@@ -91,7 +91,7 @@ class AdminTrickController extends AbstractController
             foreach ($pictures as $picture) {
                 $originalFilename = pathinfo($picture->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = (new Slugify())->slugify($originalFilename);
-                $newFilename = '/build/' . $safeFilename . '-' . uniqid() . '.' . $picture->guessExtension();
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $picture->guessExtension();
 
                 $picture->move($this->getParameter('pictures_directory'), $newFilename);
 

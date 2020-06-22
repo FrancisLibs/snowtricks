@@ -2,7 +2,9 @@
 namespace App\Controller\admin;
 
 use App\Entity\Trick;
+use App\Entity\Picture;
 use App\Form\PictureUploadType;
+use App\Repository\PictureRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,14 +14,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminPictureController extends AbstractController
 {
-    /**
-     * @Route("admin/picture/edit/{id}/{idPicture}", name="admin.picture.edit")
-     */
-    public function edit(int $idPicture, Request $request)
-    {
-        return $this->render('admin/picture/edit.html.twig');
-    }
-
     /**
      * Route("/admin/upload/picture/{id}", name="admin.trick.upload.picture", methods={"post"})
      * @param Request $request
@@ -43,28 +37,29 @@ class AdminPictureController extends AbstractController
     }
 
     /**
-     * @Route("/admin/upload/picture/", name="upload.picture", methods={"POST"})
+     * @Route("/admin/picture/edit/{id}/{pictureId}", name="admin.picture.edit", methods={"POST"})
      *
      * @param Request $request
-     *
+     * @param int $pictureId
+     * @param Trick $trick
      * @return JsonResponse|FormInterface
      */
-    public function uploadAction(Request $request)
+    public function uploadAction(Trick $trick, int $pictureId, Request $request, EntityManagerInterface $manager, PictureRepository $PictureRepository)
     {
-        //$this->denyAccessUnlessGranted('ROLE_USER', null, 'Unable to access this page!');
-        $form = $this->createForm(PictureUploadType::class);
-        $form->handleRequest($request);
+        $token = $request->request->get('token');
+        $file = $request->request->get('file');
+        $picture = $PictureRepository->findOneById($pictureId);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $file = $form->getData();
-            //$this->getDoctrine()
-             //   ->getRepository('AppBundle:File')
-             //   ->store($file);
+        // Vérification du token
+        if($this->isCsrfTokenValid('edit' . $picture->getId(), $token))
+        {
+            $nom = $picture->getFile();
 
-            return new JsonResponse(["key" => $file->getDocumentKey()], 201);
+            // Suppression du fichier
+            unlink( '/build' . '/' . $nom);
+            $manager->remove($picture);
         }
-
-        return $form;
+        return $this->json(['success' =>1]);
     }
 
     /**
@@ -80,11 +75,9 @@ class AdminPictureController extends AbstractController
         // Vérification du token
         if ($this->isCsrfTokenValid('delete' . $picture->getId(), $data['_token'])) {
             $nom = $picture->getFile();
-            // On enlève le "\build" du nom
-            $nom = substr($nom, 6);
+            
             // Suppression du fichier
-
-            unlink($this->getParameter('pictures_directory') . $nom);
+            unlink($this->getParameter('pictures_directory') . '/' . $nom);
 
             $manager->remove($picture);
             $manager->flush();

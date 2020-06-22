@@ -11,7 +11,7 @@
 }
 
 .header {
-    background-image: url("../img/home_img.jpg");
+    background-image: url('../img/fond.jpg');
     background-color: white;
     background-attachment: fixed;
     background-repeat: no-repeat;
@@ -204,7 +204,7 @@
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
-    width: 48%;
+    width: %;
     padding: 3px;
     padding-top: 10px;
     border: 1px solid;

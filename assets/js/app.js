@@ -13,7 +13,7 @@ require('../css/app.css');
 
 console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
 
-// script d'effacement d'images dans le formulaire add images
+// script d'effacement d'images dans le formulaire add images du template admin/trick/_editform
 window.onload = () => {
     //Gestion des boutons "supprimmer"
     let links = document.querySelectorAll("[data-delete]")
@@ -25,7 +25,7 @@ window.onload = () => {
             e.preventDefault()
 
             //Confirmation de suppression
-            if(confirm('Voulez-vous supprimer cette image, si oui, elle le sera, sans validation !')){
+            if(confirm('Voulez-vous vraiment supprimer cette image ?')){
                 fetch(this.getAttribute("href"), {
                     method: "DELETE",
                     headers: {
@@ -38,7 +38,7 @@ window.onload = () => {
                     response => response.json()
                 ).then(data => {
                     if(data.success)
-                        this.parentNode.parentNode.remove()
+                        this.parentNode.remove()
                     else
                         alert(data.error)
                 }).catch(e => alert(e))
@@ -46,3 +46,45 @@ window.onload = () => {
         })
     }
 }
+
+$(function () {
+    $(".btnEditPicture").on('click', function (e) {
+        e.preventDefault();
+        $(this).hide('slow');
+        $(this).prev().show('slow');
+        $(this).prev().val('');
+    })
+})
+
+$(function () {
+    selector = document.getElementsByName('uploadPictureFile');
+    $(selector).change(function() { 
+        var path = $(this).next().attr("href");
+        element = $(selector);
+        var file = $(this)[0].files[0];
+        var token = $(this).next().attr('data-token');
+        var formData = new FormData();
+        formData.append("file", file);
+        formData.append("token", token);
+
+        $.ajax({
+            type: "POST",
+            url: path,
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            async: false,
+            dataType: "json",
+            error: function (err) {
+                console.error(err);
+            },
+            success: function (data) {
+                //console.log(data);
+            },
+            complete: function () {
+                console.log("Request finished.");
+            }
+        });
+    });
+});
