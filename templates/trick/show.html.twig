@@ -6,7 +6,11 @@
     
             {# Image à la une #}
             <div id="visibility" class="show_main_picture d-flex flex-column" 
-                style="background-image: url( /build{{ asset(trick.mainPicture) }} );"
+                {% if vich_uploader_asset(trick, 'imageFile') is null %}
+                    style="background-image: url( /build{{ asset('empty.jpg') }} );"
+                {% else %}
+                    style="background-image: url( {{ vich_uploader_asset(trick, 'imageFile') }} );"
+                {% endif %}
             >
                 {# boutons d'édition #}
                 <div class="show_div_icones d-flex flex-row justify-content-end">
@@ -39,7 +43,7 @@
             </div>
 
             {# Photos et vidéos #}
-            <div class="medias mt-3">
+           {# <div class="medias mt-3">
                 {% for picture in trick.pictures %}
                     {% if picture.file %}
                         {% set file = picture.file %} 
@@ -47,7 +51,7 @@
                         <img class="card-img-top show_picture" src="{{ asset(file) | imagine_filter('test')}}"  alt="image">
                     {% endif %}
                 {% endfor %}
-            </div>
+            </div>#}
 
             
             {# Description #}

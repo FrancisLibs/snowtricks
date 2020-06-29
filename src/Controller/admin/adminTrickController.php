@@ -21,16 +21,23 @@ class AdminTrickController extends AbstractController
      */
     private $repository;
 
-    public function __construct(TrickRepository $repository)
+    /**
+     *
+     * @var EntityManagerInterface
+     */
+    private $manager;
+
+    public function __construct(TrickRepository $repository, EntityManagerInterface $manager)
     {
         $this->repository = $repository;
+        $this->manager = $manager;
     }
 
     /**
      * @Route("/admin/trick/new", name="admin.trick.create")
      * @return Symfony\Component\HttpFoundation\Response
      */
-    public function new(Request $request, EntityManagerInterface $manager): Response
+    public function new(Request $request): Response
     {
         $trick = new Trick();
         $form = $this->createForm(TrickType::class, $trick);
@@ -57,8 +64,8 @@ class AdminTrickController extends AbstractController
             $user = $this->getUser();
             $trick->setUser($user);
             $trick->setMainPicture('empty.jpg');
-            $manager->persist($trick);
-            $manager->flush();
+            $this->manager->persist($trick);
+            $this->manager->flush();
 
             return $this->redirectToRoute('trick.show', [
                 'slug' => $trick->getSlug(),
@@ -77,34 +84,19 @@ class AdminTrickController extends AbstractController
      * @param Trick $trick
      * @return Symfony\Component\HttpFoundation\Response
      */
-    public function edit(Trick $trick, Request $request, EntityManagerInterface $manager): Response
+    public function edit(Trick $trick, Request $request): Response
     {
         $form = $this->createForm(TrickType::class, $trick);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) 
         {
-            // Récupération des images transmises
-            $pictures = $form->get('pictures')->getData();
+                $this->manager->flush();
+                $this->addFlash('success', 'trick modifié');
 
-            // Boucle de traitement
-            foreach ($pictures as $picture) {
-                $originalFilename = pathinfo($picture->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFilename = (new Slugify())->slugify($originalFilename);
-                $newFilename = $safeFilename . '-' . uniqid() . '.' . $picture->guessExtension();
-
-                $picture->move($this->getParameter('pictures_directory'), $newFilename);
-
-                $newPicture = new Picture();
-                $newPicture->setFile($newFilename);
-                $trick->addPicture($newPicture);
-            }
-
-            $manager->flush();
-
-            return $this->redirectToRoute('admin.trick.edit', [
-                'id' =>  $trick->getId(),
-            ]);
+                return $this->redirectToRoute('admin.trick.edit', [
+                    'id' =>  $trick->getId(),
+                ]);
         }
 
         return $this->render('admin/trick/edit.html.twig', [

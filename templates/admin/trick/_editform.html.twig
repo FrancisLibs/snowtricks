@@ -1,41 +1,15 @@
 {{form_start(form)}}
 
-    {% if app.request.attributes.get('_route') == 'admin.trick.edit' %}
-        <div class="edit_form_images">{# Photos et vidéos #}
-            <div class="edit_medias mt-3">
-                {% for picture in trick.pictures %}
-                    <div class="edit_cards m-2">
-                    {# formatage du nom de fichier avec le bon dossier (/build/) #}
-                        {% set file = picture.file %} 
-                        {% set file = '/build/' ~ file %}
-                        <img class="edit_card_img show_picture" src="{{ asset(file) | imagine_filter('test')}}" alt="image">
-
-                        <div class="inputFile">
-                            <input type="file" id="fileInput.{{picture.id}}" name="uploadPictureFile" style="display: none;">
-                            <a class="btnEditPicture" id="btnFileInput.{{picture.id}}"
-                                href="{{ path('admin.picture.edit', {id : trick.id, pictureId : picture.id, }) }}"
-                                data-token="{{csrf_token('edit' ~ picture.id) }}"
-                            >
-                            <i class="fas fa-pencil-alt mb-1 mr-3"></i>
-                            </a> 
-                        </div>
-                        
-                        <a href="{{ path('admin.picture.delete', {id : picture.id}) }}"
-                            data-delete  data-token="{{csrf_token('delete' ~ picture.id) }}">
-                            <i class="far fa-trash-alt  mb-1 mr-1"></i>
-                        </a>                         
-
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    {% endif %}
     {# Partie texte du trick #}
     <div class="w-75 mx-auto">
         <div class="row">
             <div class="col-md-5 mb-2">
                 {{ form_label(form.name) }}
                 {{ form_widget(form.name) }}
+            </div>
+            <div class="col-md-6 mb-2">
+                {{ form_label(form.imageFile) }}
+                {{ form_widget(form.imageFile) }}
             </div>
         </div>
          <div class="row">
@@ -47,17 +21,6 @@
             {# Catégorie #}
             <div class="col-md-3">
                 {{form_row(form.category)}}
-            </div>
-            {# Ajout photo #}
-            <div class="col-md-8 offset-md-1">
-                <div class="col-md-10 mb-3 mr-5">
-                    {{ form_label(form.pictures) }}
-                    {{ form_widget(form.pictures) }}
-                </div>
-                {# Ajout video #}
-                <div class="col-md-10 mb-3 mr-5">
-                    {{ form_row(form.videos) }}
-                </div>
             </div>
         </div>
     </div>

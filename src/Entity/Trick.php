@@ -4,12 +4,19 @@ namespace App\Entity;
 
 use App\Entity\Picture;
 use Cocur\Slugify\Slugify;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
+ * @UniqueEntity("name")
+ * @Vich\Uploadable
  */
 class Trick
 {
@@ -72,15 +79,22 @@ class Trick
     private $main_picture;
 
     /**
-     * @ORM\OneToMany(targetEntity=Picture::class, mappedBy="trick", 
-     * cascade={"persist"}, orphanRemoval = true)
+     * @var File|null
+     * @Assert\Image(
+     *  mimeTypes = "image/jpeg"
+     * )
+     * @Vich\UploadableField(mapping="trick_image", fileNameProperty="fileName")
      */
-    private $pictures;
+    private $imageFile;
 
     /**
-     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick")
+     * @ORM\Column(type="string", length= 255)
+     *
+     * @var string|null
      */
-    private $videos;
+    private $fileName;
+
+    
 
     public function getId(): ?int
     {
@@ -208,64 +222,31 @@ class Trick
     }
 
     /**
-     * @return Collection|Picture[]
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile
      */
-    public function getPictures(): Collection
+    public function setImageFile(?File $imageFile = null): Trick
     {
-        return $this->pictures;
-    }
+        $this->imageFile = $imageFile;
 
-    public function addPicture(Picture $picture): self
-    {
-        if (!$this->pictures->contains($picture)) {
-            $this->pictures[] = $picture;
-            $picture->setTrick($this);
+        if ($this->imageFile instanceof UploadedFile) {
+            $this->updated_at = new \DateTime('now');
         }
 
         return $this;
     }
 
-    public function removePicture(Picture $picture): self
+    public function getImageFile(): ?File
     {
-        if ($this->pictures->contains($picture)) {
-            $this->pictures->removeElement($picture);
-            // set the owning side to null (unless already changed)
-            if ($picture->getTrick() === $this) {
-                $picture->setTrick(null);
-            }
-        }
-
-        return $this;
+        return $this->imageFile;
     }
 
-    /**
-     * @return Collection|Video[]
-     */
-    public function getVideos(): Collection
+    public function setFileName(?string $fileName): void
     {
-        return $this->videos;
+        $this->fileName = $fileName;
     }
 
-    public function addVideo(Video $video): self
+    public function getFileName(): ?string
     {
-        if (!$this->videos->contains($video)) {
-            $this->videos[] = $video;
-            $video->setTrick($this);
-        }
-
-        return $this;
-    }
-
-    public function removeVideo(Video $video): self
-    {
-        if ($this->videos->contains($video)) {
-            $this->videos->removeElement($video);
-            // set the owning side to null (unless already changed)
-            if ($video->getTrick() === $this) {
-                $video->setTrick(null);
-            }
-        }
-
-        return $this;
+        return $this->fileName;
     }
 }

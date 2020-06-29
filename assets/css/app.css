@@ -11,7 +11,7 @@
 }
 
 .header {
-    background-image: url('../img/fond.jpg');
+    background-image: url("../img/fond.jpg");
     background-color: white;
     background-attachment: fixed;
     background-repeat: no-repeat;

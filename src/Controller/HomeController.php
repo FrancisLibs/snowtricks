@@ -46,24 +46,18 @@ class HomeController extends AbstractController
 
         $tricks = $repository->findBy([], [], $tricksToRead, 0);
 
-
         //Image à la une...
         foreach ($tricks as $trick) {
-            $pictures = $trick->getPictures();
-            $mainPicture = $trick->getMainPicture();
+            $mainPicture = $trick->getFileName();
 
-            if (empty($mainPicture)) {
-                if ($pictures->isEmpty()) {
-                    $trick->setMainPicture('empty.jpg');
-                } else {
-                    $mainPicture = $pictures->first()->getFile();
-                    $trick->setMainPicture($mainPicture);
-                }
+            if (empty($mainPicture)) 
+            {
+                $trick->setMainPicture('empty.jpg');
             }
             $manager->persist($trick);
+            $manager->flush();
         }
-        $manager->flush();
-
+        
         return new Response($this->twig->render('pages/home.html.twig', [
             'tricks'        =>  $tricks,
             'displayBtn'    =>  $displayBtn,

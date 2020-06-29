@@ -3,6 +3,7 @@ namespace App\Controller\admin;
 
 use App\Entity\Trick;
 use App\Entity\Picture;
+use Cocur\Slugify\Slugify;
 use App\Form\PictureUploadType;
 use App\Repository\PictureRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,6 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 
 class AdminPictureController extends AbstractController
 {
@@ -26,9 +29,9 @@ class AdminPictureController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) 
         {
-            $this->getDoctrine()
+            /*$this->getDoctrine()
                 ->getRepository('AppBundle:File')
-                ->store($form->getData());
+                ->store($form->getData());*/
 
             return new JsonResponse([], 201);
         }
@@ -44,22 +47,42 @@ class AdminPictureController extends AbstractController
      * @param Trick $trick
      * @return JsonResponse|FormInterface
      */
-    public function uploadAction(Trick $trick, int $pictureId, Request $request, EntityManagerInterface $manager, PictureRepository $PictureRepository)
+    public function uploadAction(Trick $trick, int $pictureId, Request $request, EntityManagerInterface $manager)
     {
-        $token = $request->request->get('token');
-        $file = $request->request->get('file');
-        $picture = $PictureRepository->findOneById($pictureId);
-
-        // Vérification du token
-        if($this->isCsrfTokenValid('edit' . $picture->getId(), $token))
+        if($request->isXmlHttpRequest())// is it an Ajax request?
         {
-            $nom = $picture->getFile();
+            // On efface l'ancienne image
+            //$picture = $PictureRepository->findOneById($pictureId);
+            $fileName = $picture->getFile();
+            $trick->removePicture($picture);
 
             // Suppression du fichier
-            unlink( '/build' . '/' . $nom);
-            $manager->remove($picture);
+            unlink($this->getParameter('pictures_directory').'/'.$fileName);
+
+            // On récupère la nouvelle image
+            $file = $request->files->get('file');/* Getting the file */
+       
+            // Traitement du nom du nouveau fichier
+            $originalFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+
+            // this is needed to safely include the file name as part of the URL
+            $safeFilename = (new Slugify())->slugify($originalFileName);
+            $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
+
+            $file->move($this->getParameter('pictures_directory'), $newFilename);
+
+            $picture = new Picture();
+            $picture->setFile($newFilename);
+
+            $trick->addPicture($picture);
+
+            $manager->persist($picture);
+            $manager->flush();
+
+            $imagePath = $imagine->getUrlOfFilteredImage($this->getParameter('pictures_directory').'/'.$newFilename, 'my_thumb');
         }
-        return $this->json(['success' =>1]);
+
+        return $this->json(['newImage' => $imagePath]);
     }
 
     /**
@@ -68,7 +91,7 @@ class AdminPictureController extends AbstractController
      * @param Picture $picture
      * @param Request $request
      */
-    public function deletePicture(Picture $picture, Request $request, EntityManagerInterface $manager)
+    public function deletePicture(Request $request, EntityManagerInterface $manager)
     {
         $data = json_decode($request->getContent(), true);
 
