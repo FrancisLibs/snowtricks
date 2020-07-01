@@ -13,7 +13,7 @@ require('../css/app.css');
 
 console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
 
-// script d'effacement d'images dans le formulaire add images du template admin/trick/_editform
+// script d'effacement d'images dans le formulaire add images du template admin/trick/edit.html.twig
 window.onload = () => {
     //Gestion des boutons "supprimmer"
     let links = document.querySelectorAll("[data-delete]")

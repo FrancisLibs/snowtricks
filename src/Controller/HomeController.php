@@ -45,24 +45,12 @@ class HomeController extends AbstractController
         }
 
         $tricks = $repository->findBy([], [], $tricksToRead, 0);
-
-        //Image à la une...
-        foreach ($tricks as $trick) {
-            $mainPicture = $trick->getFileName();
-
-            if (empty($mainPicture)) 
-            {
-                $trick->setMainPicture('empty.jpg');
-            }
-            $manager->persist($trick);
-            $manager->flush();
-        }
         
-        return new Response($this->twig->render('pages/home.html.twig', [
+        return $this->render('pages/home.html.twig', [
             'tricks'        =>  $tricks,
             'displayBtn'    =>  $displayBtn,
             'nbTricks'      =>  $nbTricks
-        ]));
+        ]);
     }
 
     /**
@@ -76,23 +64,6 @@ class HomeController extends AbstractController
         $tricksDisplaying = $request->query->get('nbTricks');
         $tricksToDisplay = $nbTricks - $tricksDisplaying;
         $tricks = $repository->findBy([], [], 4, $tricksDisplaying);
-
-        //Image à la une...
-        foreach ($tricks as $trick) {
-            $pictures = $trick->getPictures();
-            $mainPicture = $trick->getMainPicture();
-
-            if (empty($mainPicture)) {
-                if ($pictures->isEmpty()) {
-                    $trick->setMainPicture('empty.jpg');
-                } else {
-                    $mainPicture = $pictures->first()->getFile();
-                    $trick->setMainPicture($mainPicture);
-                }
-            }
-            $manager->persist($trick);
-        }
-        $manager->flush();
 
         // Mise à zéro de la variable page si plus de tricks à afficher
         if ($tricksToDisplay >= 5) {
@@ -108,7 +79,6 @@ class HomeController extends AbstractController
                 $tricksArray[$i]['id'] = $trick->getId();
                 $tricksArray[$i]['name'] = $trick->getName();
                 $tricksArray[$i]['slug'] = $trick->getSlug();
-                $tricksArray[$i]['mainPicture'] = $trick->getMainPicture();
                 $i++;
             }
         }

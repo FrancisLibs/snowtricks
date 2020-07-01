@@ -2,21 +2,17 @@
 
 namespace App\Entity;
 
-use App\Entity\Picture;
 use Cocur\Slugify\Slugify;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
-use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
  * @UniqueEntity("name")
- * @Vich\Uploadable
  */
 class Trick
 {
@@ -74,27 +70,28 @@ class Trick
     private $user;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Picture", mappedBy="trick", orphanRemoval=true, cascade={"persist"})
      */
-    private $main_picture;
+    private $pictures;
 
     /**
-     * @var File|null
-     * @Assert\Image(
-     *  mimeTypes = "image/jpeg"
-     * )
-     * @Vich\UploadableField(mapping="trick_image", fileNameProperty="fileName")
+     * @Assert\All({
+     *   @Assert\Image(mimeTypes="image/jpeg")
+     * })
      */
-    private $imageFile;
+    private $pictureFiles;
 
     /**
-     * @ORM\Column(type="string", length= 255)
-     *
-     * @var string|null
+     * @ORM\OneToOne(targetEntity=Picture::class, inversedBy="mainPictureTrick", orphanRemoval=true, cascade={"persist"})
      */
-    private $fileName;
+    private $mainPicture;
 
-    
+    /**
+     * @Assert\Image(mimeTypes="image/jpeg")
+     */
+    private $mainPictureFile;
+
+    //--------------------------------------------------------------------------
 
     public function getId(): ?int
     {
@@ -209,44 +206,100 @@ class Trick
         return $this;
     }
 
-    public function getMainPicture(): ?string
+    /**
+     * @return mixed
+     */
+    public function getPictureFiles()
     {
-        return $this->main_picture;
+        return $this->pictureFiles;
     }
 
-    public function setMainPicture(?string $main_picture): self
+    /**
+     * @param mixed $pictureFiles
+     * @return Trick
+     */
+    public function setPictureFiles($pictureFiles): self
     {
-        $this->main_picture = $main_picture;
-
+        foreach ($pictureFiles as $pictureFile) {
+            $picture = new Picture();
+            $picture->setImageFile($pictureFile);
+            $this->addPicture($picture);
+        }
+        $this->pictureFiles = $pictureFiles;
         return $this;
     }
 
     /**
-     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile
+     * @return Collection|Picture[]
      */
-    public function setImageFile(?File $imageFile = null): Trick
+    public function getPictures(): Collection
     {
-        $this->imageFile = $imageFile;
+        return $this->pictures;
+    }
 
-        if ($this->imageFile instanceof UploadedFile) {
-            $this->updated_at = new \DateTime('now');
+    public function getPicture(): ?Picture
+    {
+        if ($this->pictures->isEmpty()) {
+            return null;
+        }
+        return $this->pictures->first();
+    }
+
+    public function addPicture(Picture $picture): self
+    {
+        if (!$this->pictures->contains($picture)) {
+            $this->pictures[] = $picture;
+            $picture->setTrick($this);
         }
 
         return $this;
     }
 
-    public function getImageFile(): ?File
+    public function removePicture(Picture $picture): self
     {
-        return $this->imageFile;
+        if ($this->pictures->contains($picture)) {
+            $this->pictures->removeElement($picture);
+            // set the owning side to null (unless already changed)
+            if ($picture->getTrick() === $this) {
+                $picture->setTrick(null);
+            }
+        }
+
+        return $this;
     }
 
-    public function setFileName(?string $fileName): void
+    public function getMainPicture(): ?Picture
     {
-        $this->fileName = $fileName;
+        return $this->mainPicture;
     }
 
-    public function getFileName(): ?string
+    public function setMainPicture(?Picture $mainPicture): self
     {
-        return $this->fileName;
+        $this->mainPicture = $mainPicture;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMainPictureFile()
+    {
+        return $this->mainPictureFile;
+    }
+
+    /**
+     * @param mixed $mainPictureFile
+     * @return Trick
+     */
+    public function setMainPictureFile($mainPictureFile): self
+    {
+        $picture = new Picture();
+        $picture->setImageFile($mainPictureFile);
+        $picture->setMainPicture(true);
+        $picture->setTrick($this);
+        $this->setMainPicture($picture);
+       
+        return $this;
     }
 }

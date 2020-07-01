@@ -35,18 +35,14 @@ class TrickType extends AbstractType
                 'choice_label'  => 'name'
             ])
 
-            
-            
-            ->add('imageFile', FileType::class, [
+            ->add('pictureFiles', FileType::class, [
                 'required'  => false,
+                'multiple'  => true,
             ])
-
 
             ->add('save', SubmitType::class, [
                 'label' => 'Enregistrer'
             ]);
-
-            
     }
 
     public function configureOptions(OptionsResolver $resolver)

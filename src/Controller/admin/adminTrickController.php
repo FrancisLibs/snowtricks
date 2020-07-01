@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminTrickController extends AbstractController
@@ -37,11 +37,9 @@ class AdminTrickController extends AbstractController
      * @Route("/admin/trick/new", name="admin.trick.create")
      * @return Symfony\Component\HttpFoundation\Response
      */
-    public function new(Request $request): Response
-    {
+    public function new(Request $request) {
         $trick = new Trick();
         $form = $this->createForm(TrickType::class, $trick);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -63,7 +61,6 @@ class AdminTrickController extends AbstractController
 
             $user = $this->getUser();
             $trick->setUser($user);
-            $trick->setMainPicture('empty.jpg');
             $this->manager->persist($trick);
             $this->manager->flush();
 
@@ -89,8 +86,7 @@ class AdminTrickController extends AbstractController
         $form = $this->createForm(TrickType::class, $trick);
 
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) 
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
                 $this->manager->flush();
                 $this->addFlash('success', 'trick modifié');
 
@@ -121,5 +117,28 @@ class AdminTrickController extends AbstractController
         }
 
         return $this->render('pages/home.html.twig');
+    }
+
+    /**
+     * @Route("/admin/mainPicture/delete/{id}", name="admin.mainPicture.delete")
+     * @param Trick $trick
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function mainPictureDelete(Trick $trick, EntityManagerInterface $manager, UploaderHelper $helper): Response
+    {
+        $picture = $trick->getMainPicture();
+        if ($picture) {
+            $fileName = $picture->getfileName();
+            unlink('media/tricks/' . $fileName);
+            $trick->setMainPicture(null);
+            $manager->remove($picture);
+
+            $manager->flush();
+        }
+
+        return $this->redirectToRoute('trick.show', [
+            'slug'  =>  $trick->getSlug(),
+            'id'    =>  $trick->getId(),
+        ]);
     }
 }

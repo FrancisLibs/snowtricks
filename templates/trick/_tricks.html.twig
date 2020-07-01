@@ -1,12 +1,13 @@
-<section class="d-flex flex-row justify-content-center flex-wrap home_tricks" id="tricksDisplay" >
-    {% for trick in tricks %}
         <div class="card m-4 text-white bg-secondary mb-3">
-            {% if vich_uploader_asset(trick, 'imageFile') is null %}
-                <img src="/build{{ asset('empty.jpg') }}" alt="Card-img-top" class="card-img-top">
+            {% if trick.mainPicture %}
+                    <img src="{{ vich_uploader_asset(trick.mainPicture, 'imageFile') }}" alt="{{ trick.name }}" alt="card-img-top" class="card-img-top"/>
             {% else %}
-                <img src="{{ vich_uploader_asset(trick, 'imageFile') }}" alt="Card-img-top" class="card-img-top">
+                    {% if trick.picture %}
+                        <img src="{{ vich_uploader_asset(trick.picture, 'imageFile') }}" alt="{{ trick.name }}" class="card-img-top">
+                    {% else %}
+                        <img src="{{ '/build/images/empty.jpg' }}" alt="{{ trick.name }}" class="card-img-top">
+                    {% endif %}
             {% endif %}
-            
             <div class="card-body d-flex justify-content-between">
                 <div class="card-title">
                     <a href="{{ path('trick.show', {slug:trick.slug, id:trick.id, nbComments:3 }) }}">{{ trick.name }}</a>
@@ -28,20 +29,3 @@
                 </div>
             </div>
         </div>
-    {% endfor %}
-</section>
-{% if displayBtn  %}
-    <div class="button">
-        <div class="row">
-            <div class="mx-auto">                   
-                <a href="{{ path('tricks.index', {nbTricks : nbTricks}) }}">
-                    <img id="btnPlus" class="icone_plus" src="{{ asset('build/plus.png') }}" alt="Plus"> 
-                </a>
-            </div>   
-        </div>
-    </div>    
-{% endif %}    
-<div class ="arrow">
-    <a href="#haut"><img class="arrow_high" src="{{ asset('build/fleche_haut.png') }}" alt="Fleche haut"></a>
-</div>
-

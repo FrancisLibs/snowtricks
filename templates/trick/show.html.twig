@@ -5,14 +5,19 @@
         <div class="show_page mx-auto mt-3">
     
             {# Image à la une #}
-            <div id="visibility" class="show_main_picture d-flex flex-column" 
-                {% if vich_uploader_asset(trick, 'imageFile') is null %}
-                    style="background-image: url( /build{{ asset('empty.jpg') }} );"
+            <div class="show_main_picture d-flex flex-column" 
+
+                {% if trick.mainPicture %}
+                    style="background-image: url({{ vich_uploader_asset(trick.mainPicture, 'imageFile') }});"
                 {% else %}
-                    style="background-image: url( {{ vich_uploader_asset(trick, 'imageFile') }} );"
+                    {% if trick.picture %}
+                        style="background-image: url({{ vich_uploader_asset(trick.picture, 'imageFile') }} );"
+                    {% else %}
+                        style="background-image: url({{ '/build/images/empty.jpg' }} );"
+                    {% endif %}
                 {% endif %}
             >
-                {# boutons d'édition #}
+                {# boutons d'édition de l'image à la une #}
                 <div class="show_div_icones d-flex flex-row justify-content-end">
                     {% if app.user %}
                         <div class="text-right d-flex flex-row justify-content-end">
@@ -36,22 +41,20 @@
                 {# Formulaire d'image à la une #}
                 <div id="main_picture_upload_form" class="main_picture_edit_form" style="display: none;">
                     {{ form_start(form1) }}
-                        {{ form_row(form1.file) }}
+                        {{ form_row(form1.mainPictureFile) }}
                         <button type'submit' class="btn btn-primary">Valider</button>
                     {{ form_end(form1) }}
                 </div>
             </div>
 
             {# Photos et vidéos #}
-           {# <div class="medias mt-3">
-                {% for picture in trick.pictures %}
-                    {% if picture.file %}
-                        {% set file = picture.file %} 
-                        {% set file = '/build/' ~ file %}
-                        <img class="card-img-top show_picture" src="{{ asset(file) | imagine_filter('test')}}"  alt="image">
+            <div class="medias mt-3">
+                {% for picture in trick.pictures %} 
+                    {% if picture.filename and not picture.mainPicture %}
+                        <img class="card-img-top show_picture" src="{{ vich_uploader_asset(picture, 'imageFile') }}"  alt="image">
                     {% endif %}
                 {% endfor %}
-            </div>#}
+            </div>
 
             
             {# Description #}

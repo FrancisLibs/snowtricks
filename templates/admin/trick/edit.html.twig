@@ -6,13 +6,13 @@
 
             {# Image à la une #}
             <div class="show_main_picture d-flex flex-column" 
-                {% if vich_uploader_asset(trick, 'imageFile') is null %}
-                    style="background-image: url( /build{{ asset('empty.jpg') }} );"
+
+                {% if trick.picture %}
+                    style="background-image: url({{ vich_uploader_asset(trick.picture, 'imageFile') }} );"
                 {% else %}
-                    style="background-image: url( {{ vich_uploader_asset(trick, 'imageFile') }} );"
+                    style="background-image: url({{ '/build/images/empty.jpg' }} );"
                 {% endif %}
             >
-                
                 {# Nom du trick #}
                 <div class="show_div_titre d-flex flex-column justify-content-center align-items-center">
                     <div class="show_picture_title text-center">
@@ -23,32 +23,27 @@
 
             <div class="edit_form_images">{# Photos et vidéos #}
                 <div class="edit_medias mt-3">
-                   {#} {% for picture in trick.pictures %}
-                        <div class="edit_cards m-2">
-                        {# formatage du nom de fichier avec le bon dossier (/build/)
-                            {% set file = picture.file %} 
-                            {% set file = '/build/' ~ file %}
-                            <img class="edit_card_img show_picture" src="{{ asset(file) }}" alt="image">
-                            
-                            {# formulaire d'édition 
-                            <form method="post" action="" enctype="multipart/form-data" id="upload_picture_form" style="display: none;">
-                                <input type="file" id="fileInput.{{picture.id}}" name="uploadPictureFile" >
-                                <span href="{{ path('admin.picture.edit', {id : trick.id, pictureId : picture.id, }) }}"></span>
-                            </form>
+                    {% if trick.pictures %} 
+                        {% for picture in trick.pictures %}
+                            {% if not picture.mainPicture %}
+                                <div class="edit_cards m-2">
+                                    <img class="edit_card_img show_picture" src="{{ vich_uploader_asset(picture, 'imageFile') }}" alt="image">
 
-                             <div class="inputFile">
-                                {# Bouton editer 
-                                <a class="btn_edit_picture"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>  
+                                    <div class="inputFile">
+                                        {# Bouton editer #}
+                                        <a class="btn_edit_picture"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>  
 
-                                {# Bouton effacer 
-                                <a href="{{ path('admin.picture.delete', {id : picture.id}) }}"
-                                    data-delete  data-token="{{csrf_token('delete' ~ picture.id) }}">
-                                    <i class="far fa-trash-alt  mb-1 mr-1"></i>
-                                </a>  
+                                        {# Bouton effacer #}
+                                        <a href="{{ path('admin.picture.delete', {id : picture.id}) }}"
+                                            data-delete  data-token="{{csrf_token('delete' ~ picture.id) }}">
+                                            <i class="far fa-trash-alt  mb-1 mr-1"></i>
+                                        </a>  
+                                    </div>
 
-                            </div>
-                        </div>
-                    {% endfor %} #}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
 
