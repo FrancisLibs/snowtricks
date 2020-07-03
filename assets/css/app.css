@@ -96,11 +96,6 @@
     margin-right: 8px;
 }
 
-.show_div_icones,
-.show_div_titre {
-    height: 33%;
-}
-
 .medias {
     display: flex;
     flex-direction: row;

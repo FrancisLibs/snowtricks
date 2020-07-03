@@ -100,7 +100,7 @@
         "version": "2.1.18"
     },
     "imagine/imagine": {
-        "version": "1.2.3"
+        "version": "v0.7.1"
     },
     "jms/metadata": {
         "version": "2.3.0"

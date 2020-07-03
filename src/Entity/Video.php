@@ -24,6 +24,7 @@ class Video
 
     /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="videos")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $trick;
 
@@ -39,6 +40,7 @@ class Video
 
     public function setLink(string $link): self
     {
+        
         $this->link = $link;
 
         return $this;

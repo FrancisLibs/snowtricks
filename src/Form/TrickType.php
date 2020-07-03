@@ -7,6 +7,7 @@ use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -19,29 +20,44 @@ class TrickType extends AbstractType
     {
         $builder
             ->add('name',  TextType::class, [
-                'attr' => [
-                    'placeholder' => 'Nom....'
+                'required'  =>  true,
+                'label'     =>  'Name',
+                'attr'      =>  [
+                    'placeholder' => 'Name...'
                 ]
             ])
 
             ->add('description', TextareaType::class, [
-                'attr' => [
-                    'placeholder' => 'Descritpion...'
+                'required'  =>  false,
+                'label'     =>  'Description',
+                'attr'      =>  [
+                    'placeholder' => 'Description...'
                 ]
             ])
 
             ->add('category', EntityType::class, [
+                'choice_label'  => 'name',
+                'label'         => 'Category',
                 'class'         => Category::class,
-                'choice_label'  => 'name'
+                
             ])
 
             ->add('pictureFiles', FileType::class, [
-                'required'  => false,
-                'multiple'  => true,
+                'label'     => 'Pictures',
+                'required'  =>  false,
+                'multiple'  =>  true,
+            ])
+
+            ->add('videoFile',  TextType::class, [
+                'required'  =>  false,
+                'label'     =>  'Video',
+                'attr'      =>  [
+                    'placeholder' => 'Video /embed/ link...'
+                ]
             ])
 
             ->add('save', SubmitType::class, [
-                'label' => 'Enregistrer'
+                'label' => 'Save'
             ]);
     }
 

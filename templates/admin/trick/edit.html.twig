@@ -5,24 +5,25 @@
         <div class="show_page mx-auto mt-3 pb-5">
 
             {# Image à la une #}
-            <div class="show_main_picture d-flex flex-column" 
+            <div class="show_main_picture d-flex flex-column align-items-center justify-content-center text-center" 
 
-                {% if trick.picture %}
-                    style="background-image: url({{ vich_uploader_asset(trick.picture, 'imageFile') }} );"
+                {% if trick.mainPicture %}
+                    style="background-image: url({{ vich_uploader_asset(trick.mainPicture, 'imageFile') }});"
                 {% else %}
-                    style="background-image: url({{ '/build/images/empty.jpg' }} );"
+                    {% if trick.picture %}
+                        style="background-image: url({{ vich_uploader_asset(trick.picture, 'imageFile') }} );"
+                    {% else %}
+                        style="background-image: url({{ '/build/images/empty.jpg' }} );"
+                    {% endif %}
                 {% endif %}
             >
                 {# Nom du trick #}
-                <div class="show_div_titre d-flex flex-column justify-content-center align-items-center">
-                    <div class="show_picture_title text-center">
-                        <h1>{{ trick.name }}</h1>
-                    </div>
-                </div>
+                <h1>{{ trick.name }}</h1>
             </div>
 
             <div class="edit_form_images">{# Photos et vidéos #}
-                <div class="edit_medias mt-3">
+                <div class="d-flex flex-wrap justify-content-around align-items-center mt-2">
+                    {# Images #}
                     {% if trick.pictures %} 
                         {% for picture in trick.pictures %}
                             {% if not picture.mainPicture %}
@@ -30,8 +31,11 @@
                                     <img class="edit_card_img show_picture" src="{{ vich_uploader_asset(picture, 'imageFile') }}" alt="image">
 
                                     <div class="inputFile">
-                                        {# Bouton editer #}
+                                        {# Bouton editer avec son formulaire #}
                                         <a class="btn_edit_picture"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>  
+                                        <form style="display: none;">
+                                            <input type="file">
+                                        </form>
 
                                         {# Bouton effacer #}
                                         <a href="{{ path('admin.picture.delete', {id : picture.id}) }}"
@@ -42,6 +46,28 @@
 
                                 </div>
                             {% endif %}
+                        {% endfor %}
+                    {% endif %}
+
+                    {# Vidéos #}
+                    {% if trick.videos %}
+                        {% for video in trick.videos %}
+                            <div class="edit_cards m-2">
+                                <iframe width="190" height="180" src="{{ video.link }}" frameborder="0" 
+                                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen>
+                                </iframe>
+                                <div class="inputFile">
+                                    {# Bouton editer #}
+                                    <a class="btn_edit_picture"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>  
+
+                                    {# Bouton effacer #}
+                                    <a href="{{ path('admin.video.delete', {id : video.id}) }}"
+                                        data-delete  data-token="{{csrf_token('delete' ~ video.id) }}">
+                                        <i class="far fa-trash-alt  mb-1 mr-1"></i>
+                                    </a>  
+                                </div>
+                            </div>
                         {% endfor %}
                     {% endif %}
                 </div>

@@ -91,6 +91,13 @@ class Trick
      */
     private $mainPictureFile;
 
+    private $videoFile;
+   
+    /**
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick", orphanRemoval=true, cascade={"persist"})
+     */
+    private $videos;
+
     //--------------------------------------------------------------------------
 
     public function getId(): ?int
@@ -300,6 +307,59 @@ class Trick
         $picture->setTrick($this);
         $this->setMainPicture($picture);
        
+        return $this;
+    }
+
+    /**
+     * @return Collection|Video[]
+     */
+    public function getVideos(): Collection
+    {
+        return $this->videos;
+    }
+
+    public function addVideo(Video $video): self
+    {
+        if (!$this->videos->contains($video)) {
+            $this->videos[] = $video;
+            $video->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVideo(Video $video): self
+    {
+        if ($this->videos->contains($video)) {
+            $this->videos->removeElement($video);
+            // set the owning side to null (unless already changed)
+            if ($video->getTrick() === $this) {
+                $video->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVideoFile()
+    {
+        return $this->videoFile;
+    }
+
+    /**
+     * @param mixed $videoFile
+     * @return Trick
+     */
+    public function setVideoFile($videoFile)
+    {
+        $video = new Video();
+        $video->setLink($videoFile);
+        $this->videoFile = $videoFile;
+        $this->addVideo($video);
+
         return $this;
     }
 }

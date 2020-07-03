@@ -5,20 +5,16 @@ use App\Entity\Trick;
 use App\Entity\Picture;
 use Cocur\Slugify\Slugify;
 use App\Form\PictureUploadType;
-use App\Repository\PictureRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-
 
 class AdminPictureController extends AbstractController
 {
     /**
-     * Route("/admin/upload/picture/{id}", name="admin.trick.upload.picture", methods={"post"})
+     * @Route("/admin/upload/picture/{id}", name="admin.trick.upload.picture", methods={"post"})
      * @param Request $request
      * @return JsonResponse|FormInterface
      */
@@ -78,8 +74,6 @@ class AdminPictureController extends AbstractController
 
             $manager->persist($picture);
             $manager->flush();
-
-            $imagePath = $imagine->getUrlOfFilteredImage($this->getParameter('pictures_directory').'/'.$newFilename, 'my_thumb');
         }
 
         return $this->json(['newImage' => $imagePath]);
@@ -91,22 +85,18 @@ class AdminPictureController extends AbstractController
      * @param Picture $picture
      * @param Request $request
      */
-    public function deletePicture(Request $request, EntityManagerInterface $manager)
+    public function deletePicture(Picture $picture, Request $request, EntityManagerInterface $manager)
     {
         $data = json_decode($request->getContent(), true);
 
         // Vérification du token
         if ($this->isCsrfTokenValid('delete' . $picture->getId(), $data['_token'])) {
-            $nom = $picture->getFile();
-            
-            // Suppression du fichier
-            unlink($this->getParameter('pictures_directory') . '/' . $nom);
 
             $manager->remove($picture);
             $manager->flush();
 
             //Retour d'un tabelau json
-            return $this->json(['success' => 1]);
+            return new JsonResponse(['success' => 1]);
         } else {
             return new JsonResponse(['error' => 'Token invalid'], 400);
         }

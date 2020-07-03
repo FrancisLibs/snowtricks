@@ -25,7 +25,7 @@ window.onload = () => {
             e.preventDefault()
 
             //Confirmation de suppression
-            if(confirm('Voulez-vous vraiment supprimer cette image ?')){
+            if(confirm('Voulez-vous vraiment supprimer ce média ?')){
                 fetch(this.getAttribute("href"), {
                     method: "DELETE",
                     headers: {
@@ -38,7 +38,7 @@ window.onload = () => {
                     response => response.json()
                 ).then(data => {
                     if(data.success)
-                        this.parentNode.remove()
+                        this.parentNode.parentNode.remove()
                     else
                         alert(data.error)
                 }).catch(e => alert(e))
@@ -46,6 +46,7 @@ window.onload = () => {
         })
     }
 }
+
 
 // Upload picture in the edit trick template
 $(function () {

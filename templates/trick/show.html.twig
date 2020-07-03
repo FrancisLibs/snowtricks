@@ -5,7 +5,7 @@
         <div class="show_page mx-auto mt-3">
     
             {# Image à la une #}
-            <div class="show_main_picture d-flex flex-column" 
+             <div class="show_main_picture d-flex flex-column align-items-center justify-content-center text-center" 
 
                 {% if trick.mainPicture %}
                     style="background-image: url({{ vich_uploader_asset(trick.mainPicture, 'imageFile') }});"
@@ -32,11 +32,8 @@
                 </div>
                 
                 {# Nom du trick #}
-                <div id="titre_trick" class="show_div_titre d-flex flex-column justify-content-center align-items-center">
-                    <div class="show_picture_title text-center">
-                        <h1>{{ trick.name }}</h1>
-                    </div>
-                </div>
+                <h1>{{ trick.name }}</h1>
+                
 
                 {# Formulaire d'image à la une #}
                 <div id="main_picture_upload_form" class="main_picture_edit_form" style="display: none;">
@@ -48,12 +45,22 @@
             </div>
 
             {# Photos et vidéos #}
-            <div class="medias mt-3">
+            <div class="d-flex flex-wrap justify-content-around align-items-center mt-2">
+
                 {% for picture in trick.pictures %} 
                     {% if picture.filename and not picture.mainPicture %}
                         <img class="card-img-top show_picture" src="{{ vich_uploader_asset(picture, 'imageFile') }}"  alt="image">
                     {% endif %}
                 {% endfor %}
+
+                {% if trick.videos %}
+                    {% for video in trick.videos %}
+                        <iframe width="200" height="180" src="{{ video.link }}" frameborder="0" 
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    {% endfor %}
+                {% endif %}
             </div>
 
             
