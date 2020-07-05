@@ -45,7 +45,6 @@ class AdminTrickController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $trick->setUser($user);
-            
             $this->manager->persist($trick);
             $this->manager->flush();
 
@@ -56,8 +55,8 @@ class AdminTrickController extends AbstractController
         }
 
         return $this->render('admin/trick/new.html.twig', [
-            'trick'     =>  $trick,
-            'form'      =>  $form->createView()
+            'trick' =>  $trick,
+            'form'  =>  $form->createView()
         ]);
     }
 

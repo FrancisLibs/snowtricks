@@ -5,9 +5,11 @@ use App\Entity\Trick;
 use App\Entity\Picture;
 use Cocur\Slugify\Slugify;
 use App\Form\PictureUploadType;
+use App\Repository\PictureRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Vich\UploaderBundle\Naming\SmartUniqueNamer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -39,17 +41,18 @@ class AdminPictureController extends AbstractController
      * @Route("/admin/picture/edit/{id}/{pictureId}", name="admin.picture.edit", methods={"POST"})
      *
      * @param Request $request
-     * @param int $pictureId
      * @param Trick $trick
+     * @param int $pictureId
      * @return JsonResponse|FormInterface
      */
-    public function uploadAction(Trick $trick, int $pictureId, Request $request, EntityManagerInterface $manager)
+    public function uploadAction(Trick $trick, int $pictureId, Request $request, 
+        EntityManagerInterface $manager, PictureRepository $repository)
     {
         if($request->isXmlHttpRequest())// is it an Ajax request?
         {
             // On efface l'ancienne image
-            //$picture = $PictureRepository->findOneById($pictureId);
-            $fileName = $picture->getFile();
+            $picture = $repository->findOneById($pictureId);
+            $fileName = $picture->getFilename();
             $trick->removePicture($picture);
 
             // Suppression du fichier
@@ -57,26 +60,26 @@ class AdminPictureController extends AbstractController
 
             // On récupère la nouvelle image
             $file = $request->files->get('file');/* Getting the file */
-       
+            
             // Traitement du nom du nouveau fichier
             $originalFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-
-            // this is needed to safely include the file name as part of the URL
-            $safeFilename = (new Slugify())->slugify($originalFileName);
-            $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
+            $newFilename = uniqid() . '.' . $file->guessExtension();
 
             $file->move($this->getParameter('pictures_directory'), $newFilename);
 
             $picture = new Picture();
-            $picture->setFile($newFilename);
+            $picture->setTrick($trick);
+            $picture->setFilename($newFilename);
 
             $trick->addPicture($picture);
 
             $manager->persist($picture);
             $manager->flush();
-        }
 
-        return $this->json(['newImage' => $imagePath]);
+            $newPicturePath = '/media/tricks/' . $picture->getFilename();
+
+            return $this->json(['newImage' => $newPicturePath]);
+        }
     }
 
     /**

@@ -183,16 +183,12 @@
     justify-content: center;
 }
 
-.edit_cards  {
-    width: 15%;
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
-    align-items: flex-end;
-}
+
 
 .edit_card_img {
-    width: 100%;
+    width: 15%;
+    height: auto;
+     object-fit: cover;
 }
 
 .edit_icones {

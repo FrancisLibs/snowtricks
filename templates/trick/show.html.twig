@@ -55,10 +55,7 @@
 
                 {% if trick.videos %}
                     {% for video in trick.videos %}
-                        <iframe width="200" height="180" src="{{ video.link }}" frameborder="0" 
-                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-                            allowfullscreen>
-                        </iframe>
+                        <iframe width="200" height="180" src="{{ video.link }}" frameborder="0" allowfullscreen></iframe>
                     {% endfor %}
                 {% endif %}
             </div>

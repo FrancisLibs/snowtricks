@@ -21,56 +21,54 @@
                 <h1>{{ trick.name }}</h1>
             </div>
 
-            <div class="edit_form_images">{# Photos et vidéos #}
-                <div class="d-flex flex-wrap justify-content-around align-items-center mt-2">
-                    {# Images #}
-                    {% if trick.pictures %} 
-                        {% for picture in trick.pictures %}
-                            {% if not picture.mainPicture %}
-                                <div class="edit_cards m-2">
-                                    <img class="edit_card_img show_picture" src="{{ vich_uploader_asset(picture, 'imageFile') }}" alt="image">
-
-                                    <div class="inputFile">
-                                        {# Bouton editer avec son formulaire #}
-                                        <a class="btn_edit_picture"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>  
-                                        <form style="display: none;">
-                                            <input type="file">
-                                        </form>
-
-                                        {# Bouton effacer #}
-                                        <a href="{{ path('admin.picture.delete', {id : picture.id}) }}"
-                                            data-delete  data-token="{{csrf_token('delete' ~ picture.id) }}">
-                                            <i class="far fa-trash-alt  mb-1 mr-1"></i>
-                                        </a>  
-                                    </div>
-
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-
-                    {# Vidéos #}
-                    {% if trick.videos %}
-                        {% for video in trick.videos %}
+            <div class="d-flex flex-wrap justify-content-around align-items-center">{# Photos et vidéos #}
+                {# Images #}
+                {% if trick.pictures %} 
+                    {% for picture in trick.pictures %}
+                        {% if not picture.mainPicture %}
                             <div class="edit_cards m-2">
-                                <iframe width="190" height="180" src="{{ video.link }}" frameborder="0" 
-                                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-                                    allowfullscreen>
-                                </iframe>
+                                <img class="edit_card_img show_picture" src="{{ vich_uploader_asset(picture, 'imageFile') }}" alt="image">
                                 <div class="inputFile">
-                                    {# Bouton editer #}
-                                    <a class="btn_edit_picture"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>  
-
+                                    {# Bouton editer avec son formulaire #}
+                                    <a class="btn_edit_picture"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                     {# Bouton effacer #}
-                                    <a href="{{ path('admin.video.delete', {id : video.id}) }}"
-                                        data-delete  data-token="{{csrf_token('delete' ~ video.id) }}">
+                                    <a href="{{ path('admin.picture.delete', {id : picture.id}) }}"
+                                        data-delete  data-token="{{csrf_token('delete' ~ picture.id) }}">
                                         <i class="far fa-trash-alt  mb-1 mr-1"></i>
                                     </a>  
+                                    <form method="post" action="" enctype="multipart/form-data" id="upload_picture_form" style="display: none;">
+                                        <input type="file" name="uploadPictureFile">
+                                        <span class="pathToController" data-path="{{ path('admin.picture.edit', {id: trick.id, pictureId: picture.id}) }}"></span>
+                                    </form>
                                 </div>
                             </div>
-                        {% endfor %}
-                    {% endif %}
-                </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                {# Vidéos #}
+                {% if trick.videos %}
+                    {% for video in trick.videos %}
+                        <div class="edit_cards m-2">
+                            <iframe width="190" height="180" src="{{ video.link }}" frameborder="0" allowfullscreen></iframe>
+                            <div class="inputFile">
+                                {# Bouton editer #}
+                                <a class="btn_edit_video"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>  
+
+                                {# Bouton effacer #}
+                                <a href="{{ path('admin.video.delete', {id : video.id}) }}"
+                                    data-delete  data-token="{{csrf_token('delete' ~ video.id) }}">
+                                    <i class="far fa-trash-alt  mb-1 mr-1"></i>
+                                </a>
+                                <form class="mt-2" method="post" action="" id="upload_video_form" style="display: none;">
+                                    <input type="text" name="uploadVideoName" placeholder="Lien vidéo...">
+                                    {# <a class="btn btn-outline-primary btn-sm mt-1" type="submit">Valider</a> #}
+                                    <span class="pathToController" data-path="{{ path('admin.video.edit', {id: trick.id, videoId: video.id}) }}"></span>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
             </div>
 
 
@@ -80,4 +78,108 @@
            {# <embed src="https://www.youtube.com/embed/CrLMXqNuUXw">#}
         </div>
     </div>
+{% endblock %}
+{% block javascripts %}
+<script>
+// Upload picture in the edit trick template
+    champInput = "variable globale";
+    btnEditPicture = $('.btn_edit_picture');
+    btnDeletePicture = "variable globale";
+    $(function () {
+        btnEditPicture.on('click', function (e) {
+            e.preventDefault();
+            btnEditPicture = $(this).hide('slow');
+            btnDeletePicture = btnEditPicture.next();
+            btnDeletePicture = $(this).next().hide('slow');
+            champInput = $(this).next().next();
+            champInput.find('input').val("");
+            champInput.show('slow');
+        })
+    })
+
+    $(function () {
+        selector = document.getElementsByName('uploadPictureFile');
+        $(selector).change(function() { 
+            var path = $(this).next().attr('data-path');
+            var ancienneImage = $(this).parent().parent().parent().children();
+            var file = $(this)[0].files[0];
+            var formData = new FormData();
+            formData.append("file", file);
+
+            $.ajax({
+                type: "POST",
+                url: path,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                async: false,
+                dataType: "json",
+                error: function (err) {
+                    console.error(err);
+                },
+                success: function (data) {
+                    var image = data.newImage;
+                    ancienneImage.attr('src', image);
+                    champInput.hide();
+                    btnEditPicture.show();
+                    btnDeletePicture.show();
+                },
+                complete: function () {
+                    console.log("Request finished.");
+                }
+            });
+        });
+    });
+
+    btnEditVideo = $('.btn_edit_video');
+    src = btnEditVideo.parent().parent().children();
+    $(function () {
+        btnEditVideo.on('click', function (e) {
+            e.preventDefault();
+            btnDelete = btnEditVideo.next();
+            btnEditVideo = $(this).hide('slow');
+            btnDeleteVideo = $(this).next().hide('slow');
+            champInput = $(this).next().next();
+            champInput.find('input').val("");
+            champInput.show('slow');
+        })
+    })
+
+    $(function () {
+        selector = document.getElementsByName('uploadVideoName');
+        $(selector).change(function() { 
+            var link = $(this).val();
+            var path = $(this).next().attr('data-path');
+            var formData = new FormData();
+            formData.append("link", link);
+
+            $.ajax({
+                type: "POST",
+                url: path,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                async: false,
+                dataType: "json",
+                error: function (err) {
+                    console.error(err);
+                },
+                success: function (data) {
+                    champInput.hide();
+                    console.log(link);
+                    src.val(link);
+                    btnEditVideo.show();
+                    btnDeleteVideo.show();
+                },
+                complete: function () {
+                    console.log("Request finished.");
+                }
+            });
+        });
+    });
+   
+</script>
+
 {% endblock %}

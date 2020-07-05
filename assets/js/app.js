@@ -48,45 +48,4 @@ window.onload = () => {
 }
 
 
-// Upload picture in the edit trick template
-$(function () {
-    $(".btn_edit_picture").on('click', function (e) {
-        e.preventDefault();
-        $(this).hide('slow');
-        $(this).parent().prev().show('slow');
-        $(this).prev().val('');
-    })
-})
 
-$(function () {
-    selector = document.getElementsByName('uploadPictureFile');
-    $(selector).change(function() { 
-        var path = $(this).next().attr("href");
-        var image = $(this);
-        console.log('image ancienne : ', image);
-        element = $(selector);
-        var file = $(this)[0].files[0];
-        var formData = new FormData();
-        formData.append("file", file);
-
-        $.ajax({
-            type: "POST",
-            url: path,
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            async: false,
-            dataType: "json",
-            error: function (err) {
-                console.error(err);
-            },
-            success: function (data) {
-                console.log('nouvelle image : ', data);
-            },
-            complete: function () {
-                console.log("Request finished.");
-            }
-        });
-    });
-});
