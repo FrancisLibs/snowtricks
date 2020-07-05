@@ -28,6 +28,11 @@ class Category
      */
     private $trick;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $descritption;
+
     public function __construct()
     {
         $this->trick = new ArrayCollection();
@@ -89,6 +94,18 @@ class Category
     public function __toString()
     {
         return (string) $this->getname();
+    }
+
+    public function getDescritption(): ?string
+    {
+        return $this->descritption;
+    }
+
+    public function setDescritption(?string $descritption): self
+    {
+        $this->descritption = $descritption;
+
+        return $this;
     }
    
 }

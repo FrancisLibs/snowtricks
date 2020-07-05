@@ -3,13 +3,13 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\File\File;
-use Doctrine\Common\Collections\ArrayCollection;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PictureRepository")
+ * @Vich\Uploadable
  */
 class Picture
 {
@@ -19,38 +19,50 @@ class Picture
      * @ORM\Column(type="integer")
      */
     private $id;
-    
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\NotBlank(message="File should not be blank.")
-     * @Assert\File(
-     *      mimeTypes={ "image/png", "image/jpeg", "image/gif" },
-     *      maxSize="1074000000"
-     * )
-     * @var UploadedFile
-     */
-    private $file;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="pictures")
-     *
-     * @var string
+     * @var File|null
+     * @Assert\Image(
+     *     mimeTypes="image/jpeg"
+     * )
+     * @Vich\UploadableField(mapping="trick_image", fileNameProperty="filename")
+     */
+    private $imageFile;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $filename;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="pictures")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $trick;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Trick::class, mappedBy="mainPicture")
+     */
+    private $mainPictureTrick;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $mainPicture;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getFile()
+    public function getFilename(): ?string
     {
-        return $this->file;
+        return $this->filename;
     }
 
-    public function setFile($file): self
+    public function setFilename(?string $filename): self
     {
-        $this->file = $file;
+        $this->filename = $filename;
 
         return $this;
     }
@@ -68,12 +80,50 @@ class Picture
     }
 
     /**
-     * Transform to string
-     * 
-     * @return string
+     * @return null|File
      */
-    public function __toString()
+    public function getImageFile(): ?File
     {
-        return (string) $this->getUrl();
+        return $this->imageFile;
+    }
+
+    /**
+     * @param null|File $imageFile
+     * @return self
+     */
+    public function setImageFile(?File $imageFile): self
+    {
+        $this->imageFile = $imageFile;
+        return $this;
+    }
+
+    public function getMainPictureTrick(): ?Trick
+    {
+        return $this->mainPictureTrick;
+    }
+
+    public function setMainPictureTrick(?Trick $mainPictureTrick): self
+    {
+        $this->mainPictureTrick = $mainPictureTrick;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newMainPicture = null === $mainPictureTrick ? null : $this;
+        if ($mainPictureTrick->getMainPicture() !== $newMainPicture) {
+            $mainPictureTrick->setMainPicture($newMainPicture);
+        }
+
+        return $this;
+    }
+
+    public function getMainPicture(): ?bool
+    {
+        return $this->mainPicture;
+    }
+
+    public function setMainPicture(?bool $mainPicture): self
+    {
+        $this->mainPicture = $mainPicture;
+
+        return $this;
     }
 }

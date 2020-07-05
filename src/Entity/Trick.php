@@ -3,23 +3,28 @@
 namespace App\Entity;
 
 use Cocur\Slugify\Slugify;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
+ * @UniqueEntity("name")
  */
 class Trick
 {
     public function __construct()
     {
         $this->created_at = new \DateTime();
+        $this->updated_at = new \DateTime();
         $this->comments = new ArrayCollection();
         $this->pictures = new ArrayCollection();
         $this->videos = new ArrayCollection();
     }
-    
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -45,7 +50,7 @@ class Trick
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $update_at;
+    private $updated_at;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="trick")
@@ -65,19 +70,35 @@ class Trick
     private $user;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $main_picture;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Picture::class, mappedBy="trick")
+     * @ORM\OneToMany(targetEntity="App\Entity\Picture", mappedBy="trick", orphanRemoval=true, cascade={"persist"})
      */
     private $pictures;
 
     /**
-     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick")
+     * @Assert\All({
+     *   @Assert\Image(mimeTypes="image/jpeg")
+     * })
+     */
+    private $pictureFiles;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Picture::class, inversedBy="mainPictureTrick", orphanRemoval=true, cascade={"persist"})
+     */
+    private $mainPicture;
+
+    /**
+     * @Assert\Image(mimeTypes="image/jpeg")
+     */
+    private $mainPictureFile;
+
+    private $videoFile;
+   
+    /**
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick", orphanRemoval=true, cascade={"persist"})
      */
     private $videos;
+
+    //--------------------------------------------------------------------------
 
     public function getId(): ?int
     {
@@ -125,14 +146,14 @@ class Trick
         return $this;
     }
 
-    public function getUpdateAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
-        return $this->update_at;
+        return $this->updated_at;
     }
 
-    public function setUpdateAt(?\DateTimeInterface $update_at): self
+    public function setUpdatedAt(?\DateTimeInterface $updated_at): self
     {
-        $this->update_at = $update_at;
+        $this->updated_at = $updated_at;
 
         return $this;
     }
@@ -192,15 +213,26 @@ class Trick
         return $this;
     }
 
-    public function getMainPicture(): ?string
+    /**
+     * @return mixed
+     */
+    public function getPictureFiles()
     {
-        return $this->main_picture;
+        return $this->pictureFiles;
     }
 
-    public function setMainPicture(?string $main_picture): self
+    /**
+     * @param mixed $pictureFiles
+     * @return Trick
+     */
+    public function setPictureFiles($pictureFiles): self
     {
-        $this->main_picture = $main_picture;
-
+        foreach ($pictureFiles as $pictureFile) {
+            $picture = new Picture();
+            $picture->setImageFile($pictureFile);
+            $this->addPicture($picture);
+        }
+        $this->pictureFiles = $pictureFiles;
         return $this;
     }
 
@@ -210,6 +242,14 @@ class Trick
     public function getPictures(): Collection
     {
         return $this->pictures;
+    }
+
+    public function getPicture(): ?Picture
+    {
+        if ($this->pictures->isEmpty()) {
+            return null;
+        }
+        return $this->pictures->first();
     }
 
     public function addPicture(Picture $picture): self
@@ -232,6 +272,41 @@ class Trick
             }
         }
 
+        return $this;
+    }
+
+    public function getMainPicture(): ?Picture
+    {
+        return $this->mainPicture;
+    }
+
+    public function setMainPicture(?Picture $mainPicture): self
+    {
+        $this->mainPicture = $mainPicture;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMainPictureFile()
+    {
+        return $this->mainPictureFile;
+    }
+
+    /**
+     * @param mixed $mainPictureFile
+     * @return Trick
+     */
+    public function setMainPictureFile($mainPictureFile): self
+    {
+        $picture = new Picture();
+        $picture->setImageFile($mainPictureFile);
+        $picture->setMainPicture(true);
+        $picture->setTrick($this);
+        $this->setMainPicture($picture);
+       
         return $this;
     }
 
@@ -262,6 +337,28 @@ class Trick
                 $video->setTrick(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVideoFile()
+    {
+        return $this->videoFile;
+    }
+
+    /**
+     * @param mixed $videoFile
+     * @return Trick
+     */
+    public function setVideoFile($videoFile)
+    {
+        $video = new Video();
+        $video->setLink($videoFile);
+        $this->videoFile = $videoFile;
+        $this->addVideo($video);
 
         return $this;
     }

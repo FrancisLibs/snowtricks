@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container bckgnd_blue" id="haut">
+        <h1> add media </h1>
+        <div class="row">
+            <div class="col-md-3">
+                <h5>Nom :  {{ trick.name }}</h5>
+            </div>
+            <div>
+                <h5>Catégorie : {{ trick.category }}</h5> 
+            </div>
+        </div>
+        <div>
+            <h5>Descritpion : </h5>
+            {{ trick.description }}
+        </div>
+    
+        <div class="addmedia_liens">
+            <a id="addPhoto" class="btn btn-primary" href="#">Ajouter une photo</a>
+            <a id="addvideo" class="btn btn-primary" href="#">Ajouter une video</a>
+        </div>
+
+        <div class="row" id="fileUpload">
+            <div class="col-md-5">
+                <form method="post" id="upload_form">
+                    <input type="file" id="file" name="uploadFile">
+                    <input type="submit" id="picture_upload_save">
+                </form>
+            </div>
+        </div>
+        <div id="linkToController" data-path="{{ path('admin.trick.addMedia', {id: trick.id}) }}"></div>
+       
+{% endblock %}
+{% block javascripts %}
+
+<script>
+
+    $(function() {
+        $("#addPhoto").on('click', function(event) {
+        event.preventDefault();
+        $('#picture_upload_file').val('');
+        $("#fileUpload").show('slow');
+        })
+    });
+
+    $(function () {   
+        $("#picture_upload_save").click(function(){
+            event.preventDefault();
+
+            var path = $("#linkToController").attr("data-path");
+            var myForm = $('#upload_form');
+            var formData = new FormData();
+            formData.append('file', document.getElementById("file").files[0]);
+            //formData.append('picture_upload[_token]', document.getElementById("picture_upload__token"));
+            
+            $.ajax({
+                type:"POST",
+                url:path,
+                data: formData,
+                cache:false,
+                contentType:false,
+                processData:false,
+                async: false,
+                dataType:"html", 
+                error:function(err){
+                    console.error(err);
+                },
+                success:function(data){
+                    console.log('succès de la requête');      
+                },
+                complete:function(){
+                    console.log("Request finished.");
+                }
+            });
+            
+        });
+    });
+
+</script>
+      
+{% endblock %}
+
+ 
