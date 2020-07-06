@@ -18,7 +18,7 @@ class AdminVideoController extends AbstractController
      * @param Video $video
      * @param Request $request
      */
-    public function deletePicture(Video $video, Request $request, EntityManagerInterface $manager)
+    public function deleteVideo(Video $video, Request $request, EntityManagerInterface $manager)
     {
         $data = json_decode($request->getContent(), true);
 

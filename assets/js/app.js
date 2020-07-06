@@ -13,39 +13,7 @@ require('../css/app.css');
 
 console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
 
-// script d'effacement d'images dans le formulaire add images du template admin/trick/edit.html.twig
-window.onload = () => {
-    //Gestion des boutons "supprimmer"
-    let links = document.querySelectorAll("[data-delete]")
 
-    // Boucle sur les liens
-    for(link of links) {
-        //Ecoute du click
-        link.addEventListener("click", function(e){
-            e.preventDefault()
-
-            //Confirmation de suppression
-            if(confirm('Voulez-vous vraiment supprimer ce média ?')){
-                fetch(this.getAttribute("href"), {
-                    method: "DELETE",
-                    headers: {
-                        "X-Requested-With": "XMLHttpRequest",
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({"_token": this.dataset.token})
-                }).then(
-                    // récup réponse en json
-                    response => response.json()
-                ).then(data => {
-                    if(data.success)
-                        this.parentNode.parentNode.remove()
-                    else
-                        alert(data.error)
-                }).catch(e => alert(e))
-            }
-        })
-    }
-}
 
 
 

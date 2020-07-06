@@ -20,10 +20,6 @@
     height: 39rem;
 }
 
-.container{
-    border-radius: 10px;
-}
-
 .bckgnd_blue{
     background-color: #566dea9e;
 }
@@ -82,18 +78,16 @@
     width: 95%;
 }
 
+.show_page_name{
+    height: 100%;
+}
+
 .show_main_picture {
     background-color:white;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
     height: 450px;
-}
-
-.show_picture {
-    width: 150px;
-    margin-left: 8px;
-    margin-right: 8px;
 }
 
 .medias {
@@ -182,13 +176,13 @@
     flex-flow: row wrap;
     justify-content: center;
 }
-
-
-
+.edit_cards{
+    width: 250px;
+    height: 200px;
+}
 .edit_card_img {
-    width: 15%;
-    height: auto;
-     object-fit: cover;
+   max-width: 100%;
+   max-height: 100%;
 }
 
 .edit_icones {

@@ -50,6 +50,11 @@ class Picture
      */
     private $mainPicture;
 
+    /**
+     * @ORM\OneToOne(targetEntity=User::class, mappedBy="picture", cascade={"persist", "remove"})
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -123,6 +128,24 @@ class Picture
     public function setMainPicture(?bool $mainPicture): self
     {
         $this->mainPicture = $mainPicture;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newPicture = null === $user ? null : $this;
+        if ($user->getPicture() !== $newPicture) {
+            $user->setPicture($newPicture);
+        }
 
         return $this;
     }

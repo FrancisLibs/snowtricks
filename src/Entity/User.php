@@ -71,11 +71,6 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $profile_image;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     private $token;
 
     /**
@@ -83,6 +78,11 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $resetToken;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Picture::class, inversedBy="user", cascade={"persist", "remove"})
+     */
+    private $picture;
 
     public function __construct()
     {
@@ -227,18 +227,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getProfileImage(): ?string
-    {
-        return $this->profile_image;
-    }
-
-    public function setProfileImage(?string $profile_image): self
-    {
-        $this->profile_image = $profile_image;
-
-        return $this;
-    }
-
     public function getToken(): ?string
     {
         return $this->token;
@@ -247,6 +235,18 @@ class User implements UserInterface
     public function setToken(?string $token): self
     {
         $this->token = $token;
+
+        return $this;
+    }
+
+    public function getPicture(): ?Picture
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(?Picture $picture): self
+    {
+        $this->picture = $picture;
 
         return $this;
     }

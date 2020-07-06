@@ -2,30 +2,20 @@
 
 {% block body %}
     <div class="home_page mb-5" id="haut">
-        {% include "_home_header.html.twig" %}
-        
-        <section class="d-flex flex-row justify-content-center flex-wrap home_tricks" id="tricksDisplay" >
-            {% for trick in tricks %}
-                {% include "trick/_tricks.html.twig" %}
-            {% endfor %}
-        </section>
-        
-        {% if displayBtn  %}
-            <div class="button">
-                <div class="row">
-                    <div class="mx-auto">                   
-                        <a href="{{ path('tricks.index', {nbTricks : nbTricks}) }}">
-                            <img id="btnPlus" class="icone_plus" src="{{ asset('build/plus.png') }}" alt="Plus"> 
-                        </a>
-                    </div>   
-                </div>
-            </div>    
-        {% endif %}   
-         
+        <div class="header content-block"> {# la div header contient l'image de banière #}
+            <div class="arrow">
+                <a href="#bas"><img class="arrow_down" src="{{ asset('build/fleche_bas.png') }}" alt="Fleche bas"></a>
+            </div>
+        </div>
+
+        {% include "trick/_tricks.html.twig" %}
+    
         <div class ="arrow">
             <a href="#haut"><img class="arrow_high" src="{{ asset('build/fleche_haut.png') }}" alt="Fleche haut"></a>
         </div>
+
         <span id="linkToController" data-path="{{ path('home.tricks.more') }}"></span>
+        
     </div>
 {% endblock %}
 {% block javascripts %}

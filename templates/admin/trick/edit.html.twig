@@ -13,7 +13,7 @@
                     {% if trick.picture %}
                         style="background-image: url({{ vich_uploader_asset(trick.picture, 'imageFile') }} );"
                     {% else %}
-                        style="background-image: url({{ '/build/images/empty.jpg' }} );"
+                        style="background-image: url({{ 'v' }} );"
                     {% endif %}
                 {% endif %}
             >
@@ -33,7 +33,7 @@
                                     <a class="btn_edit_picture"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                     {# Bouton effacer #}
                                     <a href="{{ path('admin.picture.delete', {id : picture.id}) }}"
-                                        data-delete  data-token="{{csrf_token('delete' ~ picture.id) }}">
+                                        data-delete-picture  data-token="{{csrf_token('delete' ~ picture.id) }}">
                                         <i class="far fa-trash-alt  mb-1 mr-1"></i>
                                     </a>  
                                     <form method="post" action="" enctype="multipart/form-data" id="upload_picture_form" style="display: none;">
@@ -57,7 +57,7 @@
 
                                 {# Bouton effacer #}
                                 <a href="{{ path('admin.video.delete', {id : video.id}) }}"
-                                    data-delete  data-token="{{csrf_token('delete' ~ video.id) }}">
+                                    data-delete-video  data-token="{{csrf_token('delete' ~ video.id) }}">
                                     <i class="far fa-trash-alt  mb-1 mr-1"></i>
                                 </a>
                                 <form class="mt-2" method="post" action="" id="upload_video_form" style="display: none;">
@@ -81,7 +81,7 @@
 {% endblock %}
 {% block javascripts %}
 <script>
-// Upload picture in the edit trick template
+    // Upload picture in the edit trick template
     champInput = "variable globale";
     btnEditPicture = $('.btn_edit_picture');
     btnDeletePicture = "variable globale";
@@ -132,6 +132,41 @@
         });
     });
 
+    // script d'effacement d'images dans admin/trick/edit.html.twig
+    window.onload = () => {
+        //Gestion des boutons "supprimmer"
+        let links = document.querySelectorAll("[data-delete-picture]")
+
+        // Boucle sur les liens
+        for(link of links) {
+            //Ecoute du click
+            link.addEventListener("click", function(e){
+                e.preventDefault()
+
+                //Confirmation de suppression
+                if(confirm('Voulez-vous vraiment supprimer ce média ?')){
+                    fetch(this.getAttribute("href"), {
+                        method: "DELETE",
+                        headers: {
+                            "X-Requested-With": "XMLHttpRequest",
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({"_token": this.dataset.token})
+                    }).then(
+                        // récup réponse en json
+                        response => response.json()
+                    ).then(data => {
+                        if(data.success)
+                            this.parentNode.parentNode.remove()
+                        else
+                            alert(data.error)
+                    }).catch(e => alert(e))
+                }
+            })
+        }
+    }
+
+    // Upload video in the edit trick template
     btnEditVideo = $('.btn_edit_video');
     src = btnEditVideo.parent().parent().children();
     $(function () {
@@ -179,6 +214,40 @@
             });
         });
     });
+
+    // script d'effacement d'une vidéo dans admin/trick/edit.html.twig
+    window.onload = () => {
+        //Gestion des boutons "supprimmer"
+        let links = document.querySelectorAll("[data-delete-video]")
+
+        // Boucle sur les liens
+        for(link of links) {
+            //Ecoute du click
+            link.addEventListener("click", function(e){
+                e.preventDefault()
+
+                //Confirmation de suppression
+                if(confirm('Voulez-vous vraiment supprimer cette vidéo ?')){
+                    fetch(this.getAttribute("href"), {
+                        method: "DELETE",
+                        headers: {
+                            "X-Requested-With": "XMLHttpRequest",
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({"_token": this.dataset.token})
+                    }).then(
+                        // récup réponse en json
+                        response => response.json()
+                    ).then(data => {
+                        if(data.success)
+                            this.parentNode.parentNode.remove()
+                        else
+                            alert(data.error)
+                    }).catch(e => alert(e))
+                }
+            })
+        }
+    }
    
 </script>
 
