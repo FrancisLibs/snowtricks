@@ -4,14 +4,14 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\PictureRepository")
- * @Vich\Uploadable
+ * @ORM\Entity(repositoryClass="App\Repository\MainPictureRepository")
+ * @Vich\Uploadable()
  */
-class Picture
+class MainPicture
 {
     /**
      * @ORM\Id()
@@ -25,7 +25,7 @@ class Picture
      * @Assert\Image(
      *     mimeTypes="image/jpeg"
      * )
-     * @Vich\UploadableField(mapping="trick_image", fileNameProperty="filename")
+     * @Vich\UploadableField(mapping="main_image", fileNameProperty="filename")
      */
     private $imageFile;
 
@@ -35,10 +35,11 @@ class Picture
     private $filename;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="pictures")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\OneToOne(targetEntity=Trick::class, mappedBy="mainPicture", cascade={"persist", "remove"})
      */
     private $trick;
+
+   
 
     public function getId(): ?int
     {
@@ -53,18 +54,6 @@ class Picture
     public function setFilename(?string $filename): self
     {
         $this->filename = $filename;
-
-        return $this;
-    }
-
-    public function getTrick(): ?Trick
-    {
-        return $this->trick;
-    }
-
-    public function setTrick(?Trick $trick): self
-    {
-        $this->trick = $trick;
 
         return $this;
     }
@@ -87,8 +76,21 @@ class Picture
         return $this;
     }
 
-    public function __toString()
+    public function getTrick(): ?Trick
     {
-        return $this->name;
+        return $this->trick;
+    }
+
+    public function setTrick(?Trick $trick): self
+    {
+        $this->trick = $trick;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newMainPicture = null === $trick ? null : $this;
+        if ($trick->getMainPicture() !== $newMainPicture) {
+            $trick->setMainPicture($newMainPicture);
+        }
+
+        return $this;
     }
 }

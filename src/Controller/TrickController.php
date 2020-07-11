@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
@@ -24,7 +25,7 @@ class TrickController extends AbstractController
      * @return Response
      */
     public function trickShow( Trick $trick, string $slug, int $nbComments = 0, CommentRepository $commentRepository,
-        EntityManagerInterface $manager, Request $request): Response 
+        EntityManagerInterface $manager, Request $request, ?UserInterface $user): Response 
     {
         if ($trick->getSlug() !== $slug) {
             return $this->redirectToRoute('trick.show', [
@@ -59,10 +60,10 @@ class TrickController extends AbstractController
         {
             $comment->setCreatedAt(new \DateTime());
             $comment->setTrick($trick);
+            $comment->setUser($user);
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($comment);
-            $entityManager->flush();
+            $manager->persist($comment);
+            $manager->flush();
 
             return $this->redirectToRoute('trick.show', [
                 'slug' => $trick->getSlug(),
@@ -74,11 +75,13 @@ class TrickController extends AbstractController
         // Affichage de 3 commentaires 
         $nbComments = $commentRepository->countTrikComments($trick);
         $comments = $commentRepository->findPaginateComments($trick, 0, 3);
+
+        $displayButton = true;
         if ($nbComments <= 3) {
-            $nbComments = 0;
-        } else {
-            $nbComments = 3;
+            $displayButton = false;
         }
+
+        if ($nbComments > 3) {$nbComments = 3;}
 
         return $this->render('trick/show.html.twig', [
             'trick'         =>  $trick,
@@ -87,6 +90,7 @@ class TrickController extends AbstractController
             'form2'         =>  $form2->createView(),
             'current-menu'  =>  'tricks',
             'nbComments'    =>  $nbComments,
+            'buttonMore'    =>  $displayButton,
             
         ]);
     }
@@ -97,33 +101,24 @@ class TrickController extends AbstractController
      */
     public function commentMore(Trick $trick, int $nbComments, CommentRepository $commentRepository, Request $request)
     {
-        $nbComments = $commentRepository->countTrikComments($trick);
-        $commentsDisplaying = $request->query->get('nbCommentaires');
-        $comments = $commentRepository->findPaginateComments($trick, $commentsDisplaying, 1);
+       
+        $nbTrickComments = $commentRepository->countTrikComments($trick);
+        
+        $comment = $commentRepository->findOnePaginateComment($trick, $nbComments);
 
-
-        if ($nbComments >= $commentsDisplaying + 2) {
-            $displayBtn = true;
-        } else {
-            $displayBtn = false;
+        $nbComments++;
+       
+        $displayButton = true;
+        if($nbTrickComments == $nbComments)
+        {
+            $displayButton = false;
         }
 
-        $commentArray = array();
-        $i = 0;
-        if ($comments) {
-            foreach ($comments as $comment) {
-                $commentArray[$i]['id'] = $comment->getId();
-                $commentArray[$i]['content'] = $comment->getContent();
-                $commentArray[$i]['date'] = $comment->getCreatedAt()->format('m-d-Y');
-                $commentArray[$i]['heure'] = $comment->getCreatedAt()->format('g\hi');
-                $commentArray[$i]['displayBtn'] = $displayBtn;
-                $i++;
-            }
-        }
-        $results = array(
-            'comments'      => $commentArray,
-        );
-
-        return new Response(json_encode($results));
+        return $this->render('trick/_comments.html.twig', [
+            'trick'         =>  $trick,
+            'comment'       =>  $comment,
+            'nbComments'    =>  $nbComments,
+            'buttonMore'    =>  $displayButton,
+        ]);
     }
 }

@@ -16,14 +16,11 @@ use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 class SecurityController extends AbstractController
 {
-    const ENREGISTRE = 1;
-    const VALIDE = 2;
-
     /**
      * @Route("/register", name="app_register")
      */
     public function register(Request $request, EntityManagerInterface $manager, 
-    UserPasswordEncoderInterface $encoder, \Swift_Mailer $mailer, UrlGeneratorInterface $generator)
+    UserPasswordEncoderInterface $encoder)
     {
         $user = new User();
         $form = $this->createForm(RegistrationType::class, $user);
@@ -34,22 +31,11 @@ class SecurityController extends AbstractController
             $hash = $encoder->encodePassword($user, $user->getPassword());
 
             $user->setPassword($hash);
-            $user->setStatus(self::ENREGISTRE);
             $token = uniqid();
             $user->setToken(random_bytes(20));
 
             $manager->persist($user);
             $manager->flush();
-
-            $url = $generator->generate(
-                'security_registration_validation', [
-                    'token' => $token,
-                    'id'    => $user->getId(),
-                ],
-                UrlGeneratorInterface::ABSOLUTE_URL
-            );
-
-            $this->notify($url, $mailer, $user );
 
             return $this->redirectToRoute('app_login');
         }
@@ -60,50 +46,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/validation/{id}/{token}", name="security_registration_validation")
-     */
-    public function inscritpionValidation(User $user, Request $request, string $token, EntityManagerInterface $manager)
-    {
-        $token = $request->query->get('token');
-        if($token == $user->getToken())
-        {
-            $user->setStatus(2);
-           // $role = {'ROLE_ADMIN'};
-            $user->setRoles($role);
-
-            $manager->flush();
-        }
-
-        return $this->redirectToRoute('home');
-    } 
-
-    /**
-     * @Route("/logout", name="app_logout")
-     */
-    public function logout()
-    {
-        return $this->redirectToRoute('homepage');
-    }
-
-    public function notify($url, $mailer, $user)
-    {
-        $message = (new \Swift_Message('Activation de votre compte'))
-            ->setFrom('fr.libs@gmail.com')
-            ->setTo($user->getEmail())
-            ->setBody(
-                $this->renderView(
-                    'emails/registration.html.twig', [
-                        'url'   => $url,
-                    ]
-                ),
-                'text/plain'
-            )
-        ;
-        $mailer->send($message);
-    }
-
-    /**
-     * @Route("/login", name="app_login")
+     * @Route("/login", name="app_login", methods={"GET", "POST"})
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -116,5 +59,13 @@ class SecurityController extends AbstractController
             'last_username' => $lastUsername, 
             'error' => $error
         ]);
+    }
+
+    /**
+     * @Route("/logout", name="app_logout")
+     */
+    public function logout()
+    {
+        return $this->redirectToRoute('homepage');
     }
 }

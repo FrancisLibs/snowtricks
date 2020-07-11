@@ -2,20 +2,21 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\UserPicture;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\UserInterface;
+use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"username"}, message="Le nom proposé n'est plus disponible")
  * @UniqueEntity(fields={"email"}, message="Cette adresse mail existe déjà")
  */
-class User implements UserInterface
+class User implements UserInterface, \Serializable
 {
     /**
      * @ORM\Id()
@@ -64,11 +65,6 @@ class User implements UserInterface
     private $tricks;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $status;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $token;
@@ -80,13 +76,24 @@ class User implements UserInterface
     private $resetToken;
 
     /**
-     * @ORM\OneToOne(targetEntity=Picture::class, inversedBy="user", cascade={"persist", "remove"})
+     * @Assert\Image(mimeTypes="image/jpeg")
      */
-    private $picture;
+    private $userPictureFile;
+    
+    /**
+     * @ORM\OneToOne(targetEntity=UserPicture::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $userPicture;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $comments;
 
     public function __construct()
     {
         $this->tricks = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -115,10 +122,7 @@ class User implements UserInterface
      * @see UserInterface
      */
     public function getRoles() {
-        if (empty($this->roles)) {
-            return ['ROLE_USER'];
-        }
-        return $this->roles;
+        return ['ROLE_ADMIN'];
     }
 
     function setRoles($role) {
@@ -160,7 +164,7 @@ class User implements UserInterface
      */
     public function getSalt()
     {
-        // not needed when using the "bcrypt" algorithm in security.yaml
+       return null;
     }
 
     /**
@@ -168,8 +172,7 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+
     }
 
     public function getEmail(): ?string
@@ -215,18 +218,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getStatus(): ?int
-    {
-        return $this->status;
-    }
-
-    public function setStatus(int $status): self
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
     public function getToken(): ?string
     {
         return $this->token;
@@ -239,17 +230,95 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getPicture(): ?Picture
+    public function serialize()
     {
-        return $this->picture;
+        return serialize([
+            $this->id,
+            $this->username,
+            $this->password,
+        ]);
     }
 
-    public function setPicture(?Picture $picture): self
+    public function unserialize($serialized)
     {
-        $this->picture = $picture;
+        list(
+            $this->id,
+            $this->username,
+            $this->password
+        ) = unserialize($serialized, ['allowed classes' => false]);
+        
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getuserPictureFile()
+    {
+        return $this->userPictureFile;
+    }
+
+    /**
+     * @param mixed $userPictureFile
+     * @return User
+     */
+    public function setUserPictureFile($userPictureFile): self
+    {
+        $userPicture = new UserPicture();
+        $userPicture->setImageFile($userPictureFile);
+        $userPicture->setUser($this);
+        $this->userPicture = $userPicture;
+
+        $this->UserPictureFile = $userPictureFile;
 
         return $this;
     }
 
-    
+    public function getUserPicture(): ?UserPicture
+    {
+        return $this->userPicture;
+    }
+
+    public function setUserPicture(?UserPicture $userPicture): self
+    {
+        $this->userPicture = $userPicture;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newUser = null === $userPicture ? null : $this;
+        if ($userPicture->getUser() !== $newUser) {
+            $userPicture->setUser($newUser);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getUser() === $this) {
+                $comment->setUser(null);
+            }
+        }
+
+        return $this;
+    }
 }

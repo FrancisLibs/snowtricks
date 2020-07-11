@@ -13,7 +13,7 @@
                     {% if trick.picture %}
                         style="background-image: url({{ vich_uploader_asset(trick.picture, 'imageFile') }} );"
                     {% else %}
-                        style="background-image: url({{ 'v' }} );"
+                        style="background-image: url({{ '/media/tricks/empty.jpg' }} );"
                     {% endif %}
                 {% endif %}
             >
@@ -21,28 +21,32 @@
                 <h1>{{ trick.name }}</h1>
             </div>
 
-            <div class="d-flex flex-wrap justify-content-around align-items-center">{# Photos et vidéos #}
+            <div id="delegation" class="d-flex flex-wrap justify-content-around align-items-center">{# Photos et vidéos #}
                 {# Images #}
                 {% if trick.pictures %} 
                     {% for picture in trick.pictures %}
-                        {% if not picture.mainPicture %}
-                            <div class="edit_cards m-2">
-                                <img class="edit_card_img show_picture" src="{{ vich_uploader_asset(picture, 'imageFile') }}" alt="image">
-                                <div class="inputFile">
-                                    {# Bouton editer avec son formulaire #}
-                                    <a class="btn_edit_picture"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                                    {# Bouton effacer #}
-                                    <a href="{{ path('admin.picture.delete', {id : picture.id}) }}"
-                                        data-delete-picture  data-token="{{csrf_token('delete' ~ picture.id) }}">
-                                        <i class="far fa-trash-alt  mb-1 mr-1"></i>
-                                    </a>  
-                                    <form method="post" action="" enctype="multipart/form-data" id="upload_picture_form" style="display: none;">
-                                        <input type="file" name="uploadPictureFile">
-                                        <span class="pathToController" data-path="{{ path('admin.picture.edit', {id: trick.id, pictureId: picture.id}) }}"></span>
-                                    </form>
-                                </div>
+                        <div class="edit_cards m-2">
+                            <img class="edit_card_img show_picture" src="{{ vich_uploader_asset(picture, 'imageFile') }}" alt="image">
+                            <div class="inputFile">
+
+                                {# Bouton editer avec son formulaire #}
+                                <a class="btn_edit_picture">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                </a>
+
+                                {# Bouton effacer #}
+                                <a href="{{ path('admin.picture.delete', {id : picture.id}) }}"
+                                    delete-picture data-token="{{csrf_token('delete' ~ picture.id) }}">
+                                    <i class="far fa-trash-alt  mb-1 mr-1"></i>
+                                </a>
+
+                                <form method="post" action="" enctype="multipart/form-data" id="upload_picture_form" style="display: none;">
+                                    <input type="file" name="uploadPictureFile">
+                                    <span class="pathToController" data-path="{{ path('admin.picture.edit', {id: picture.id}) }}"></span>
+                                </form>
+
                             </div>
-                        {% endif %}
+                        </div>
                     {% endfor %}
                 {% endif %}
 
@@ -70,23 +74,21 @@
                     {% endfor %}
                 {% endif %}
             </div>
-
-
-            <div class="edit_form mx-auto">
+            <div class="edit_form mx-auto mt-3">
                 {{ include('admin/trick/_editform.html.twig') }}
             </div>
-           {# <embed src="https://www.youtube.com/embed/CrLMXqNuUXw">#}
         </div>
     </div>
 {% endblock %}
+
 {% block javascripts %}
 <script>
     // Upload picture in the edit trick template
     champInput = "variable globale";
-    btnEditPicture = $('.btn_edit_picture');
     btnDeletePicture = "variable globale";
+    btnEditPicture = $('.btn_edit_picture');
     $(function () {
-        btnEditPicture.on('click', function (e) {
+        $("#delegation").on('click', ('.btn_edit_picture'), function (e) {
             e.preventDefault();
             btnEditPicture = $(this).hide('slow');
             btnDeletePicture = btnEditPicture.next();
@@ -98,32 +100,28 @@
     })
 
     $(function () {
-        selector = document.getElementsByName('uploadPictureFile');
-        $(selector).change(function() { 
-            var path = $(this).next().attr('data-path');
-            var ancienneImage = $(this).parent().parent().parent().children();
+        var selector = document.getElementsByName('uploadPictureFile');
+        $("#delegation").on('change', ("[name='uploadPictureFile']"), function () { 
+            var path = $(this).next();
+            var ancienneImage = $(this).parent().parent().parent();
             var file = $(this)[0].files[0];
             var formData = new FormData();
             formData.append("file", file);
 
             $.ajax({
                 type: "POST",
-                url: path,
+                url: path.attr('data-path'),
                 data: formData,
                 cache: false,
                 contentType: false,
                 processData: false,
                 async: false,
-                dataType: "json",
+                dataType: "html",
                 error: function (err) {
                     console.error(err);
                 },
                 success: function (data) {
-                    var image = data.newImage;
-                    ancienneImage.attr('src', image);
-                    champInput.hide();
-                    btnEditPicture.show();
-                    btnDeletePicture.show();
+                    ancienneImage.html(data);
                 },
                 complete: function () {
                     console.log("Request finished.");
@@ -133,38 +131,36 @@
     });
 
     // script d'effacement d'images dans admin/trick/edit.html.twig
-    window.onload = () => {
-        //Gestion des boutons "supprimmer"
-        let links = document.querySelectorAll("[data-delete-picture]")
+    $(function () {
+        $("#delegation").on('click', ("[delete-picture]"), function (e) { 
+            e.preventDefault();
+            var path = $(this).attr('href');
+            var image = $(this).parent().parent();
+            var token = $(this).attr('data-token');
+            var jsonToken  = { "_token" : token};
+            var jsonToken = JSON.stringify(jsonToken);
 
-        // Boucle sur les liens
-        for(link of links) {
-            //Ecoute du click
-            link.addEventListener("click", function(e){
-                e.preventDefault()
-
-                //Confirmation de suppression
-                if(confirm('Voulez-vous vraiment supprimer ce média ?')){
-                    fetch(this.getAttribute("href"), {
-                        method: "DELETE",
-                        headers: {
-                            "X-Requested-With": "XMLHttpRequest",
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({"_token": this.dataset.token})
-                    }).then(
-                        // récup réponse en json
-                        response => response.json()
-                    ).then(data => {
-                        if(data.success)
-                            this.parentNode.parentNode.remove()
-                        else
-                            alert(data.error)
-                    }).catch(e => alert(e))
+            $.ajax({
+                type: "DELETE",
+                url: path,
+                data: jsonToken,
+                cache: false,
+                contentType: false,
+                processData: false,
+                async: false,
+                dataType: "json",
+                error: function (err) {
+                    console.error(err);
+                },
+                success: function (data) {
+                    image.remove();
+                },
+                complete: function () {
+                    console.log("Request finished.");
                 }
-            })
-        }
-    }
+            });
+        });
+    });
 
     // Upload video in the edit trick template
     btnEditVideo = $('.btn_edit_video');

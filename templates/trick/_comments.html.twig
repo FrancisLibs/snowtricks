@@ -1,0 +1,28 @@
+
+    <div class="unCommentaire row justify-content-center mb-1">
+        {% if comment.user.userPicture %}
+            <div class="col-md-1">
+                <img class="photoProfil" src="{{ vich_uploader_asset(comment.user.userPicture, 'imageFile') }}" alt="comment.user.username">
+            </div>
+        {% else %}
+            <div class="col-md-1">
+                <img class="photoProfil" src="{{ '/media/tricks/empty.jpg' }}" alt="">
+            </div>
+        {% endif %}
+        <div class="ligne_date col-md-2 font-weight-bold">
+            Créé le : {{ comment.createdAt | date("m/d/Y à H:i") }}h
+        </div>
+        <div class="ligne_content col-md-8 border text-justify">
+            {{ comment.content | raw }}
+        </div>
+    </div>
+    {# button more #}
+    <div class="show_more_comment_btn mx-auto mb-3 d-flex justify-content-center">
+        {% if buttonMore %}
+            <a id='pathToController' href="{{ path('comment.more', { 'id' : trick.id, 'nbComments' : nbComments }) }}">
+                <img class="show_more_comment_btn" src="{{ asset('build/plus.png') }}" alt="Plus">
+            </a>
+        {% endif %}
+    </div>
+   
+

@@ -129,6 +129,11 @@
     line-height: 1;
 }
 
+.photoProfil {
+    width: 30px;
+    height: 30px;;
+}
+
 .icone_effacer {
     width: 20px;
 }

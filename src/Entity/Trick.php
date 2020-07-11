@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
+use App\Entity\Video;
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
@@ -59,7 +59,7 @@ class Trick
     private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="trick", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="trick", orphanRemoval=true, cascade={"persist", "remove"})
      */
     private $comments;
 
@@ -70,7 +70,7 @@ class Trick
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Picture", mappedBy="trick", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Picture", mappedBy="trick", orphanRemoval=true, cascade={"persist", "remove"})
      */
     private $pictures;
 
@@ -81,22 +81,22 @@ class Trick
      */
     private $pictureFiles;
 
+    private $videoFile;
+    
     /**
-     * @ORM\OneToOne(targetEntity=Picture::class, inversedBy="mainPictureTrick", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick", orphanRemoval=true, cascade={"persist", "remove"})
      */
-    private $mainPicture;
+    private $videos;
 
     /**
      * @Assert\Image(mimeTypes="image/jpeg")
      */
     private $mainPictureFile;
 
-    private $videoFile;
-   
     /**
-     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToOne(targetEntity=MainPicture::class, inversedBy="trick", cascade={"persist", "remove"})
      */
-    private $videos;
+    private $mainPicture;
 
     //--------------------------------------------------------------------------
 
@@ -275,12 +275,12 @@ class Trick
         return $this;
     }
 
-    public function getMainPicture(): ?Picture
+    public function getMainPicture(): ?MainPicture
     {
         return $this->mainPicture;
     }
 
-    public function setMainPicture(?Picture $mainPicture): self
+    public function setMainPicture(?MainPicture $mainPicture): self
     {
         $this->mainPicture = $mainPicture;
 
@@ -301,11 +301,10 @@ class Trick
      */
     public function setMainPictureFile($mainPictureFile): self
     {
-        $picture = new Picture();
-        $picture->setImageFile($mainPictureFile);
-        $picture->setMainPicture(true);
-        $picture->setTrick($this);
-        $this->setMainPicture($picture);
+        $mainPicture = new MainPicture();
+        $mainPicture->setImageFile($mainPictureFile);
+        $mainPicture->setTrick($this);
+        $this->setMainPicture($mainPicture);
        
         return $this;
     }
@@ -341,25 +340,19 @@ class Trick
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getVideoFile()
-    {
-        return $this->videoFile;
-    }
-
-    /**
-     * @param mixed $videoFile
-     * @return Trick
-     */
     public function setVideoFile($videoFile)
     {
         $video = new Video();
         $video->setLink($videoFile);
-        $this->videoFile = $videoFile;
+        $video->setTrick($this);
         $this->addVideo($video);
+        $this->video = $video;
 
         return $this;
+    }
+
+    public function getVideoFile()
+    {
+        return $this->videoFile;
     }
 }
