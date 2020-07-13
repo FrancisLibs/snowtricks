@@ -54,10 +54,6 @@ class TrickType extends AbstractType
                 'attr'      =>  [
                     'placeholder' => 'Video /embed/ link...'
                 ]
-            ])
-
-            ->add('save', SubmitType::class, [
-                'label' => 'Save'
             ]);
     }
 

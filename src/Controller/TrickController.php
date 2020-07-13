@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Trick;
 use App\Entity\Comment;
 use App\Form\CommentType;
+use App\Entity\MainPicture;
 use App\Form\MainPictureType;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -41,7 +42,7 @@ class TrickController extends AbstractController
         $form1->handleRequest($request);
 
         if ($form1->isSubmitted() && $form1->isValid()) 
-        {            
+        {
             $manager->flush();
 
             return $this->redirectToRoute('trick.show', [

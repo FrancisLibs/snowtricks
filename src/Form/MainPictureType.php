@@ -13,8 +13,7 @@ class MainPictureType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('mainPictureFile', FileType::class, [
-                'mapped'    => true,
+            ->add('mainImageFile', FileType::class, [
                 'required'  => false,
                 'label'     => false,
             ])

@@ -7,8 +7,8 @@
             {# Image à la une #}
             <div class="show_main_picture"
 
-                {% if trick.mainPicture %}
-                    style="background-image: url({{ vich_uploader_asset(trick.mainPicture, 'imageFile') }});"
+                {% if trick.mainFileName %}
+                    style="background-image: url({{ vich_uploader_asset(trick, 'mainImageFile') }});"
                 {% else %}
                     {% if trick.picture %}
                         style="background-image: url({{ vich_uploader_asset(trick.picture, 'imageFile') }} );"
@@ -21,7 +21,7 @@
                 {# boutons d'édition de l'image à la une #}
                 <div class="d-flex justify-content-end">
                     {% if app.user %}
-                        <div class="d-flex flex-row justify-content-end show_div_icones  ">
+                        <div class="d-flex flex-row justify-content-end show_edit_icones  ">
                             <a id="btn_edit_main_picture" class="edit" href="#">
                                 <i class="fas fa-pencil-alt mr-2"></i> 
                             </a>                            
@@ -34,12 +34,12 @@
 
                 {# Nom du trick #}
                 <div class="show_page_name d-flex flex-row justify-content-center align-items-center">
-                    <h1 id="trick_name">{{ trick.name }}</h1>
+                    <h1 id="main_trick_name">{{ trick.name }}</h1>
 
                     {# Formulaire d'image à la une #}
                     <div id="main_picture_upload_form" class="main_picture_edit_form" style="display: none;">
                         {{ form_start(form1) }}
-                            {{ form_row(form1.mainPictureFile) }}
+                            {{ form_row(form1.mainImageFile) }}
                             <button type'submit' class="btn btn-primary">Valider</button>
                         {{ form_end(form1) }}
                     </div>
@@ -115,7 +115,7 @@
                                 </div>
                             {% else %}
                                 <div class="col-md-1">
-                                    <img class="photoProfil" src="{{ '/media/tricks/empty.jpg' }}" alt="">
+                                    <img class="photoProfil" src="{{ '/media/userPicture/emptyprofil.jpg' }}" alt="">
                                 </div>
                             {% endif %}
                             <div class="ligne_date col-md-2 font-weight-bold">

@@ -1,8 +1,8 @@
 <section class="d-flex flex-row justify-content-center flex-wrap home_tricks" id="tricksDisplay" >
     {% for trick in tricks %}
         <div class="card m-4 text-white bg-secondary mb-3">
-            {% if trick.mainPicture %}
-                    <img src="{{ vich_uploader_asset(trick.mainPicture, 'imageFile') }}" alt="{{ trick.name }}" alt="card-img-top" class="card-img-top"/>
+            {% if trick.mainFileName %}
+                    <img src="{{ vich_uploader_asset(trick, 'mainImageFile') }}" alt="{{ trick.name }}" alt="card-img-top" class="card-img-top"/>
             {% else %}
                     {% if trick.picture %}
                         <img src="{{ vich_uploader_asset(trick.picture, 'imageFile') }}" alt="{{ trick.name }}" class="card-img-top">

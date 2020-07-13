@@ -7,8 +7,8 @@
             {# Image à la une #}
             <div class="show_main_picture d-flex flex-column align-items-center justify-content-center text-center" 
 
-                {% if trick.mainPicture %}
-                    style="background-image: url({{ vich_uploader_asset(trick.mainPicture, 'imageFile') }});"
+                {% if trick.mainFileName %}
+                    style="background-image: url({{ vich_uploader_asset(trick, 'mainImageFile') }});"
                 {% else %}
                     {% if trick.picture %}
                         style="background-image: url({{ vich_uploader_asset(trick.picture, 'imageFile') }} );"
@@ -134,31 +134,33 @@
     $(function () {
         $("#delegation").on('click', ("[delete-picture]"), function (e) { 
             e.preventDefault();
-            var path = $(this).attr('href');
-            var image = $(this).parent().parent();
-            var token = $(this).attr('data-token');
-            var jsonToken  = { "_token" : token};
-            var jsonToken = JSON.stringify(jsonToken);
+            if(confirm('Etes-vous certain de vouloir supprimer cette image ?')) {
+                var path = $(this).attr('href');
+                var image = $(this).parent().parent();
+                var token = $(this).attr('data-token');
+                var jsonToken  = { "_token" : token};
+                var jsonToken = JSON.stringify(jsonToken);
 
-            $.ajax({
-                type: "DELETE",
-                url: path,
-                data: jsonToken,
-                cache: false,
-                contentType: false,
-                processData: false,
-                async: false,
-                dataType: "json",
-                error: function (err) {
-                    console.error(err);
-                },
-                success: function (data) {
-                    image.remove();
-                },
-                complete: function () {
-                    console.log("Request finished.");
-                }
-            });
+                $.ajax({
+                    type: "DELETE",
+                    url: path,
+                    data: jsonToken,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    async: false,
+                    dataType: "json",
+                    error: function (err) {
+                        console.error(err);
+                    },
+                    success: function (data) {
+                        image.remove();
+                    },
+                    complete: function () {
+                        console.log("Request finished.");
+                    }
+                });
+            }
         });
     });
 
@@ -198,6 +200,7 @@
                     console.error(err);
                 },
                 success: function (data) {
+
                     champInput.hide();
                     console.log(link);
                     src.val(link);
@@ -211,7 +214,7 @@
         });
     });
 
-    // script d'effacement d'une vidéo dans admin/trick/edit.html.twig
+    // Effacement d'une vidéo dans admin/trick/edit.html.twig
     window.onload = () => {
         //Gestion des boutons "supprimmer"
         let links = document.querySelectorAll("[data-delete-video]")

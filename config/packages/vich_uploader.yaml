@@ -12,7 +12,7 @@ vich_uploader:
             upload_destination: '%kernel.project_dir%/public/media/userPicture'
             namer: Vich\UploaderBundle\Naming\UniqidNamer
 
-        main_image:
-            uri_prefix: /media/mainPicture
-            upload_destination: '%kernel.project_dir%/public/media/mainPicture'
+        trick_main:
+            uri_prefix: /media/trickMain
+            upload_destination: '%kernel.project_dir%/public/media/trickMain'
             namer: Vich\UploaderBundle\Naming\UniqidNamer

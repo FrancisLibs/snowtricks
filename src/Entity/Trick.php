@@ -6,12 +6,16 @@ use App\Entity\Video;
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
+ * @Vich\Uploadable
  * @UniqueEntity("name")
  */
 class Trick
@@ -81,6 +85,9 @@ class Trick
      */
     private $pictureFiles;
 
+    /**
+     * @var string
+     */
     private $videoFile;
     
     /**
@@ -89,14 +96,18 @@ class Trick
     private $videos;
 
     /**
-     * @Assert\Image(mimeTypes="image/jpeg")
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @var string|null
      */
-    private $mainPictureFile;
+    private $mainFileName;
 
     /**
-     * @ORM\OneToOne(targetEntity=MainPicture::class, inversedBy="trick", cascade={"persist", "remove"})
+     * @Vich\UploadableField(mapping="trick_main", fileNameProperty="mainFileName")
+     * 
+     * @var File|null
      */
-    private $mainPicture;
+    private $mainImageFile;
 
     //--------------------------------------------------------------------------
 
@@ -275,40 +286,6 @@ class Trick
         return $this;
     }
 
-    public function getMainPicture(): ?MainPicture
-    {
-        return $this->mainPicture;
-    }
-
-    public function setMainPicture(?MainPicture $mainPicture): self
-    {
-        $this->mainPicture = $mainPicture;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMainPictureFile()
-    {
-        return $this->mainPictureFile;
-    }
-
-    /**
-     * @param mixed $mainPictureFile
-     * @return Trick
-     */
-    public function setMainPictureFile($mainPictureFile): self
-    {
-        $mainPicture = new MainPicture();
-        $mainPicture->setImageFile($mainPictureFile);
-        $mainPicture->setTrick($this);
-        $this->setMainPicture($mainPicture);
-       
-        return $this;
-    }
-
     /**
      * @return Collection|Video[]
      */
@@ -355,4 +332,47 @@ class Trick
     {
         return $this->videoFile;
     }
+
+
+    /**
+     * @return string|null
+     */
+    public function getMainFileName(): ?string
+    {
+        return $this->mainFileName;
+    }
+
+    /**
+     * @param string|null $mainFileName
+     * @return Trick
+     */
+    public function setMainFileName(?string $mainFileName): Trick
+    {
+        $this->mainFileName = $mainFileName;
+        return $this;
+    }
+
+    /**
+     * @return File|null
+     */
+    public function getMainImageFile(): ?File
+    {
+        return $this->mainImageFile;
+    }
+
+    /**
+     * @param File|null $mainImageFile
+     * @return Trick
+     */
+    public function setMainImageFile(?File $mainImageFile): Trick
+    {
+        $this->mainImageFile = $mainImageFile;
+
+        if ($this->mainImageFile instanceof UploadedFile) {
+            $this->updated_at = new \DateTime('now');
+        }
+
+        return $this;
+    }
+    
 }

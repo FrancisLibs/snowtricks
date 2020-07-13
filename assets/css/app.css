@@ -2,12 +2,29 @@
     color: black;
 }
 
+h1{
+    font-size: 4rem;
+}
+
+#main_trick_name{
+    font-family: 'Bangers', cursive;
+}
+
 .trick_image {
     width: 20%;
 }
 
 .home_page {
     background-color:rgba(190, 223, 218, 0.979);
+}
+
+.title_home_page {
+    height: 93%;
+}
+
+.home_page_title {
+    font-family: 'Permanent Marker', cursive;
+    color: #164b9f;
 }
 
 .header {
@@ -88,6 +105,12 @@
     background-position: center;
     background-size: cover;
     height: 450px;
+}
+
+.show_edit_icones{
+    background-color: white;
+    width: 50px;
+    border-radius: 5px;
 }
 
 .medias {
@@ -181,13 +204,13 @@
     flex-flow: row wrap;
     justify-content: center;
 }
-.edit_cards{
-    width: 250px;
-    height: 200px;
-}
+
 .edit_card_img {
-   max-width: 100%;
-   max-height: 100%;
+   display:inline-block;
+   width:190px;
+   height:190px;
+   white-space:nowrap;
+   overflow:hidden;
 }
 
 .edit_icones {
