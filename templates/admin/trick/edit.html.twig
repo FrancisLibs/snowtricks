@@ -1,26 +1,16 @@
 {% extends 'base.html.twig' %}
 
+{% block mainPicture %}
+    {% include "pages/_mainPicture.html.twig" %}
+{% endblock %}
+
 {% block body %}
+    {# Bouton affichage media #}
+    <div class="btn-affichage-media">
+        <a id="btn-affichage-media" class="btn btn-primary btn-affichage-media">Affichage media</a>
+    </div>
     <div class="container" id="haut">
-        <div class="show_page mx-auto mt-3 pb-5">
-
-            {# Image à la une #}
-            <div class="show_main_picture d-flex flex-column align-items-center justify-content-center text-center" 
-
-                {% if trick.mainFileName %}
-                    style="background-image: url({{ vich_uploader_asset(trick, 'mainImageFile') }});"
-                {% else %}
-                    {% if trick.picture %}
-                        style="background-image: url({{ vich_uploader_asset(trick.picture, 'imageFile') }} );"
-                    {% else %}
-                        style="background-image: url({{ '/media/tricks/empty.jpg' }} );"
-                    {% endif %}
-                {% endif %}
-            >
-                {# Nom du trick #}
-                <h1>{{ trick.name }}</h1>
-            </div>
-
+        <div id="div-affichage-photos-videos">
             <div id="delegation" class="d-flex flex-wrap justify-content-around align-items-center">{# Photos et vidéos #}
                 {# Images #}
                 {% if trick.pictures %} 
@@ -74,15 +64,49 @@
                     {% endfor %}
                 {% endif %}
             </div>
-            <div class="edit_form mx-auto mt-3">
-                {{ include('admin/trick/_editform.html.twig') }}
-            </div>
+        </div>
+        <div class="edit-form mx-auto mt-3">
+            {{ include('admin/trick/_editform.html.twig') }}
         </div>
     </div>
 {% endblock %}
 
 {% block javascripts %}
 <script>
+    // Effacement d'un trick
+    $(function () {
+        $(".delete-trick").on('click', function (e) {
+            e.preventDefault();
+            if(confirm('Etes-vous certain de vouloir supprimer cette image ?')){
+                //var token = $( "input[name='_token']" ).val();
+                //var path = $(".pathToControllerDelete").attr('data-path');
+               // var formData = new FormData();
+                formData.append("_token", token);
+
+                $.ajax({
+                    type: "DELETE",
+                    url: path,
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    async: false,
+                    dataType: "json",
+                    error: function (err) {
+                        console.error(err);
+                    },
+                    success: function (data) {
+                        console.log('retour : ', data);
+                    },
+                    complete: function () {
+                        console.log("Request finished.");
+                    }
+                });
+            }
+        })
+    })
+
+
     // Upload picture in the edit trick template
     champInput = "variable globale";
     btnDeletePicture = "variable globale";
@@ -200,7 +224,6 @@
                     console.error(err);
                 },
                 success: function (data) {
-
                     champInput.hide();
                     console.log(link);
                     src.val(link);
@@ -247,6 +270,15 @@
             })
         }
     }
+
+    // Gestion du bouton de l'affichage des médias
+    $(function () {
+        var bouton=$('#btn-affichage-media');
+         bouton.click(function(e) {
+             bouton.hide();
+             $("#div-affichage-photos-videos").show();
+         }) 
+    })
    
 </script>
 

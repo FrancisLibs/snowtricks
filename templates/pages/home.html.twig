@@ -1,29 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="home_page mb-5" id="haut">
-        <div class="header content-block"> {# la div header contient l'image de banière #}
-            {# Nom du trick #}
-            <div class="title_home_page d-flex flex-row justify-content-center align-items-center">
-                <h1 class="home_page_title">Snowboard, what else !</h1>
-            </div>
-            <div class="arrow_h d-flex flex-row-reverse">
-                <a href="#tricksDisplay"><img class="arrow_down" src="{{ asset('build/fleche_bas.png') }}" alt="Fleche bas"></a>
-            </div>
-        </div>
+    
+    {% include "trick/_tricks.html.twig" %}
+
+    <div class ="arrow_b d-flex flex-row-reverse" >
+        <a href="#haut"><img class="arrow_high" src="{{ asset('build/fleche_haut.png') }}" alt="Fleche haut"></a>
     </div>
-        
-
-        {% include "trick/_tricks.html.twig" %}
     
-        <div class ="arrow_b d-flex flex-row-reverse" >
-            <a href="#haut"><img class="arrow_high" src="{{ asset('build/fleche_haut.png') }}" alt="Fleche haut"></a>
-        </div>
-
-        <span id="linkToController" data-path="{{ path('home.tricks.more') }}"></span>
-        
-    
+    <span id="linkToController" data-path="{{ path('home.tricks.more') }}"></span>
+     
 {% endblock %}
-{% block javascripts %}
 
-{% endblock %}
+ 

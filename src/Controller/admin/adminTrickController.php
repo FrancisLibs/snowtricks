@@ -6,6 +6,7 @@ use App\Entity\Trick;
 use App\Entity\Picture;
 use App\Form\TrickType;
 use Cocur\Slugify\Slugify;
+use App\Form\MainPictureType;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,25 +39,26 @@ class AdminTrickController extends AbstractController
      * @Route("/admin/trick/new", name="admin.trick.create")
      * @return Symfony\Component\HttpFoundation\Response
      */
-    public function new(Request $request, UserInterface $user) {
+    public function new(Request $request, UserInterface $user, EntityManagerInterface $manager) 
+    {
         $trick = new Trick();
-        $form = $this->createForm(TrickType::class, $trick);
+        $form2 = $this->createForm(TrickType::class, $trick);
 
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form2->handleRequest($request);
+        if ($form2->isSubmitted() && $form2->isValid()) {
             $trick->setUser($user);
             $this->manager->persist($trick);
             $this->manager->flush();
 
             return $this->redirectToRoute('trick.show', [
-                'slug' => $trick->getSlug(),
-                'id' => $trick->getId(),
+                'slug'  => $trick->getSlug(),
+                'id'    => $trick->getId(),
             ]);
         }
 
         return $this->render('admin/trick/new.html.twig', [
-            'trick' =>  $trick,
-            'form'  =>  $form->createView()
+            'trick'     =>  $trick,
+            'form2'     =>  $form2->createView()
         ]);
     }
 
@@ -65,12 +67,24 @@ class AdminTrickController extends AbstractController
      * @param Trick $trick
      * @return Symfony\Component\HttpFoundation\Response
      */
-    public function edit(Trick $trick, Request $request): Response
+    public function edit(Trick $trick, Request $request, EntityManagerInterface $manager): Response
     {
-        $form = $this->createForm(TrickType::class, $trick);
+        // Modification de l'image à la une
+        $form1 = $this->createForm(MainPictureType::class, $trick);
+        $form1->handleRequest($request);
 
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form1->isSubmitted() && $form1->isValid()) {
+            $manager->flush();
+
+            return $this->redirectToRoute('trick.edit', [
+                'id' => $trick->getId(),
+            ]);
+        }
+
+        $form2 = $this->createForm(TrickType::class, $trick);
+
+        $form2->handleRequest($request);
+        if ($form2->isSubmitted() && $form2->isValid()) {
                 $this->manager->flush();
                 $this->addFlash('success', 'trick modifié');
 
@@ -81,7 +95,8 @@ class AdminTrickController extends AbstractController
 
         return $this->render('admin/trick/edit.html.twig', [
             'trick' =>  $trick,
-            'form'  =>  $form->createView(),
+            'form1' =>  $form1->createView(),
+            'form2' =>  $form2->createView(),
         ]);
     }
 
@@ -92,8 +107,10 @@ class AdminTrickController extends AbstractController
      */
     public function delete(Trick $trick, Request $request, EntityManagerInterface $manager): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $trick->getId(), $request->get('_token'))) {
-            $manager = $this->getDoctrine()->getManager();
+        $token = $request->get('_token');
+
+        if ($this->isCsrfTokenValid('delete' . $trick->getId(), $token)) 
+        {
             $manager->remove($trick);
             $manager->flush();
 
@@ -110,16 +127,12 @@ class AdminTrickController extends AbstractController
      */
     public function mainPictureDelete(Trick $trick, EntityManagerInterface $manager, UploaderHelper $helper): Response
     {
-        $picture = $trick->getMainPicture();
-        if ($picture) {
-            $fileName = $picture->getfileName();
-            unlink('media/tricks/' . $fileName);
-            $trick->setMainPicture(null);
-            $manager->remove($picture);
+        $pictureFile = $trick->getMainFileName();
+        unlink('media/trickMain/' . $pictureFile);
+        $trick->setMainFileName(null);
 
-            $manager->flush();
-        }
-
+        $manager->flush();
+        
         return $this->redirectToRoute('trick.show', [
             'slug'  =>  $trick->getSlug(),
             'id'    =>  $trick->getId(),

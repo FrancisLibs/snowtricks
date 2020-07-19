@@ -1,31 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Inscription{% endblock %}
 
-{% block body %}
-    <div class="container" id="haut">
-        <div class="mx-auto">
-            <h2 class="registration_title text-center mt-3">Inscription</h2>
-            <div class="row">
-                <div class="col-md-4 mx-auto mt-4 registration_box">
-                    {{ form_start(form) }}
-                        <div class="text-center">
-                            {{ form_row(form.username, {
-                                'attr': {'placeholder': 'Nom d\'utilisateur...'}})}}
-                            {{ form_row(form.email, {
-                                'attr': {'placeholder': 'Adresse email...'}})}}
-                            {{ form_row(form.password, {
-                                'attr': {'placeholder': 'Mot de passe...'}})}}
-                            {{ form_row(form.confirm_password, {
-                                'attr': {'placeholder': 'Répétez votre mot de passe...'}})}}
-                            {{ form_row(form.userPictureFile, {
-                                'attr': {'placeholder': 'Photo...'}})}}
+{% block insert %}
+   <div class="row align-items-center" id="content-panel">
+		<div class="offset-1 col-10 offset-sm-3 col-sm-6 offset-md-3 col-md-4 offset-lg-4 col-lg-3 offset-xl-4 col-xl-3 text-center reset-password-form">
+			<h5>Inscription</h5>
+            <div class="">
+                {{ form_start(form) }}
+                    <div class="text-center">
+                        {{ form_row(form.username, {
+                            'attr': {'placeholder': 'Nom d\'utilisateur...'}})}}
+                        {{ form_row(form.email, {
+                            'attr': {'placeholder': 'Adresse email...'}})}}
+                        {{ form_row(form.password, {
+                            'attr': {'placeholder': 'Mot de passe...'}})}}
+                        {{ form_row(form.confirm_password, {
+                            'attr': {'placeholder': 'Répétez votre mot de passe...'}})}}
+                        {{ form_row(form.userPictureFile, {
+                            'attr': {'placeholder': 'Photo...'}})}}
 
-                            <button type="submit" class="btn btn-primary mt-4 mb-4">Créer un compte</button>
-                        </div>
-                    {{ form_end(form) }}
-                </div>
+                        <button type="submit" class="btn btn-primary mt-4 mb-4">Créer un compte</button>
+                    </div>
+                {{ form_end(form) }}
             </div>
-        </div>
-    </div>
+		</div>
+	</div>
 {% endblock %}
+
+

@@ -3,7 +3,7 @@
     <head>
         <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<meta name="robots" content="noindex"/>
 
@@ -12,21 +12,51 @@
         <link rel="stylesheet" href="https://bootswatch.com/4/spacelab/bootstrap.min.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet"> 
-        <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=BenchNine&display=swap" rel="stylesheet"> 
         
         {{ encore_entry_link_tags('app') }}
         
         <link rel="stylesheet" href="{% block stylesheets %}{% endblock %}">
     </head>
     <body>
-        <div class="header">
-            
-            {% include "pages/_navBar.html.twig" %}
-            {% block body %}
-            {% endblock %}
-            
-        </header>
+        {% if app.request.get('_route') == 'home' or app.request.get('_route') == 'user.password.reset' %}
+            <div class="header-hp">
+        {% else %}
+            <div class="header">
+        {% endif %}
+            <div class="home_page" id="haut">
+                {% include "pages/_navBar.html.twig" %}
+                <div class="content-block"> {# la div header contient l'image de banière #}
+                    {% block mainPicture %}{% endblock %}
+
+                    {% for message in app.flashes('danger') %}
+                        <div class="alert alert-success">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+
+                    {% if app.request.get('_route') == 'home' %}
+                        {# Slogan home page #}
+                        <div class="title-home-page d-flex flex-row justify-content-center align-items-center">
+                            <h1 class="home_page_title">Snowboard, what else !</h1>
+                        </div>
+                        <div class="arrow_h d-flex flex-row-reverse">
+                            <a href="#tricksDisplay"><img class="arrow_down" src="{{ asset('build/fleche_bas.png') }}" alt="Fleche bas"></a>
+                        </div>
+                    {% endif %}
+
+                    {% block trickMainPicture %}{% endblock %}
+
+                    {% block insert %}{% endblock %}
+
+                </div>
+            </div>
+        </div>
+        {% block body %}
+        {% endblock %}
         {% include "pages/_footer.html.twig" %}
+        
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>

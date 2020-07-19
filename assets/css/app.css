@@ -3,10 +3,22 @@
 }
 
 h1{
-    font-size: 4rem;
+    font-size: 3rem;
+}
+.navbar {
+    background: #c8c8e9;
 }
 
-#main_trick_name{
+.navbar-high-display {
+    display: none;
+
+}
+
+.navbar-low-display {
+    display: block;
+}
+
+#main_trick_name {
     font-family: 'Bangers', cursive;
 }
 
@@ -14,44 +26,46 @@ h1{
     width: 20%;
 }
 
-.home_page {
-    background-color:rgba(190, 223, 218, 0.979);
-}
-
-.title_home_page {
-    height: 93%;
+.title-home-page {
+    height: 470px;
 }
 
 .home_page_title {
     font-family: 'Permanent Marker', cursive;
     color: #164b9f;
+    margin-left: 5px;
 }
 
-.header {
+.header-hp {
     background-image: url("../img/fond.jpg");
-    background-color: white;
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
-    height: 39rem;
-}
+    height: 619px;
+} 
 
-.bckgnd_blue{
-    background-color: #566dea9e;
+.header {
+    background-image: url("../img/fond.jpg");
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    height: 215px;
 }
 
 .card {
-    width: 17rem;
-    height: 16rem;
+    width: 17em;
+    height: 17em;
     border-radius: 0.5rem;
+    margin: 10px;
 }
 
 .card-img-top {
     height: 12rem;
 }
 
-.card-body, .card-body > .liens{
+.card-body, .card-body > .liens {
     display: flex;
 }
 
@@ -60,19 +74,14 @@ h1{
 }
 
 .card-title > a {
-    color: #4ec9ff;
-    font-size: 1rem;
+    color: #3cecf5;
+    font-size: 1.2rem;
 }
 
 .card-body > .liens {
     width: 22%;
 }
 
-.content-block {
-    margin-bottom: 2em;
-}
-
-/* Couleur utilisée pour les liens */
 .navbar .navbar-dark > li > a {
     color: white;
 }
@@ -81,6 +90,13 @@ h1{
     background: url("../img/fleche_haut.png");
 }
 
+.arrow_h {
+    background-color: transparent;
+}
+
+.arrow_b {
+    display: none!important;
+}
 .anchor_arrow_down {
     width: 22%;
     text-align: right;
@@ -90,12 +106,17 @@ h1{
     width: 2%;
 }
 
-.show_page {
-    background-color : #d9e0ee;
-    width: 95%;
+.more-comment-button {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
-.show_page_name{
+.show_page {
+    width: 95%;
+    margin-top: 34px;
+}
+
+.show_page_name {
     height: 100%;
 }
 
@@ -104,10 +125,11 @@ h1{
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    height: 450px;
+    height: 230px;
+    width: 75%;
 }
 
-.show_edit_icones{
+.show_edit_icones {
     background-color: white;
     width: 50px;
     border-radius: 5px;
@@ -118,38 +140,55 @@ h1{
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-
 }
 
 .show_description {
-    width: 70%;
+    width: 97%;
     font-size: 0.8em;
     line-height: 1em;
     min-height: 2rem;
+    text-align: justify;
 }
 
 .show_div_info {
     display: flex;
-    width: 45%;
+    width: 96%;
     font-size: 0.6em;
     font-weight: bold;
 }   
 
 .show_info {
     text-align: center;
-    width: 30%;
+    width: 31%;
     margin: auto;
     border: 1px solid white!important;
+    min-height: 30px;
 }
 
-.show_comment_form {
-    width: 45%;
+.show-display-comment-form {
+    width: 90%;
 }
 
 .show_commentaires {
-    width:45%;
+    width: 87%;
     font-size: 0.65rem;
-    line-height: 1;
+    line-height: 10px;;
+    margin: auto;
+}
+
+.un-commentaire {
+    width: 100%;
+    margin: auto;
+}
+
+.commentaire-date-content {
+    width: 100%;
+    min-height: 30px;;
+}
+
+.ligne-date-commentaire {
+    margin: 0;
+    margin-bottom: 1px;
 }
 
 .photoProfil {
@@ -170,7 +209,7 @@ h1{
     width: 70%;
 }
 
-.div_show_more_comment_btn{
+.div_show_more_comment_btn {
     height: 4rem;
 }
 
@@ -188,7 +227,7 @@ h1{
     margin-bottom: 8px;
 }
 
-.edit_main_picture{
+.edit_main_picture {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -217,7 +256,6 @@ h1{
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
-    width: %;
     padding: 3px;
     padding-top: 10px;
     border: 1px solid;
@@ -248,7 +286,7 @@ h1{
     color : white;
 }
 
-.registration_title{
+.registration_title {
     color: white;
 }
 
@@ -275,26 +313,58 @@ h1{
     margin:auto;
 }
 
-.main_picture_form{
+.main_picture_form {
     background-color: white;
 }
 
-.main_picture_edit_form{
-    width: 50%;
-    margin: auto;
-    background: white;
-    border: 1px solid blue;
-    border-radius: 10px;
+.main_picture_edit_form {
+   width: 74%;
+   margin: auto;
+   background: white;
+   border: 1px solid blue;
+   border-radius: 10px;
+   line-height: 23px;
+   font-size: 8px;
 }
 
-ul.photos{
+.btn-main-picture {
+    font-size: 10px;
+    line-height: 9px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+}
+
+.btn-affichage-media{
+     width: 141px;
+     margin: auto;
+     color: white;
+     margin-top: 14px; 
+}
+
+.edit-btn-submit-trick {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 80px;
+}
+
+.edit-btn-trick-valider {
+    width: 139px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.edit-form{
+    width: 70%;
+}
+
+ul.photos {
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
     width: 70%;
 }
 
-.custom-file-input{
+.custom-file-input {
     opacity: 1;
 }
 
@@ -307,7 +377,360 @@ fieldset .col-form-label {
     display: none;
 }
 
-/* Saisie image */
-.champ_saisie_image{
+.champ_saisie_image {
     display: none;
+}
+
+#div-affichage-photos-videos {
+    display: none;
+    width: 100%;
+}
+
+.btn-affichage-media {
+    display: block;
+}
+
+.reset-password-bloc {
+    padding-top: 76px;
+    height: 300px;
+}
+
+.reset-password-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 439px;
+    background-color: #eee;
+    padding: 20px;
+}
+
+.registration-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 550px;
+    background-color: #eee;
+    padding: 20px;
+}
+
+.reset-password-form-fields {
+     display: flex;
+     flex-direction: column;
+     justify-content: space-around;
+     height: 73%;
+}
+
+.reset-form-input {
+    background-color: transparent;
+    border: 0px solid;
+    border-bottom: 2px solid white;
+    display: inline;
+}
+
+@media (min-width: 576px) { /*-----------------------------------*/
+    .header-hp {
+         height: 628px;
+     }
+
+    .title-home-page {
+         height: 302px;
+     }
+
+    .header {
+        height: 344px;
+    }
+    .navbar-high-display {
+        display: block;
+    }
+
+    .title_home_page {
+        height: 196px;
+    }
+
+    .navbar-low-display {
+        display: none !important;
+    }
+
+    .arrow_b {
+        display: block;
+    }
+
+    .header {
+        margin-bottom: 60px;
+    }
+
+    .show_main_picture{
+        height: 269px;
+    }
+
+    .main_picture_edit_form {
+        width: 62%;
+        font-size: 12px;
+    }
+
+    .reset-password-title {
+        font-family: 'BenchNine',
+            sans-serif;
+    }
+
+    .reset-password-bloc {
+        padding-top: 52px;
+        height: 283px;
+    }
+
+    .reset-password-form-fields {
+        border: 1px solid white;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        height: 62%;
+    }
+}
+
+@media (min-width: 768px) {    /*-----------------------------------*/
+    .header-hp {
+         height: 679px;
+     }
+
+      .title-home-page {
+          height: 458px;
+      }
+
+    .header {
+        height: 480px;
+    }
+
+    .navbar-high-display {
+        display: block;
+    }
+
+    .navbar-low-display {
+        display: none!important;
+    }
+
+    .arrow_b {
+        display: block;
+    }
+
+    .show-display-comment-form {
+        width: 62%;
+    }
+
+    .show_main_picture {
+        height: 400px;
+    }
+
+     .show_div_info {
+         width: 60%;
+         font-size: 0.8em;
+     }
+
+    .show_info {
+         min-height: 38px;
+     }
+
+    .show_commentaires {
+          width: 59%;
+          font-size: 0.8rem;
+    }
+
+    .main_picture_edit_form {
+        width: 39%;
+    }
+
+   .edit-btn-trick-effacer {
+       width: 139px;
+       margin-top: 10px;
+       margin-bottom: 10px;
+   }
+
+   .edit-btn-trick-valider {
+       width: 139px;
+       margin-top: 10px;
+       margin-bottom: 10px;
+   }
+
+    #div-affichage-photos-videos {
+        display: bloc;
+    }
+
+    .reset-password-title {
+        font-family: 'BenchNine',
+            sans-serif;
+    }
+
+    .reset-password-bloc {
+        padding-top: 52px;
+        height: 283px;
+    }
+}
+
+@media (min-width: 992px) {    /*-----------------------------------*/
+    .header-hp {
+         height: 679px;
+     }
+
+    .header {
+        height: 538px;
+    }
+
+    .show_main_picture {
+         height: 450px;
+    }
+
+    .reset-form-labels {
+        width: 57%;
+        margin: auto;
+    }
+
+    .reset-form-fields {
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        height: 250px;
+    }
+}
+
+@media (min-width: 1200px) {    /*-----------------------------------*/
+    .header-hp {
+        height: 679px;
+    }
+
+    .header{
+        height: 625px;
+    }
+
+    .title_home_page {
+        height: 523px;
+    }
+
+    .show_main_picture {
+        height: 560px;
+    }
+
+    .main_picture_edit_form {
+        width: 27%;
+        font-size: 12px;
+    }
+
+    .show_page {
+        width: 75%;
+    }
+
+    #div-affichage-photos-videos {
+        display: block;
+        width: 100%;
+    }
+
+    .show_description {
+        width: 68%;
+        font-size: 0.8em;
+        line-height: 1em;
+        min-height: 2rem;
+        text-align: center;
+    }
+
+    .show_div_info {
+        width: 47%;
+        font-size: 0.8em;
+    }
+
+    .show_barre {
+        width: 70%;
+    }
+
+    .show-display-comment-form {
+        width: 44%;
+    }
+
+    .show_commentaires {
+        width: 44%;
+        font-size: 0.8rem;
+    }
+
+    .btn-affichage-media {
+        display: none;
+    }
+
+    .forgot-password {
+        margin-top: 100px;
+        width: 30%;
+    }
+
+    .forgot-password-input {
+        width: 80%;
+    }
+
+    .forgot-password-button{
+        line-height: 10px;
+    }
+    
+    .reset-password {
+         margin-top: 100px;
+         width: 43%;
+     }
+
+    .reset-password-input {
+         width: 80%;
+         height: 157px;
+     }
+
+    .reset-password-button {
+         line-height: 10px;
+     }
+
+    .bloc-profil {
+         width: 25%;
+     }
+
+    .profil-picture {
+         width: 60px;
+         height: auto;
+    }
+
+
+    .reset-password-title {
+         font-family: 'BenchNine',
+     sans-serif;
+    }
+
+    .reset-form {
+        margin-top: 20px;
+        height: 200px;
+    }
+     
+    .reset-form-input {
+        width: 63%;
+        background-color: transparent;
+        border: 0px solid;
+        border-bottom: 2px solid white!important;
+        display: inline;
+    }
+
+    .reset-form-submit {
+        width: 26%;
+    }
+
+    .reset-password-form-fields {
+        border: 1px solid white;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        height: 62%;
+        width: 19%;
+        margin: auto;
+    }
+
+    #form_newPassword {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .reset-form-input-control{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
 }

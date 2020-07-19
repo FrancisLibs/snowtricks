@@ -1,6 +1,6 @@
 <section class="d-flex flex-row justify-content-center flex-wrap home_tricks" id="tricksDisplay" >
     {% for trick in tricks %}
-        <div class="card m-4 text-white bg-secondary mb-3">
+        <div class="card text-white bg-secondary">
             {% if trick.mainFileName %}
                     <img src="{{ vich_uploader_asset(trick, 'mainImageFile') }}" alt="{{ trick.name }}" alt="card-img-top" class="card-img-top"/>
             {% else %}
@@ -23,9 +23,7 @@
                             onsubmit="return confirm('Voulez-vous supprimer ce trick ?')">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.id) }}">
-                            <button class="btn">
-                                <i class="far fa-trash-alt"></i>
-                            </button>
+                            <button id="delete-trick" class="btn"><i class="far fa-trash-alt"></i></button>
                         </form>
                     {% endif %}
                 </div>
@@ -34,7 +32,7 @@
     {% endfor %}
 </section>
      {% if displayBtn  %}
-        <div class="button">
+        <div class="more-comment-button">
             <div class="row">
                 <div class="mx-auto">                   
                     <a href="{{ path('tricks.index', {nbTricks : nbTricks}) }}">

@@ -2,14 +2,12 @@
 
 {% block title %}Connexion !{% endblock %}
 
-{% block body %}
+{% block insert %}
     <div class="container" id="haut">
         <div class="mx-auto">
-            <h2 class="registration_title text-center mt-3">Inscription</h2>
+            <h2 class="registration_title text-center mt-3">Connexion</h2>
             <div class="row">
-                <div class="col-md-4 mx-auto mt-4 registration_box">
-                   
-
+                <div class="col-md-4 mx-auto pt-4 pb-4 registration_box">
                    <form method="post">
                         {% if error %}
                             <div class="alert alert-danger">
@@ -41,7 +39,11 @@
                                 Connexion !
                             </button>
                         </div>
+
                     </form>
+                </div>
+                <div class="col-md-4 mx-auto">
+                    <a href="{{ path('app_forgotten_password') }}">Mot de passe oublié</a>
                 </div>
             </div>
         </div>
