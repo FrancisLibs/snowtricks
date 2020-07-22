@@ -1,0 +1,38 @@
+    {# Image à la une #}
+    <div class="show_main_picture mx-auto" 
+        {% if trick.mainFileName %}
+            style="background-image:url({{ vich_uploader_asset(trick, 'mainImageFile') }});"
+        {% else %}
+            style="background-image:url({{ '/media/tricks/empty.jpg' }});"
+        {% endif %}
+    >
+
+        {# Boutons d'édition de l'image à la une #}
+        <div class="d-flex justify-content-end">
+            {% if app.user %}
+                <div class="d-flex flex-row justify-content-end show_edit_icones mt-1 mr-1">
+                    <a id="btn_edit_main_picture" class="edit" href="#">
+                        <i class="fas fa-pencil-alt mr-2"></i> 
+                    </a>
+                    {% if trick.mainFileName %}
+                        <a href="{{ path('admin.mainPicture.delete', {'id' : trick.id}) }}">
+                            <i class="far fa-trash-alt mr-2"></i> 
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+
+        {# Nom du trick #}
+        <div class="show_page_name d-flex flex-row justify-content-center align-items-center">
+            <h2 id="main_trick_name">{{ trick.name }}</h2>
+
+            {# Formulaire d'image à la une #}
+            <div id="main_picture_upload_form" class="main_picture_edit_form" style="display: none;">
+                {{ form_start(form1) }}
+                    {{ form_row(form1.mainImageFile) }}
+                    <button type="submit" class="btn btn-primary btn-main-picture">Valider</button>
+                {{ form_end(form1) }}
+            </div>
+        </div>
+    </div>

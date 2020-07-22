@@ -1,53 +1,19 @@
 {% extends 'base.html.twig' %}
 
+{% block mainPicture %}
+    {% include "pages/_mainPicture.html.twig" %}
+{% endblock %}
+
 {% block body %}
-    <div class="container" id="haut">
-        <div class="show_page mx-auto mt-3">
-    
-            {# Image à la une #}
-            <div class="show_main_picture"
+    <div class="show_page mx-auto" id="haut">
+        {# Bouton affichage media #}
+        <div class="btn-affichage-media">
+            <a id="btn-affichage-media" class="btn btn-primary btn-affichage-media">Affichage media</a>
+        </div>
 
-                {% if trick.mainFileName %}
-                    style="background-image: url({{ vich_uploader_asset(trick, 'mainImageFile') }});"
-                {% else %}
-                    {% if trick.picture %}
-                        style="background-image: url({{ vich_uploader_asset(trick.picture, 'imageFile') }} );"
-                    {% else %}
-                        style="background-image: url({{ '/media/tricks/empty.jpg' }} );"
-                    {% endif %}
-                {% endif %}
-            >
-
-                {# boutons d'édition de l'image à la une #}
-                <div class="d-flex justify-content-end">
-                    {% if app.user %}
-                        <div class="d-flex flex-row justify-content-end show_edit_icones  ">
-                            <a id="btn_edit_main_picture" class="edit" href="#">
-                                <i class="fas fa-pencil-alt mr-2"></i> 
-                            </a>                            
-                            <a href="{{ path('admin.mainPicture.delete', {'id' : trick.id}) }}">
-                                <i class="far fa-trash-alt mr-2"></i> 
-                            </a>
-                        </div>
-                    {% endif %}
-                </div>
-
-                {# Nom du trick #}
-                <div class="show_page_name d-flex flex-row justify-content-center align-items-center">
-                    <h1 id="main_trick_name">{{ trick.name }}</h1>
-
-                    {# Formulaire d'image à la une #}
-                    <div id="main_picture_upload_form" class="main_picture_edit_form" style="display: none;">
-                        {{ form_start(form1) }}
-                            {{ form_row(form1.mainImageFile) }}
-                            <button type'submit' class="btn btn-primary">Valider</button>
-                        {{ form_end(form1) }}
-                    </div>
-                </div>
-            </div>
-
-            {# Photos et vidéos #}
-             <div class="d-flex flex-wrap justify-content-around align-items-center">{# Photos et vidéos #}
+        {# Photos et vidéos #}
+        <div id="div-affichage-photos-videos">
+            <div  class="d-flex flex-wrap justify-content-around align-items-center">
                 {# Images #}
                 {% if trick.pictures %} 
                     {% for picture in trick.pictures %}
@@ -66,91 +32,88 @@
                     {% endfor %}
                 {% endif %}
             </div>
+        </div>
 
-            {# Description #}
-            <div class="show_description mx-auto mt-3 mb-3 p-2 border border-light rounded">
-                {{ trick.description | raw }}
+        {# Description #}
+        <div class="show_description mx-auto mt-3 mb-2 p-2 ">
+            {{ trick.description | raw }}
+        </div>
+
+        {# Infos diverses #}
+        <div class="show_div_info justify-content-center mx-auto">
+            <div id="mel" class="show_info border rounded">
+                <span>mis en ligne le : {{ trick.createdAt | date("m/d/Y") }}</span>
             </div>
-
-            {# Infos diverses #}
-            <div class="show_div_info justify-content-center mx-auto">
-                <div id="mel" class="show_info border rounded">
-                    <span>mis en ligne le : {{ trick.createdAt | date("m/d/Y à H:i") }}h</span>
-                </div>
-                <div class="show_info border rounded">
-                    <span>modifié le : <br >{{ trick.updatedAt | date("m/d/Y") }} à {{ trick.updatedAt | date("H:i") }}h</span>
-                </div>
-                <div class="show_info border rounded">
-                    <span>Catégorie : <br >{{ trick.category.name}}</span>
-                </div>
+            <div class="show_info border rounded">
+                <span>modifié le : <br >{{ trick.updatedAt | date("m/d/Y") }}</span>
             </div>
+            <div class="show_info border rounded">
+                <span>Catégorie : <br >{{ trick.category.name}}</span>
+            </div>
+        </div>
 
-            <div class="show_barre mx-auto"><hr></div>
+        <div class="show_barre mx-auto"><hr></div>
 
-            {# Formulaire de commentaires #}
-            {% if app.user %}
-                <div class="show_comment_form mx-auto">
-                    {{ form_start(form2, {'method': 'POST'}) }}
-                    <div class="row">
-                        <div class="col-9">
-                            {{ form_row(form2.content) }}
-                        </div>
-                        <div class="col-3">
-                            <button type'submit' class="btn btn-success">Commenter</button>
-                        </div>
+        {# Formulaire de commentaires #}
+        {% if app.user %}
+            {{ form_start(form2, {'method': 'POST'}) }}
+                <div class="show-display-comment-form d-flex flex-row justify-content-center mx-auto">
+                    <div class="mr-2 w-75">
+                        {{ form_row(form2.content) }}
                     </div>
-                    {{ form_end(form2) }}
+                    <div> 
+                        <button type'submit' class="btn btn-success w-100 ">Commenter</button>
+                    </div>
                 </div>
-                <div class="show_barre mx-auto"><hr></div>
-            {% endif %}
-            
-            {# Commentaires #}
-            {% if comments %}
-                <section id="section_commentaires" class="show_commentaires mx-auto">
+            {{ form_end(form2) }}
+
+        <div class="show_barre mx-auto"><hr></div>
+        {% endif %}
+        
+        {# Commentaires #}
+        {% if comments %}
+            <section id="section_commentaires" class="show_commentaires mx-auto">
+                <div class="mb-2">
                     {% for comment in comments %}
-                        <div class="unCommentaire row justify-content-center mb-1">
-                            {% if comment.user.userPicture %}
-                                <div class="col-md-1">
-                                    <img class="photoProfil" src="{{ vich_uploader_asset(comment.user.userPicture, 'imageFile') }}" alt="comment.user.username">
-                                </div>
-                            {% else %}
-                                <div class="col-md-1">
-                                    <img class="photoProfil" src="{{ '/media/userPicture/emptyprofil.jpg' }}" alt="">
-                                </div>
-                            {% endif %}
-                            <div class="ligne_date col-md-2 font-weight-bold">
-                                Créé le : {{ comment.createdAt | date("m/d/Y à H:i") }}h
+                        <div class="un-commentaire mb-2 d-flex flex-row align-items-start">
+                            <div class="mr-1">
+                                {% if comment.user.userPicture %}
+                                    <img class="photoProfil" src="{{ vich_uploader_asset(comment.user) }}" alt="comment.user.username">
+                                {% else %}
+                                <img class="photoProfil" src="{{ '/media/userPicture/emptyprofil.jpg' }}" alt="">
+                                {% endif %}
                             </div>
-                            <div class="ligne_content col-md-8 border text-justify">
-                                {{ comment.content | raw }}
+                            <div class="commentaire-date-content">
+                                <div class="ligne-date-commentaire font-weight-bold mr-1">
+                                    {{ comment.createdAt | date("m/d/Y") }}
+                                </div>
+                                <div class="ligne_content text-justify">
+                                    {{ comment.content | raw }}
+                                </div>
                             </div>
                         </div>
                     {% endfor %}
-                    {# button more #}
-                    <div class="show_more_comment_btn mx-auto mb-3 d-flex justify-content-center">
-                        {% if buttonMore %}
-                            <a id='pathToController' href="{{ path('comment.more', { 'id' : trick.id, 'nbComments' : nbComments }) }}">
-                                <img class="show_more_comment_btn" src="{{ asset('build/plus.png') }}" alt="Plus">
-                            </a>
-                        {% endif %}
-                    </div>
-                </section>
-            {% endif %}               
-        </div>
+                </div>
+                {# button more #}
+                <div class="show_more_comment_btn mx-auto mb-3 d-flex justify-content-center">
+                    {% if buttonMore %}
+                        <a id='pathToController' href="{{ path('comment.more', { 'id' : trick.id, 'nbComments' : nbComments }) }}">
+                            <img class="show_more_comment_btn" src="{{ asset('build/plus.png') }}" alt="Plus">
+                        </a>
+                    {% endif %}
+                </div>
+            </section>
+        {% endif %}               
     </div>
 {% endblock %}
 
 {% block javascripts %}
-
+{{ parent() }}
 <script>
-    // Affichage formulaire changement image à la une
-    $('#btn_edit_main_picture').click(function() { 
-        $('#trick_name').fadeOut();
-        $('#main_picture_upload_form').delay("slow").show('slow');      
-    });
+   
 
     // Gestion affichage des commentaires
-     $(function () {
+    $(function () {
         $("#section_commentaires").on('click', ('#pathToController'), function(e) {
             e.preventDefault();
             var path = $("#pathToController").attr('href');
@@ -178,9 +141,9 @@
             });
             
         });  
-     })
+    })
 
-       
+   
 </script>
 {% endblock %}
  

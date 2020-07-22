@@ -6,6 +6,7 @@
 parameters:
     locale: 'fr'
     pictures_directory: '%kernel.project_dir%/public/media/tricks'
+    user_pictures:      '%kernel.project_dir%/public/media/userPicture/'
 
 services:
     # default configuration for services in *this* file

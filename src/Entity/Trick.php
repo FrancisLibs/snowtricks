@@ -16,7 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
  * @Vich\Uploadable
- * @UniqueEntity("name")
+ * @UniqueEntity(fields={"name"}, message="Le nom proposé n'est plus disponible")
  */
 class Trick
 {
@@ -104,6 +104,7 @@ class Trick
 
     /**
      * @Vich\UploadableField(mapping="trick_main", fileNameProperty="mainFileName")
+     * @Assert\Image(mimeTypes="image/jpeg")
      * 
      * @var File|null
      */

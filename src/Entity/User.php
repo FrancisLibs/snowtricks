@@ -7,7 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -15,6 +17,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"username"}, message="Le nom proposé n'est plus disponible")
  * @UniqueEntity(fields={"email"}, message="Cette adresse mail existe déjà")
+ * @Vich\Uploadable
  */
 class User implements UserInterface, \Serializable
 {
@@ -76,12 +79,15 @@ class User implements UserInterface, \Serializable
     private $resetToken;
 
     /**
+     * @Vich\UploadableField(mapping="user_image", fileNameProperty="userPicture")
      * @Assert\Image(mimeTypes="image/jpeg")
+     * 
+     * @var File|null
      */
     private $userPictureFile;
-    
+
     /**
-     * @ORM\OneToOne(targetEntity=UserPicture::class, mappedBy="user", cascade={"persist", "remove"})
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $userPicture;
 
@@ -89,6 +95,16 @@ class User implements UserInterface, \Serializable
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="user", orphanRemoval=true)
      */
     private $comments;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $plainPassword;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $updated_at;
 
     public function __construct()
     {
@@ -230,6 +246,22 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getResetToken(): string
+    {
+        return $this->resetToken;
+    }
+
+    /**
+     * @param string $resetToken
+     */
+    public function setResetToken(?string $resetToken): void
+    {
+        $this->resetToken = $resetToken;
+    }
+
     public function serialize()
     {
         return serialize([
@@ -263,30 +295,23 @@ class User implements UserInterface, \Serializable
      */
     public function setUserPictureFile($userPictureFile): self
     {
-        $userPicture = new UserPicture();
-        $userPicture->setImageFile($userPictureFile);
-        $userPicture->setUser($this);
-        $this->userPicture = $userPicture;
-
-        $this->UserPictureFile = $userPictureFile;
+        $this->userPictureFile = $userPictureFile;
+        
+        if ($this->userPictureFile instanceof UploadedFile) {
+            $this->updated_at = new \DateTime('now');
+        }
 
         return $this;
     }
 
-    public function getUserPicture(): ?UserPicture
+    public function getUserPicture()
     {
         return $this->userPicture;
     }
 
-    public function setUserPicture(?UserPicture $userPicture): self
+    public function setUserPicture($userPicture): self
     {
         $this->userPicture = $userPicture;
-
-        // set (or unset) the owning side of the relation if necessary
-        $newUser = null === $userPicture ? null : $this;
-        if ($userPicture->getUser() !== $newUser) {
-            $userPicture->setUser($newUser);
-        }
 
         return $this;
     }
@@ -318,6 +343,30 @@ class User implements UserInterface, \Serializable
                 $comment->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updated_at): self
+    {
+        $this->updated_at = $updated_at;
 
         return $this;
     }
