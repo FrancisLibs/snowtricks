@@ -4,40 +4,39 @@
     <div class="mx-auto">
 
         <div class="row">
-            <div class="col-md-5 mb-2">
+            <div class="offset-md-2 col-md-4 mb-2">
                 {{ form_row(form2.name) }}
             </div>
         </div>
-
-         <div class="row">
-            <div class="col-md-12 mb-3">
+        <div class="row">
+            <div class="offset-md-2 col-md-8 mb-2">
                 {{ form_row(form2.description) }}
             </div>
         </div>
 
-        <div class="d-flex flex-row justify-content-center flex-wrap">
-            {# Catégorie #}
-            <div>
+        <div class="row">
+            <div class="offset-md-2 col-md-3 mb-2">{# Catégorie #}
                 {{ form_row(form2.category) }}
             </div>
-        
-            {# Media #}
-            <div class="col-md-6 offset-md-1 border border-primary rounded">
-                {# Images #}
-                <div>
+            <div class="col-md-4 offset-md-1 border border-primary rounded">{# Media #}
+                
+                <div> {# Images #}
                     {{ form_row(form2.pictureFiles) }}
                 </div>
-                {# Videos #}
-                <div>
+               
+                <div> {# Videos #}
                     {{ form_row(form2.videoFile) }}
                 </div>
                 <p><small><em>Ex. Lien vidéo : https://www.youtube.com/embed/UNItNopAeDU</em></small></p>
             </div>
-            
-            {# Boutons valider #}
-            <div>
-                <input type ="submit" class="btn btn-primary edit-btn-trick-valider" value="Valider">
-                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.id) }}">
+        </div>
+        <div class="row justify-content-around align-items-center mt-3">
+        {# Boutons valider #}
+            <div class="col-6 text-right">
+                <input type ="submit" class="btn btn-primary button-edit-trick" value="Valider">
+            </div>
+            <div class="col-6 text-left">
+                <a class="btn btn-primary button-edit-trick" href={{ path('home') }} role="button">Annuler</a>
             </div>
         </div>
     </div>

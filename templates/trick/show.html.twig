@@ -78,7 +78,7 @@
                         <div class="un-commentaire mb-2 d-flex flex-row align-items-start">
                             <div class="mr-1">
                                 {% if comment.user.userPicture %}
-                                    <img class="photoProfil" src="{{ vich_uploader_asset(comment.user.userPicture, 'imageFile') }}" alt="comment.user.username">
+                                    <img class="photoProfil" src="{{ vich_uploader_asset(comment.user) }}" alt="comment.user.username">
                                 {% else %}
                                 <img class="photoProfil" src="{{ '/media/userPicture/emptyprofil.jpg' }}" alt="">
                                 {% endif %}
@@ -108,13 +108,9 @@
 {% endblock %}
 
 {% block javascripts %}
-
+{{ parent() }}
 <script>
-    // Affichage formulaire changement image à la une
-    $('#btn_edit_main_picture').click(function() { 
-        $('#main_trick_name').fadeOut();
-        $('#main_picture_upload_form').delay("slow").show('slow');      
-    });
+   
 
     // Gestion affichage des commentaires
     $(function () {
@@ -147,14 +143,7 @@
         });  
     })
 
-    // Gestion du bouton de l'affichage des médias
-    $(function () {
-        var bouton=$('#btn-affichage-media');
-         bouton.click(function(e) {
-             bouton.hide();
-             $("#div-affichage-photos-videos").show();
-         })
-    })
+   
 </script>
 {% endblock %}
  

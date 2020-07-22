@@ -2,7 +2,7 @@
     <div class="unCommentaire row justify-content-center mb-1">
         {% if comment.user.userPicture %}
             <div class="col-md-1">
-                <img class="photoProfil" src="{{ vich_uploader_asset(comment.user.userPicture, 'imageFile') }}" alt="comment.user.username">
+                <img class="photoProfil" src="{{ vich_uploader_asset(comment.user) }}" alt="comment.user.username">
             </div>
         {% else %}
             <div class="col-md-1">

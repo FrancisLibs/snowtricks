@@ -76,7 +76,7 @@ class AdminTrickController extends AbstractController
         if ($form1->isSubmitted() && $form1->isValid()) {
             $manager->flush();
 
-            return $this->redirectToRoute('trick.edit', [
+            return $this->redirectToRoute('admin.trick.edit', [
                 'id' => $trick->getId(),
             ]);
         }

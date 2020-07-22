@@ -1,0 +1,13 @@
+<div>
+    {% if user.userPicture %}
+        <img class="profil-picture" src="{{ '/media/userPicture/' ~ user.userPicture }}" alt="{{ user.username }}">
+    {% else %}
+        <img class="profil-picture" src="/media/userPicture/emptyprofil.jpg" alt="">
+    {% endif %}
+    <div id="user-picture-form" style="display: none;">
+    <span id="path-Controller-user-picture" data-path="{{ path('change.picture', {id: user.id }) }}"></span>
+        <form method="post" action="" enctype="multipart/form-data" id="upload_picture_form">
+            <input id="user_picture_input" type="file" name="uploadPictureFile">
+        </form>
+    </div>
+</div>

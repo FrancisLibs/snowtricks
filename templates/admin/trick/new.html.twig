@@ -4,11 +4,9 @@
     {% include "pages/_newTrickMainPicture.html.twig" %}
 {% endblock %}
 
+
 {% block body %}
-    <div class="bckgnd_blue">
-        <h2>Nouveau trick</h2>
-        <section class="container edit_form mx-auto pb-5">
-            {{ include('admin/trick/_editform.html.twig') }}
-        </section>
-    </div>
+    <section class="container edit_form mx-auto pb-5">
+        {{ include('admin/trick/_editform.html.twig') }}
+    </section>
 {% endblock %}

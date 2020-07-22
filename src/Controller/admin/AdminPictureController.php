@@ -55,8 +55,9 @@ class AdminPictureController extends AbstractController
         $file = $request->files->get('file');
         
         // Traitement du nom du nouveau fichier
-        $originalFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $newFilename = uniqid() . '.' . $file->guessExtension();
+        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
+        $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
 
         $file->move($this->getParameter('pictures_directory'), $newFilename);
 

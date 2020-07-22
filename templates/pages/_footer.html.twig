@@ -2,15 +2,24 @@
     {# home #}
     <a href="{{ path('home') }}"><i class="fas fa-home fa-2x"></i></a>
     {% if not app.user %}
+        
         {# connexion #}
         <a href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt fa-2x"></i></a>
+        
         {# inscrition #}
         <a href="{{ path('app_register') }}"><i class="far fa-edit fa-2x"></i></a>
+
     {% else %}
+        
         {# ajout trick #}
         <a href="{{ path('admin.trick.create') }}"><i class="far fa-plus-square fa-2x"></i></a>
+        
+        {# profil #}
+        <a href="{{ path('user') }}"><i class="fas fa-user fa-2x"></i></a>
+
         {# déconnexion #}
         <a href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt fa-2x"></i></a>
+
     {% endif %}
     
 </div>

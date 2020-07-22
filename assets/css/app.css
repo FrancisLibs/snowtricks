@@ -196,6 +196,11 @@ h1{
     height: 30px;;
 }
 
+.profil-picture {
+    width: 60px;
+    height: auto;
+}
+
 .icone_effacer {
     width: 20px;
 }
@@ -408,7 +413,7 @@ fieldset .col-form-label {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    height: 550px;
+    height: 439px;
     background-color: #eee;
     padding: 20px;
 }
@@ -426,6 +431,8 @@ fieldset .col-form-label {
     border-bottom: 2px solid white;
     display: inline;
 }
+
+
 
 @media (min-width: 576px) { /*-----------------------------------*/
     .header-hp {
@@ -563,6 +570,10 @@ fieldset .col-form-label {
         padding-top: 52px;
         height: 283px;
     }
+
+    .button-edit-trick {
+        width: 26%;
+    }
 }
 
 @media (min-width: 992px) {    /*-----------------------------------*/
@@ -590,6 +601,10 @@ fieldset .col-form-label {
         justify-content: space-around;
         height: 250px;
     }
+
+     .button-edit-trick {
+         width: 26%;
+     }
 }
 
 @media (min-width: 1200px) {    /*-----------------------------------*/
@@ -625,7 +640,7 @@ fieldset .col-form-label {
 
     .show_description {
         width: 68%;
-        font-size: 0.8em;
+        font-size: 1em;
         line-height: 1em;
         min-height: 2rem;
         text-align: center;
