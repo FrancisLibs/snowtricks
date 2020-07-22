@@ -21,9 +21,8 @@
                 <div>
                     {{ form_row(form.category) }}
                 </div>
-                <div class="mt-5">
-                    {{ form_label(form.save) }}
-                    {{ form_widget(form.save) }}
+                <div class="mt-5 w-75">
+                    <input type ="submit" class="btn btn-primary pl-5 pr-5" value="Valider">
                 </div>
             </div>
 
@@ -31,11 +30,11 @@
             <div class="col-md-6 offset-md-1 border border-primary rounded">
                 {# Images #}
                 <div>
-                    {{form_row(form.pictureFiles)}}
+                    {{ form_row(form.pictureFiles) }}
                 </div>
                 {# Videos #}
                 <div>
-                    {{form_row(form.videoFile)}}
+                    {{ form_row(form.videoFile) }}
                 </div>
                 <p><small><em>Ex. Lien vidéo : https://www.youtube.com/embed/UNItNopAeDU</em></small></p>
             </div>

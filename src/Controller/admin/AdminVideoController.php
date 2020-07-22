@@ -18,12 +18,14 @@ class AdminVideoController extends AbstractController
      * @param Video $video
      * @param Request $request
      */
-    public function deletePicture(Video $video, Request $request, EntityManagerInterface $manager)
+    public function deleteVideo(Video $video, Request $request, EntityManagerInterface $manager)
     {
         $data = json_decode($request->getContent(), true);
 
         // Vérification du token
         if ($this->isCsrfTokenValid('delete' . $video->getId(), $data['_token'])) {
+            $trick = $video->getTrick();
+            $trick->removeVideo($video);
             $manager->remove($video);
             $manager->flush();
 
@@ -44,7 +46,7 @@ class AdminVideoController extends AbstractController
      */
     public function uploadAction(Trick $trick, int $videoId, Request $request, EntityManagerInterface $manager,
         VideoRepository $repository) {
-        if ($request->isXmlHttpRequest()) // is it an Ajax request?
+        if ($request->isXmlHttpRequest()) 
         {
             // On efface l'ancienne image
             $video = $repository->findOneById($videoId);

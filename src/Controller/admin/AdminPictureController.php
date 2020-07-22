@@ -27,10 +27,6 @@ class AdminPictureController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) 
         {
-            /*$this->getDoctrine()
-                ->getRepository('AppBundle:File')
-                ->store($form->getData());*/
-
             return new JsonResponse([], 201);
         }
 
@@ -38,48 +34,47 @@ class AdminPictureController extends AbstractController
     }
 
     /**
-     * @Route("/admin/picture/edit/{id}/{pictureId}", name="admin.picture.edit", methods={"POST"})
+     * @Route("/admin/picture/edit/{id}", name="admin.picture.edit", methods={"POST"})
      *
      * @param Request $request
-     * @param Trick $trick
-     * @param int $pictureId
+     * @param $id
      * @return JsonResponse|FormInterface
      */
-    public function uploadAction(Trick $trick, int $pictureId, Request $request, 
-        EntityManagerInterface $manager, PictureRepository $repository)
+    public function uploadAction(Picture $picture, Request $request, EntityManagerInterface $manager, PictureRepository $repository)
     {
-        if($request->isXmlHttpRequest())// is it an Ajax request?
-        {
-            // On efface l'ancienne image
-            $picture = $repository->findOneById($pictureId);
-            $fileName = $picture->getFilename();
-            $trick->removePicture($picture);
+        $trick = $picture->getTrick();
 
-            // Suppression du fichier
-            unlink($this->getParameter('pictures_directory').'/'.$fileName);
+        // On efface l'ancienne image
+        $fileName = $picture->getFilename();
+        $trick->removePicture($picture);
 
-            // On récupère la nouvelle image
-            $file = $request->files->get('file');/* Getting the file */
-            
-            // Traitement du nom du nouveau fichier
-            $originalFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-            $newFilename = uniqid() . '.' . $file->guessExtension();
+        // Suppression du fichier
+        unlink($this->getParameter('pictures_directory').'/'.$fileName);
 
-            $file->move($this->getParameter('pictures_directory'), $newFilename);
+        // On récupère la nouvelle image
+        $file = $request->files->get('file');
+        
+        // Traitement du nom du nouveau fichier
+        $originalFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $newFilename = uniqid() . '.' . $file->guessExtension();
 
-            $picture = new Picture();
-            $picture->setTrick($trick);
-            $picture->setFilename($newFilename);
+        $file->move($this->getParameter('pictures_directory'), $newFilename);
 
-            $trick->addPicture($picture);
+        $picture = new Picture();
+        $picture->setTrick($trick);
+        $picture->setFilename($newFilename);
 
-            $manager->persist($picture);
-            $manager->flush();
+        $trick->addPicture($picture);
 
-            $newPicturePath = '/media/tricks/' . $picture->getFilename();
+        $manager->persist($trick);
+        $manager->flush();
 
-            return $this->json(['newImage' => $newPicturePath]);
-        }
+        $newPictureFile = '/media/tricks/' . $picture->getFilename();
+        $newPictureId = $picture->getId();
+
+        return $this->render('admin/trick/picture.html.twig',[
+            'picture'  => $picture,
+        ]);
     }
 
     /**
@@ -91,17 +86,17 @@ class AdminPictureController extends AbstractController
     public function deletePicture(Picture $picture, Request $request, EntityManagerInterface $manager)
     {
         $data = json_decode($request->getContent(), true);
-
+       
         // Vérification du token
         if ($this->isCsrfTokenValid('delete' . $picture->getId(), $data['_token'])) {
 
             $manager->remove($picture);
             $manager->flush();
 
-            //Retour d'un tabelau json
+            //Retour d'un tableau json
             return new JsonResponse(['success' => 1]);
-        } else {
+        } 
             return new JsonResponse(['error' => 'Token invalid'], 400);
-        }
     }
+       
 }

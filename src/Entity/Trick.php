@@ -2,16 +2,20 @@
 
 namespace App\Entity;
 
+use App\Entity\Video;
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
+ * @Vich\Uploadable
  * @UniqueEntity("name")
  */
 class Trick
@@ -59,7 +63,7 @@ class Trick
     private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="trick", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="trick", orphanRemoval=true, cascade={"persist", "remove"})
      */
     private $comments;
 
@@ -70,7 +74,7 @@ class Trick
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Picture", mappedBy="trick", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Picture", mappedBy="trick", orphanRemoval=true, cascade={"persist", "remove"})
      */
     private $pictures;
 
@@ -82,21 +86,28 @@ class Trick
     private $pictureFiles;
 
     /**
-     * @ORM\OneToOne(targetEntity=Picture::class, inversedBy="mainPictureTrick", orphanRemoval=true, cascade={"persist"})
+     * @var string
      */
-    private $mainPicture;
-
-    /**
-     * @Assert\Image(mimeTypes="image/jpeg")
-     */
-    private $mainPictureFile;
-
     private $videoFile;
-   
+    
     /**
-     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick", orphanRemoval=true, cascade={"persist", "remove"})
      */
     private $videos;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @var string|null
+     */
+    private $mainFileName;
+
+    /**
+     * @Vich\UploadableField(mapping="trick_main", fileNameProperty="mainFileName")
+     * 
+     * @var File|null
+     */
+    private $mainImageFile;
 
     //--------------------------------------------------------------------------
 
@@ -275,41 +286,6 @@ class Trick
         return $this;
     }
 
-    public function getMainPicture(): ?Picture
-    {
-        return $this->mainPicture;
-    }
-
-    public function setMainPicture(?Picture $mainPicture): self
-    {
-        $this->mainPicture = $mainPicture;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMainPictureFile()
-    {
-        return $this->mainPictureFile;
-    }
-
-    /**
-     * @param mixed $mainPictureFile
-     * @return Trick
-     */
-    public function setMainPictureFile($mainPictureFile): self
-    {
-        $picture = new Picture();
-        $picture->setImageFile($mainPictureFile);
-        $picture->setMainPicture(true);
-        $picture->setTrick($this);
-        $this->setMainPicture($picture);
-       
-        return $this;
-    }
-
     /**
      * @return Collection|Video[]
      */
@@ -341,25 +317,62 @@ class Trick
         return $this;
     }
 
-    /**
-     * @return string
-     */
+    public function setVideoFile($videoFile)
+    {
+        $video = new Video();
+        $video->setLink($videoFile);
+        $video->setTrick($this);
+        $this->addVideo($video);
+        $this->video = $video;
+
+        return $this;
+    }
+
     public function getVideoFile()
     {
         return $this->videoFile;
     }
 
+
     /**
-     * @param mixed $videoFile
+     * @return string|null
+     */
+    public function getMainFileName(): ?string
+    {
+        return $this->mainFileName;
+    }
+
+    /**
+     * @param string|null $mainFileName
      * @return Trick
      */
-    public function setVideoFile($videoFile)
+    public function setMainFileName(?string $mainFileName): Trick
     {
-        $video = new Video();
-        $video->setLink($videoFile);
-        $this->videoFile = $videoFile;
-        $this->addVideo($video);
+        $this->mainFileName = $mainFileName;
+        return $this;
+    }
+
+    /**
+     * @return File|null
+     */
+    public function getMainImageFile(): ?File
+    {
+        return $this->mainImageFile;
+    }
+
+    /**
+     * @param File|null $mainImageFile
+     * @return Trick
+     */
+    public function setMainImageFile(?File $mainImageFile): Trick
+    {
+        $this->mainImageFile = $mainImageFile;
+
+        if ($this->mainImageFile instanceof UploadedFile) {
+            $this->updated_at = new \DateTime('now');
+        }
 
         return $this;
     }
+    
 }

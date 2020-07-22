@@ -36,19 +36,9 @@ class Picture
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="pictures")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $trick;
-
-    /**
-     * @ORM\OneToOne(targetEntity=Trick::class, mappedBy="mainPicture")
-     */
-    private $mainPictureTrick;
-
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $mainPicture;
 
     public function getId(): ?int
     {
@@ -97,33 +87,8 @@ class Picture
         return $this;
     }
 
-    public function getMainPictureTrick(): ?Trick
+    public function __toString()
     {
-        return $this->mainPictureTrick;
-    }
-
-    public function setMainPictureTrick(?Trick $mainPictureTrick): self
-    {
-        $this->mainPictureTrick = $mainPictureTrick;
-
-        // set (or unset) the owning side of the relation if necessary
-        $newMainPicture = null === $mainPictureTrick ? null : $this;
-        if ($mainPictureTrick->getMainPicture() !== $newMainPicture) {
-            $mainPictureTrick->setMainPicture($newMainPicture);
-        }
-
-        return $this;
-    }
-
-    public function getMainPicture(): ?bool
-    {
-        return $this->mainPicture;
-    }
-
-    public function setMainPicture(?bool $mainPicture): self
-    {
-        $this->mainPicture = $mainPicture;
-
-        return $this;
+        return $this->name;
     }
 }

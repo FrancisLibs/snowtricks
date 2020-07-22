@@ -3,9 +3,11 @@
 namespace App\Form;
 
 use App\Entity\User;
+use PhpParser\Parser\Multiple;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class RegistrationType extends AbstractType
@@ -17,6 +19,7 @@ class RegistrationType extends AbstractType
             ->add('email')
             ->add('password', PasswordType::class)
             ->add('confirm_password', PasswordType::class)
+            ->add('userPictureFile', FileType::class)
         ;
     }
 

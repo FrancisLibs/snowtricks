@@ -1,0 +1,22 @@
+<div class="edit_cards m-2">
+    <img class="edit_card_img show_picture" src="{{ vich_uploader_asset(picture, 'imageFile') }}" alt="image">
+    <div class="inputFile">
+
+        {# Bouton editer avec son formulaire #}
+        <a class="btn_edit_picture">
+            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+        </a>
+
+        {# Bouton effacer #}
+        <a href="{{ path('admin.picture.delete', {id : picture.id}) }}"
+            delete-picture data-token="{{csrf_token('delete' ~ picture.id) }}">
+            <i class="far fa-trash-alt  mb-1 mr-1"></i>
+        </a>
+
+        <form method="post" action="" enctype="multipart/form-data" id="upload_picture_form" style="display: none;">
+            <input type="file" name="uploadPictureFile">
+            <span class="pathToController" data-path="{{ path('admin.picture.edit', {id: picture.id}) }}"></span>
+        </form>
+
+    </div>
+</div>
