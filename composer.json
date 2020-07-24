@@ -8,6 +8,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "cocur/slugify": "^4.0",
+        "fzaninotto/faker": "^1.9",
         "liip/imagine-bundle": "^2.3",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/apache-pack": "^1.0",
