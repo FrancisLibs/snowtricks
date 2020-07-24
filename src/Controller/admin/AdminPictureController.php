@@ -3,13 +3,11 @@ namespace App\Controller\admin;
 
 use App\Entity\Trick;
 use App\Entity\Picture;
-use Cocur\Slugify\Slugify;
 use App\Form\PictureUploadType;
 use App\Repository\PictureRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Vich\UploaderBundle\Naming\SmartUniqueNamer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -69,9 +67,6 @@ class AdminPictureController extends AbstractController
 
         $manager->persist($trick);
         $manager->flush();
-
-        $newPictureFile = '/media/tricks/' . $picture->getFilename();
-        $newPictureId = $picture->getId();
 
         return $this->render('admin/trick/picture.html.twig',[
             'picture'  => $picture,
