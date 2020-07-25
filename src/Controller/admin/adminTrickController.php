@@ -107,17 +107,18 @@ class AdminTrickController extends AbstractController
      */
     public function delete(Trick $trick, Request $request, EntityManagerInterface $manager): Response
     {
-        $token = $request->get('_token');
+        $data = json_decode($request->getContent(), true);
+        $token = $data['token'];
 
-        if ($this->isCsrfTokenValid('delete' . $trick->getId(), $token)) 
+        if ($this->isCsrfTokenValid('delete' . $trick->getId(), $token))
         {
             $manager->remove($trick);
             $manager->flush();
 
-            return $this->redirectToRoute('tricks.index');
+            return $this->json(['success' => 1]);
         }
 
-        return $this->render('pages/home.html.twig');
+        return $this->json(['success' => 0]);
     }
 
     /**

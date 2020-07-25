@@ -45,7 +45,8 @@ class AdminVideoController extends AbstractController
      * @return JsonResponse|FormInterface
      */
     public function uploadAction(Trick $trick, int $videoId, Request $request, EntityManagerInterface $manager,
-        VideoRepository $repository) {
+        VideoRepository $repository) 
+    {
         if ($request->isXmlHttpRequest()) 
         {
             // On efface l'ancienne image
