@@ -1,4 +1,5 @@
-.far, .fas {
+.far,
+.fas {
   color: black;
 }
 
@@ -43,7 +44,7 @@ h1 {
   background-position: center center;
   background-size: cover;
   height: 619px;
-} 
+}
 
 .header {
   background-image: url("../img/fond.jpg");
@@ -65,7 +66,8 @@ h1 {
   height: 12rem;
 }
 
-.card-body, .card-body > .liens {
+.card-body,
+.card-body > .liens {
   display: flex;
 }
 
@@ -289,7 +291,7 @@ h1 {
 .registration_box {
   background: rgba(19, 70, 117, 0.4);
   border-radius: 10px;
-  color : white;
+  color: white;
 }
 
 .registration_title {
@@ -299,7 +301,7 @@ h1 {
 .login_box {
   background: rgba(19, 70, 117, 0.4);
   border-radius: 10px;
-  color : white;
+  color: white;
 }
 
 .login_label {
@@ -672,7 +674,7 @@ fieldset .col-form-label {
   .forgot-password-button {
     line-height: 10px;
   }
-  
+
   .reset-password {
     margin-top: 100px;
     width: 43%;
@@ -708,7 +710,7 @@ fieldset .col-form-label {
   .reset-form-input {
     width: 63%;
     background-color: transparent;
-    border: 0px solid;
+    border: 0;
     border-bottom: 2px solid white !important;
     display: inline;
   }

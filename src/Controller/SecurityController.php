@@ -34,7 +34,6 @@ class SecurityController extends AbstractController
             $hash = $encoder->encodePassword($user, $user->getPassword());
 
             $user->setPassword($hash);
-            $token = uniqid();
             $user->setToken(random_bytes(20));
 
             $manager->persist($user);
@@ -75,8 +74,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/forgotten_password", name="app_forgotten_password")
      */
-    public function forgottenPassword(Request $request, UserPasswordEncoderInterface $encoder,
-        \Swift_Mailer $mailer, TokenGeneratorInterface $tokenGenerator,
+    public function forgottenPassword(Request $request, \Swift_Mailer $mailer, TokenGeneratorInterface $tokenGenerator,
         EntityManagerInterface $manager): Response 
     {
 
@@ -149,10 +147,9 @@ class SecurityController extends AbstractController
             $this->addFlash('notice', 'Mot de passe mis à jour');
 
             return $this->redirectToRoute('tricks.index');
-        } else {
+        } 
 
-            return $this->render('security/reset_password.html.twig', ['token' => $token]);
-        }
+        return $this->render('security/reset_password.html.twig', ['token' => $token]);
     }
 
     /**
@@ -162,7 +159,7 @@ class SecurityController extends AbstractController
      * @return response
      */
     public function passwordReset(UserInterface $user, Request $request, UserPasswordEncoderInterface $encoder,
-        EntityManagerInterface $manager, UserRepository $repository)
+        EntityManagerInterface $manager)
     {
         $user = $this->getUser();
 

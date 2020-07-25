@@ -15,7 +15,7 @@ class UserController extends AbstractController
     /**
      * @Route("/user", name="user")
      */
-    public function profil(?UserInterface $user,Request $request, EntityManagerInterface $manager)
+    public function profil(?UserInterface $user)
     {
         $user = $this->getUser();
 

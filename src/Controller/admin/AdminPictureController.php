@@ -18,7 +18,7 @@ class AdminPictureController extends AbstractController
      * @param Request $request
      * @return JsonResponse|FormInterface
      */
-    public function uploadFile(Trick $trick, Request $request)
+    public function uploadFile(Request $request)
     {
         $form = $this->createForm(PictureUploadType::class);
 
@@ -38,7 +38,7 @@ class AdminPictureController extends AbstractController
      * @param $id
      * @return JsonResponse|FormInterface
      */
-    public function uploadAction(Picture $picture, Request $request, EntityManagerInterface $manager, PictureRepository $repository)
+    public function uploadAction(Picture $picture, Request $request, EntityManagerInterface $manager)
     {
         $trick = $picture->getTrick();
 
