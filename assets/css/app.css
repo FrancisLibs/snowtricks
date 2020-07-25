@@ -5,6 +5,7 @@
 h1 {
   font-size: 3rem;
 }
+
 .navbar {
   background: #c8c8e9;
 }
@@ -94,7 +95,7 @@ h1 {
 }
 
 .arrow_b {
-  display: none!important;
+  display: none !important;
 }
 
 .anchor_arrow_down {
@@ -161,7 +162,7 @@ h1 {
   text-align: center;
   width: 31%;
   margin: auto;
-  border: 1px solid white!important;
+  border: 1px solid white !important;
   min-height: 30px;
 }
 
@@ -172,7 +173,7 @@ h1 {
 .show_commentaires {
   width: 87%;
   font-size: 0.65rem;
-  line-height: 10px;;
+  line-height: 10px;
   margin: auto;
 }
 
@@ -183,7 +184,7 @@ h1 {
 
 .commentaire-date-content {
   width: 100%;
-  min-height: 30px;;
+  min-height: 30px;
 }
 
 .ligne-date-commentaire {
@@ -193,7 +194,7 @@ h1 {
 
 .photoProfil {
   width: 30px;
-  height: 30px;;
+  height: 30px;
 }
 
 .profil-picture {
@@ -228,7 +229,7 @@ h1 {
 }
 
 .btn_main_picture {
-  width:40%;
+  width: 40%;
   margin-bottom: 8px;
 }
 
@@ -250,11 +251,11 @@ h1 {
 }
 
 .edit_card_img {
-  display:inline-block;
-  width:190px;
-  height:190px;
-  white-space:nowrap;
-  overflow:hidden;
+  display: inline-block;
+  width: 190px;
+  height: 190px;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .edit_icones {
@@ -277,16 +278,16 @@ h1 {
 
 .edit_delete_btn {
   line-height: 1rem;
-  font-size: 1.0rem;
+  font-size: 1rem;
 }
 
 .edit_save_btn {
-  font-size: 1.0rem;
+  font-size: 1rem;
   line-height: 1rem;
 }
 
 .registration_box {
-  background:rgba(19, 70, 117, 0.4);
+  background: rgba(19, 70, 117, 0.4);
   border-radius: 10px;
   color : white;
 }
@@ -296,7 +297,7 @@ h1 {
 }
 
 .login_box {
-  background:rgba(19, 70, 117, 0.4);
+  background: rgba(19, 70, 117, 0.4);
   border-radius: 10px;
   color : white;
 }
@@ -315,7 +316,7 @@ h1 {
 .login_btn {
   display: inline-block;
   height: 2rem;
-  margin:auto;
+  margin: auto;
 }
 
 .main_picture_form {
@@ -344,6 +345,7 @@ h1 {
   margin: auto;
   color: white;
   margin-top: 14px; 
+  display: block;
 }
 
 .edit-btn-submit-trick {
@@ -391,10 +393,6 @@ fieldset .col-form-label {
   width: 100%;
 }
 
-.btn-affichage-media {
-  display: block;
-}
-
 .reset-password-bloc {
   padding-top: 76px;
   height: 300px;
@@ -427,12 +425,12 @@ fieldset .col-form-label {
 
 .reset-form-input {
   background-color: transparent;
-  border: 0px solid;
+  border: 0;
   border-bottom: 2px solid white;
   display: inline;
 }
 
-@media (min-width: 576px) { /*-----------------------------------*/
+@media (min-width: 576px) { /* ----------------------------------- */
   .header-hp {
     height: 628px;
   }
@@ -443,6 +441,7 @@ fieldset .col-form-label {
 
   .header {
     height: 344px;
+    margin-bottom: 60px;
   }
 
   .navbar-high-display {
@@ -459,10 +458,6 @@ fieldset .col-form-label {
 
   .arrow_b {
     display: block;
-  }
-
-  .header {
-    margin-bottom: 60px;
   }
 
   .show_main_picture {
@@ -492,7 +487,7 @@ fieldset .col-form-label {
   }
 }
 
-@media (min-width: 768px) {    /*-----------------------------------*/
+@media (min-width: 768px) {    /* ----------------------------------- */
   .header-hp {
     height: 679px;
   }
@@ -510,7 +505,7 @@ fieldset .col-form-label {
   }
 
   .navbar-low-display {
-    display: none!important;
+    display: none !important;
   }
 
   .arrow_b {
@@ -560,7 +555,7 @@ fieldset .col-form-label {
   }
 
   .reset-password-title {
-      font-family: 'BenchNine', sans-serif;
+    font-family: 'BenchNine', sans-serif;
   }
 
   .reset-password-bloc {
@@ -573,7 +568,7 @@ fieldset .col-form-label {
   }
 }
 
-@media (min-width: 992px) {    /*-----------------------------------*/
+@media (min-width: 992px) {    /* ----------------------------------- */
   .header-hp {
     height: 679px;
   }
@@ -604,7 +599,7 @@ fieldset .col-form-label {
   }
 }
 
-@media (min-width: 1200px) {    /*-----------------------------------*/
+@media (min-width: 1200px) {    /* ----------------------------------- */
   .header-hp {
     height: 679px;
   }
@@ -714,7 +709,7 @@ fieldset .col-form-label {
     width: 63%;
     background-color: transparent;
     border: 0px solid;
-    border-bottom: 2px solid white!important;
+    border-bottom: 2px solid white !important;
     display: inline;
   }
 

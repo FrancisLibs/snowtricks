@@ -15,12 +15,13 @@
                 {# Images #}
                 {% if trick.pictures %} 
                     {% for picture in trick.pictures %}
-                        <div class="edit_cards m-2">
+                        <div class="edit_cards m-2" id="blocToReplace">
                             <img class="edit_card_img show_picture" src="{{ vich_uploader_asset(picture, 'imageFile') }}" alt="image">
+                            
                             <div class="inputFile">
 
                                 {# Bouton editer avec son formulaire #}
-                                <a class="btn_edit_picture">
+                                <a class="btn_edit_picture" id="btn_edit_picture">
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                 </a>
 
@@ -31,8 +32,8 @@
                                 </a>
 
                                 <form method="post" action="" enctype="multipart/form-data" id="upload_picture_form" style="display: none;">
-                                    <input type="file" name="uploadPictureFile">
-                                    <span class="pathToController" data-path="{{ path('admin.picture.edit', {id: picture.id}) }}"></span>
+                                    <input type="file" id="uploadPictureFile" name="uploadPictureFile">
+                                    <span id="pathToPictureController" data-path="{{ path('admin.picture.edit', {id: picture.id}) }}"></span>
                                 </form>
 
                             </div>
@@ -57,7 +58,7 @@
                                 <form class="mt-2" method="post" action="" id="upload_video_form" style="display: none;">
                                     <input type="text" name="uploadVideoName" placeholder="Lien vidéo...">
                                     {# <a class="btn btn-outline-primary btn-sm mt-1" type="submit">Valider</a> #}
-                                    <span class="pathToController" data-path="{{ path('admin.video.edit', {id: trick.id, videoId: video.id}) }}"></span>
+                                    <span id="pathToVideoController" data-path="{{ path('admin.video.edit', {id: trick.id, videoId: video.id}) }}"></span>
                                 </form>
                             </div>
                         </div>
