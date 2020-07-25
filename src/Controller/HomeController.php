@@ -29,7 +29,7 @@ class HomeController extends AbstractController
      * @Route("/home/trick/{nbTricks}", name="tricks.index")
      * @return Response
      */
-    public function index(TrickRepository $repository, int $nbTricks = 0, EntityManagerInterface $manager): Response
+    public function index(TrickRepository $repository, int $nbTricks = 0): Response
     {
         $nbTricksCount = $repository->countAll();
         $restTricks = $nbTricksCount - $nbTricks;
@@ -39,7 +39,9 @@ class HomeController extends AbstractController
         if ($restTricks > 4) {
             $displayBtn = true;
             $nbTricks = $nbTricks + 4;
-        } else {
+        } 
+        else 
+        {
             $displayBtn = false;
             $nbTricks = $nbTricks + $restTricks;
         }
@@ -58,7 +60,7 @@ class HomeController extends AbstractController
      * @param $page_var
      * @return Response
      */
-    public function moreTricks(TrickRepository $repository, Request $request, EntityManagerInterface $manager): Response
+    public function moreTricks(TrickRepository $repository, Request $request): Response
     {
         $nbTricks = $repository->countAll();
         $tricksDisplaying = $request->query->get('nbTricks');
@@ -73,13 +75,13 @@ class HomeController extends AbstractController
         }
 
         $tricksArray = array();
-        $i = 0;
+        $counter = 0;
         if ($tricks) {
             foreach ($tricks as $trick) {
-                $tricksArray[$i]['id'] = $trick->getId();
-                $tricksArray[$i]['name'] = $trick->getName();
-                $tricksArray[$i]['slug'] = $trick->getSlug();
-                $i++;
+                $tricksArray[$counter]['id'] = $trick->getId();
+                $tricksArray[$counter]['name'] = $trick->getName();
+                $tricksArray[$counter]['slug'] = $trick->getSlug();
+                $counter++;
             }
         }
         $results = array(

@@ -39,7 +39,7 @@ class AdminTrickController extends AbstractController
      * @Route("/admin/trick/new", name="admin.trick.create")
      * @return Symfony\Component\HttpFoundation\Response
      */
-    public function new(Request $request, UserInterface $user, EntityManagerInterface $manager) 
+    public function new(Request $request, UserInterface $user) 
     {
         $trick = new Trick();
         $form2 = $this->createForm(TrickType::class, $trick);
@@ -126,7 +126,7 @@ class AdminTrickController extends AbstractController
      * @param Trick $trick
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function mainPictureDelete(Trick $trick, EntityManagerInterface $manager, UploaderHelper $helper): Response
+    public function mainPictureDelete(Trick $trick, EntityManagerInterface $manager): Response
     {
         $pictureFile = $trick->getMainFileName();
         unlink('media/trickMain/' . $pictureFile);
