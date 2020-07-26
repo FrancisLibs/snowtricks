@@ -44,22 +44,24 @@
                 {# Vidéos #}
                 {% if trick.videos %}
                     {% for video in trick.videos %}
-                        <div class="edit_cards m-2">
+                        <div class="edit_cards m-2 bloc-a-remplacer">
                             <iframe width="190" height="180" src="{{ video.link }}" frameborder="0" allowfullscreen></iframe>
                             <div class="inputFile">
+
                                 {# Bouton editer #}
-                                <a class="btn_edit_video"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>  
+                                <a class="btn-edit-video"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>  
 
                                 {# Bouton effacer #}
-                                <a href="{{ path('admin.video.delete', {id : video.id}) }}"
+                                <a href="{{ path('admin.video.delete', {id : video.id}) }}" class="btn-delete-video" 
                                     data-delete-video  data-token="{{csrf_token('delete' ~ video.id) }}">
                                     <i class="far fa-trash-alt  mb-1 mr-1"></i>
                                 </a>
-                                <form class="mt-2" method="post" action="" id="upload_video_form" style="display: none;">
+                                <form class="mt-2 upload-video-form" method="post" action="" style="display: none;" controller-path="{{ path('admin.video.edit', {id : video.id}) }}">
                                     <input type="text" name="uploadVideoName" placeholder="Lien vidéo...">
-                                    {# <a class="btn btn-outline-primary btn-sm mt-1" type="submit">Valider</a> #}
-                                    <span id="pathToVideoController" data-path="{{ path('admin.video.edit', {id: trick.id, videoId: video.id}) }}"></span>
+                                    <br />
+                                    <button type="submit" class="btn btn-primary mt-2">Valider</button>
                                 </form>
+
                             </div>
                         </div>
                     {% endfor %}
@@ -73,6 +75,6 @@
 {% endblock %}
 
 {% block javascripts %}
-{{ parent() }}
+    {{ parent() }}
 
 {% endblock %}

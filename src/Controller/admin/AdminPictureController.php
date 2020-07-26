@@ -35,8 +35,7 @@ class AdminPictureController extends AbstractController
      * @Route("/admin/picture/edit/{id}", name="admin.picture.edit", methods={"POST"})
      *
      * @param Request $request
-     * @param $id
-     * @return JsonResponse|FormInterface
+     * @param Picture $picture
      */
     public function uploadAction(Picture $picture, Request $request, EntityManagerInterface $manager)
     {
@@ -69,7 +68,7 @@ class AdminPictureController extends AbstractController
         $manager->flush();
 
         return $this->render('admin/trick/picture.html.twig',[
-            'picture'  => $picture,
+            "picture"  => $picture,
         ]);
     }
 

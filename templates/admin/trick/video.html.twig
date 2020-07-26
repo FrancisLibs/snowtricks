@@ -1,0 +1,20 @@
+<div class="edit_cards m-2">
+    <iframe width="190" height="180" src="{{ video.link }}" frameborder="0" allowfullscreen></iframe>
+    <div class="inputFile">
+
+        {# Bouton editer #}
+        <a class="btn-edit-video"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>  
+
+        {# Bouton effacer #}
+        <a href="{{ path('admin.video.delete', {id : video.id}) }}" class="btn-delete-video" 
+            data-delete-video  data-token="{{csrf_token('delete' ~ video.id) }}">
+            <i class="far fa-trash-alt  mb-1 mr-1"></i>
+        </a>
+        <form class="mt-2 upload-video-form" method="post" action="" style="display: none;" controller-path="{{ path('admin.video.edit', {id : video.id}) }}">
+            <input type="text" name="uploadVideoName" placeholder="Lien vidéo...">
+            <br />
+            <button type="submit" class="btn btn-primary mt-2">Valider</button>
+        </form>
+
+    </div>
+</div>

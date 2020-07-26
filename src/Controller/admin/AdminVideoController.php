@@ -37,23 +37,22 @@ class AdminVideoController extends AbstractController
     }
 
     /**
-     * @Route("/admin/video/edit/{id}/{videoId}", name="admin.video.edit", methods={"POST"})
+     * @Route("/admin/video/edit/{id}", name="admin.video.edit", methods={"POST"})
      *
+     * @param Video $video
      * @param Request $request
-     * @param Trick $trick
-     * @param int $pictureId
-     * @return JsonResponse|FormInterface
      */
-    public function uploadAction(Trick $trick, int $videoId, Request $request, EntityManagerInterface $manager,
-        VideoRepository $repository) 
+    public function uploadAction(Video $video, Request $request, EntityManagerInterface $manager) 
     {
         if ($request->isXmlHttpRequest()) 
         {
-            // On efface l'ancienne image
-            $video = $repository->findOneById($videoId);
+            $data = json_decode($request->getContent(), true);
+            
+            // On récupère le trick
+            $trick = $video->getTrick();
             $trick->removeVideo($video);
 
-            $link = $request->request->get('link');
+            $link = $data['link'];
 
             $video = new Video();
             $video->setLink($link);
@@ -61,9 +60,12 @@ class AdminVideoController extends AbstractController
             $trick->addVideo($video);
 
             $manager->persist($video);
+            $manager->persist($trick);
             $manager->flush();
 
-            return $this->json(['success' => 1]);
+            return $this->render('admin/trick/video.html.twig', [
+                "video"  => $video,
+            ]);
         }
     }
 }

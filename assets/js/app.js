@@ -143,51 +143,51 @@ $(function () {
     });
 });
 
-// Upload video in the edit trick template
-var btnEditVideo = $(".btn_edit_video");
-var champInput;
-src = btnEditVideo.parent().parent().children();
+
+
+// Remplacement d'une vidéo dans la page edit
 $(function () {
-    btnEditVideo.on("click", function (e) {
+    $("#delegation").on("click", ".btn-edit-video", function (e) {
         e.preventDefault();
-        btnDelete = btnEditVideo.next();
-        btnEditVideo = $(this).hide("slow");
-        var btnDeleteVideo = $(this).next();
-        btnDeleteVideo.hide("slow");
-        var champInput = $(this).next().next();
-        champInput.find("input").val("");
-        champInput.show("slow");
+
+        $(this).hide("slow");
+        $(this).next().hide("slow");
+        form = $(this).parent().find(".upload-video-form");
+        $('input[name=uploadVideoName]').val("");
+        form.show("slow");
+
     });
 });
 
 $(function () {
-    var selector = document.getElementsByName("uploadVideoName");
-    $(selector).change(function () {
-        var link = $(this).val();
-        var path = $(this).next().attr("data-path");
-        var formData = new FormData();
-        formData.append("link", link);
+    $("#delegation").on("submit", "form.upload-video-form", function (e) {
+        e.preventDefault();
+
+        path = $(this).attr('controller-path');
+        var link = $(this).find('input').val();
+        var lien = {
+            "link": link
+        };
+        var lien = JSON.stringify(lien);
+        var blocARemplacer = $(this).parent().parent();
 
         $.ajax({
             type: "POST",
             url: path,
-            data: formData,
+            data: lien,
             cache: false,
             contentType: false,
             processData: false,
             async: false,
-            dataType: "json",
+            dataType: "html",
             error: function (erreur) {
-                //console.error(erreur);
+                console.error(erreur);
             },
             success: function (data) {
-                champInput.hide();
-                src.val(link);
-                btnEditVideo.show();
-                btnDeleteVideo.show();
+                blocARemplacer.html(data);
             },
             complete: function () {
-                //console.log("Request finished.");
+                console.log("Request finished.");
             }
         });
     });
@@ -259,7 +259,6 @@ $(function () {
                     //console.error(erreur);
                 },
                 success: function (data) {
-                    //console.log(data);
                     oldPicture.html(data);
                 },
                 complete: function () {
