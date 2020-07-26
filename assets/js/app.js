@@ -32,11 +32,13 @@ $("#btn_edit_main_picture").click(function () {
 $(function () {
     $("#delete-trick").on("click", function (e) { 
         e.preventDefault();
+
         var path = $(this).parent().parent().find(".tricks_delete_form").attr("action");
         var token = $(this).prev().val();
         if (confirm("Etes-vous certain de vouloir supprimer cette image ?")) {
            var jsonToken = {"token": token };
            jsonToken = JSON.stringify(jsonToken);
+
 
             $.ajax({
                 type: "DELETE",
@@ -47,16 +49,19 @@ $(function () {
                 processData: false,
                 async: false,
                 dataType: "json",
+
                 error: function (erreur) {
                     console.error(erreur);
                 },
                 success: function (data) {
                     if (data["success"]) {
                         $("#BlocTrickToDelete").remove();
+
+               
                     }
                 },
                 complete: function () {
-                    console.log("Request finished.");
+                    //console.log("Request finished.");
                 }
             });
         }
@@ -69,12 +74,14 @@ $(function () {
     $("#delegation").on("click", ("#btn_edit_picture"), function (e) {
         e.preventDefault();
 
+
         var btnEditPicture = $(this).hide("slow");
         btnDeletePicture = btnEditPicture.next().hide("slow");
         var form = $(this).next().next();
         form.show("slow");
     });
 });
+
 
 $(function () {
     var selector = document.getElementsByName('uploadPictureFile');
@@ -144,14 +151,17 @@ $(function () {
 });
 
 // Upload video in the edit trick template
+
 var btnEditVideo = $(".btn_edit_video");
 var champInput;
+
 src = btnEditVideo.parent().parent().children();
 $(function () {
     btnEditVideo.on("click", function (e) {
         e.preventDefault();
         btnDelete = btnEditVideo.next();
         btnEditVideo = $(this).hide("slow");
+
         var btnDeleteVideo = $(this).next();
         btnDeleteVideo.hide("slow");
         var champInput = $(this).next().next();
@@ -162,6 +172,14 @@ $(function () {
 
 $(function () {
     var selector = document.getElementsByName("uploadVideoName");
+
+        btnDeleteVideo = $(this).next().hide("slow");
+        champInput = $(this).next().next();
+        champInput.find("input").val("");
+        champInput.show("slow");
+    })
+})
+
     $(selector).change(function () {
         var link = $(this).val();
         var path = $(this).next().attr("data-path");
