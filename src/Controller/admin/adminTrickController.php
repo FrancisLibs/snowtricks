@@ -3,9 +3,7 @@
 namespace App\Controller\admin;
 
 use App\Entity\Trick;
-use App\Entity\Picture;
 use App\Form\TrickType;
-use Cocur\Slugify\Slugify;
 use App\Form\MainPictureType;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminTrickController extends AbstractController

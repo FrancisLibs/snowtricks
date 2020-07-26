@@ -4,7 +4,6 @@ namespace App\Controller\admin;
 use App\Entity\Trick;
 use App\Entity\Picture;
 use App\Form\PictureUploadType;
-use App\Repository\PictureRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;

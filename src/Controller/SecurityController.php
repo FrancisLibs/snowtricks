@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationType;
 use App\Form\ResetPasswordType;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -182,9 +181,9 @@ class SecurityController extends AbstractController
                 $this->addFlash('success', 'le changement de mot de passe a bien été pris en compte');
 
                 return $this->redirectToRoute('home');
-            } else {
-                $this->addFlash('danger', 'l\'ancien mot de passe est erroné');
-            }
+            } 
+
+            $this->addFlash('danger', 'l\'ancien mot de passe est erroné');
         }
 
         return $this->render('user/passwordReset.html.twig', [

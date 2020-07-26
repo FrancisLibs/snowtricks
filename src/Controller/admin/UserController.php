@@ -3,7 +3,6 @@
 namespace App\Controller\admin;
 
 use App\Entity\User;
-use App\Form\UserPictureType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
