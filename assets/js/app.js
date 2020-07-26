@@ -35,7 +35,9 @@ $(function () {
         var path = $(this).parent().parent().find(".tricks_delete_form").attr("action");
         var token = $(this).prev().val();
         if (confirm("Etes-vous certain de vouloir supprimer cette image ?")) {
-           var jsonToken = {"token": token };
+           var jsonToken = {
+               "token": token 
+            };
            jsonToken = JSON.stringify(jsonToken);
 
             $.ajax({
@@ -56,7 +58,7 @@ $(function () {
                     }
                 },
                 complete: function () {
-                    console.log("Request finished.");
+                    //console.log("Request finished.");
                 }
             });
         }
@@ -155,7 +157,6 @@ $(function () {
         form = $(this).parent().find(".upload-video-form");
         $('input[name=uploadVideoName]').val("");
         form.show("slow");
-
     });
 });
 

@@ -710,7 +710,11 @@ fieldset .col-form-label {
   .reset-form-input {
     width: 63%;
     background-color: transparent;
+<<<<<<< HEAD
     border: 0;
+=======
+    border: 0px solid;
+>>>>>>> fc5c647be9f485abdb0d7a7488949f49d0102926
     border-bottom: 2px solid white !important;
     display: inline;
   }

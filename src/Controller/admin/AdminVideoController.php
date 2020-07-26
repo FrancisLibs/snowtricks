@@ -42,7 +42,12 @@ class AdminVideoController extends AbstractController
      * @param Video $video
      * @param Request $request
      */
+<<<<<<< HEAD
     public function uploadAction(Video $video, Request $request, EntityManagerInterface $manager) 
+=======
+    public function uploadAction(Trick $trick, int $videoId, Request $request, EntityManagerInterface $manager,
+        VideoRepository $repository) 
+>>>>>>> fc5c647be9f485abdb0d7a7488949f49d0102926
     {
         if ($request->isXmlHttpRequest()) 
         {
