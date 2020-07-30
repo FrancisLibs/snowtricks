@@ -36,7 +36,7 @@ $(function () {
         var path = $(this).parent().parent().find(".tricks_delete_form").attr("action");
         var token = $(this).prev().val();
         if (confirm("Etes-vous certain de vouloir supprimer cette image ?")) {
-           var jsonToken = {"token": token };
+           var jsonToken = {"token": token};
            jsonToken = JSON.stringify(jsonToken);
 
 
@@ -49,20 +49,14 @@ $(function () {
                 processData: false,
                 async: false,
                 dataType: "json",
-
-                error: function (erreur) {
-                    console.error(erreur);
-                },
+                error: function (erreur) {},
                 success: function (data) {
-                    if (data["success"]) {
+                    if (data["success"]) 
+                    {
                         $("#BlocTrickToDelete").remove();
-
-               
                     }
                 },
-                complete: function () {
-                    //console.log("Request finished.");
-                }
+                complete: function () {}
             });
         }
     });
@@ -76,7 +70,7 @@ $(function () {
 
 
         var btnEditPicture = $(this).hide("slow");
-        btnDeletePicture = btnEditPicture.next().hide("slow");
+        btnEditPicture.next().hide("slow");
         var form = $(this).next().next();
         form.show("slow");
     });
@@ -84,8 +78,8 @@ $(function () {
 
 
 $(function () {
-    var selector = document.getElementsByName('uploadPictureFile');
-    $("#delegation").on('change', ("[name='uploadPictureFile']"), function () {
+    var selector = document.getElementsByName("uploadPictureFile");
+    $("#delegation").on("change", ("[name='uploadPictureFile']"), function () {
         var path = $(this).next().attr("data-path");
         var ancienneImage = $(this).parent().parent().parent();
         var file = $(this)[0].files[0];
@@ -101,15 +95,11 @@ $(function () {
             processData: false,
             async: false,
             dataType: "html",
-            error: function (erreur) {
-                //console.error(erreur);
-            },
+            error: function (erreur) {},
             success: function (data) {
                 ancienneImage.html(data);
             },
-            complete: function () {
-                //console.log("Request finished.");
-            }
+            complete: function () {}
         });
     });
 });
@@ -122,10 +112,8 @@ $(function () {
             var path = $(this).attr("href");
             var image = $(this).parent().parent();
             var token = $(this).attr("data-token");
-            var jsonToken = {
-                "_token": token
-            };
-            var jsonToken = JSON.stringify(jsonToken);
+            var jsonToken = {"_token": token};
+            jsonToken = JSON.stringify(jsonToken);
 
             $.ajax({
                 type: "DELETE",
@@ -136,77 +124,56 @@ $(function () {
                 processData: false,
                 async: false,
                 dataType: "json",
-                error: function (erreur) {
-                    //console.error(erreur);
-                },
+                error: function (erreur) {},
                 success: function (data) {
                     image.remove();
                 },
-                complete: function () {
-                    //console.log("Request finished.");
-                }
+                complete: function () {}
             });
         }
     });
 });
 
-// Upload video in the edit trick template
-
-var btnEditVideo = $(".btn_edit_video");
-var champInput;
-
-src = btnEditVideo.parent().parent().children();
+// Remplacement d'une vidéo dans la page edit
 $(function () {
-    btnEditVideo.on("click", function (e) {
+    $("#delegation").on("click", ".btn-edit-video", function (e) {
         e.preventDefault();
-        btnDelete = btnEditVideo.next();
-        btnEditVideo = $(this).hide("slow");
 
-        var btnDeleteVideo = $(this).next();
-        btnDeleteVideo.hide("slow");
-        var champInput = $(this).next().next();
-        champInput.find("input").val("");
-        champInput.show("slow");
+        $(this).hide("slow");
+        $(this).next().hide("slow");
+        var form = $(this).parent().find(".upload-video-form");
+        $("input[name=uploadVideoName]").val("");
+        form.show("slow");
     });
 });
 
 $(function () {
-    var selector = document.getElementsByName("uploadVideoName");
 
-        btnDeleteVideo = $(this).next().hide("slow");
-        champInput = $(this).next().next();
-        champInput.find("input").val("");
-        champInput.show("slow");
-    })
-})
+    $("#delegation").on("submit", "form.upload-video-form", function (e) {
+        e.preventDefault();
 
-    $(selector).change(function () {
-        var link = $(this).val();
-        var path = $(this).next().attr("data-path");
-        var formData = new FormData();
-        formData.append("link", link);
+        var path = $(this).attr("controller-path");
+        var link = $(this).find("input").val();
+        var lien = {
+            "link": link
+        };
+        lien = JSON.stringify(lien);
+        var blocARemplacer = $(this).parent().parent();
 
         $.ajax({
             type: "POST",
             url: path,
-            data: formData,
+            data: lien,
             cache: false,
             contentType: false,
             processData: false,
             async: false,
-            dataType: "json",
-            error: function (erreur) {
-                //console.error(erreur);
-            },
+            dataType: "html",
+            error: function (erreur) {},
             success: function (data) {
-                champInput.hide();
-                src.val(link);
-                btnEditVideo.show();
-                btnDeleteVideo.show();
+                blocARemplacer.html(data);
             },
-            complete: function () {
-                //console.log("Request finished.");
-            }
+            complete: function () {}
         });
     });
 });
@@ -217,7 +184,7 @@ window.onload = () => {
     let links = document.querySelectorAll("[data-delete-video]");
 
     // Boucle sur les liens
-    for (link of links) {
+    for (let link of links) {
         //Ecoute du click
         link.addEventListener("click", function (e) {
             e.preventDefault();
@@ -245,7 +212,7 @@ window.onload = () => {
                     }
                 }).catch(e => alert(e));
             }
-        })
+        });
     }
 };
 
@@ -273,16 +240,11 @@ $(function () {
                 processData: false,
                 async: false,
                 dataType: "html",
-                error: function (erreur) {
-                    //console.error(erreur);
-                },
+                error: function (erreur) {},
                 success: function (data) {
-                    //console.log(data);
                     oldPicture.html(data);
                 },
-                complete: function () {
-                    //console.log("Request finished.");
-                }
+                complete: function () {}
             });
         });
     });

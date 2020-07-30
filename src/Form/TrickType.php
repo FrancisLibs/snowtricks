@@ -43,9 +43,11 @@ class TrickType extends AbstractType
             ])
 
             ->add('pictureFiles', FileType::class, [
-                'label'     => 'Pictures',
                 'required'  =>  false,
                 'multiple'  =>  true,
+                'attr'      =>  [
+                    'placeholder' => 'Pictures...'
+                ]
             ])
 
             ->add('videoFile',  TextType::class, [

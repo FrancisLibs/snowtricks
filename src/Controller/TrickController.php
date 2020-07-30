@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Trick;
 use App\Entity\Comment;
 use App\Form\CommentType;
-use App\Entity\MainPicture;
 use App\Form\MainPictureType;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -100,7 +99,7 @@ class TrickController extends AbstractController
      * @Route("/trick/comments/more/{id}/{nbComments}", name="comment.more")
      * 
      */
-    public function commentMore(Trick $trick, int $nbComments, CommentRepository $commentRepository, Request $request)
+    public function commentMore(Trick $trick, int $nbComments, CommentRepository $commentRepository)
     {
        
         $nbTrickComments = $commentRepository->countTrikComments($trick);

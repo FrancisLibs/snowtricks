@@ -20,8 +20,9 @@
             </div>
             <div class="col-md-4 offset-md-1 border border-primary rounded">{# Media #}
                 
-                <div> {# Images #}
-                    {{ form_row(form2.pictureFiles) }}
+                <div class="custom-file mb-5"> {# Images #}
+                    {{ form_label(form2.pictureFiles, 'Pictures', {'attr': {'class': 'custom-file-label'}}) }}
+                    {{ form_widget(form2.pictureFiles) }}
                 </div>
                
                 <div> {# Videos #}
@@ -32,10 +33,10 @@
         </div>
         <div class="row justify-content-around align-items-center mt-3">
         {# Boutons valider #}
-            <div class="col-6 text-right">
+            <div class="col-6 text-right mb-5">
                 <input type ="submit" class="btn btn-primary button-edit-trick" value="Valider">
             </div>
-            <div class="col-6 text-left">
+            <div class="col-6 text-left  mb-5">
                 <a class="btn btn-primary button-edit-trick" href={{ path('home') }} role="button">Annuler</a>
             </div>
         </div>

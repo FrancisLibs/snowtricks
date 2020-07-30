@@ -14,7 +14,7 @@
                 <div class="card-title">
                     <a href="{{ path('trick.show', {slug:trick.slug, id:trick.id, nbComments:3 }) }}">{{ trick.name }}</a>
                 </div>
-                 <div class="liens">
+                <div class="liens">
                     {% if app.user %}
                         <a href="{{ path('admin.trick.edit', {id : trick.id}) }}">
                             <i class="fas fa-pencil-alt mt-2"></i>
@@ -30,15 +30,14 @@
         </div>
     {% endfor %}
 </section>
-     {% if displayBtn  %}
-        <div class="more-comment-button">
-            <div class="row">
-                <div class="mx-auto">                   
-                    <a href="{{ path('tricks.index', {nbTricks : nbTricks}) }}">
-                        <img id="btnPlus" class="icone_plus" src="{{ asset('build/plus.png') }}" alt="Plus"> 
-                    </a>
-                </div>   
-            </div>
-        </div>    
-    {% endif %}   
-    
+{% if button %}
+    <div class="more-comment-button" id="button-more-comments">
+        <div class="row">
+            <div class="mx-auto">                   
+                <a href="{{ path('tricks.index.more', {tricksDisplay : tricksDisplay}) }}">
+                    <img class="icone_plus" src='{{ asset("build/plus.png") }}' alt="Plus">
+                </a>
+            </div>   
+        </div>
+    </div>     
+{% endif %}

@@ -4,7 +4,6 @@ namespace App\Controller\admin;
 use App\Entity\Trick;
 use App\Entity\Picture;
 use App\Form\PictureUploadType;
-use App\Repository\PictureRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,8 +34,7 @@ class AdminPictureController extends AbstractController
      * @Route("/admin/picture/edit/{id}", name="admin.picture.edit", methods={"POST"})
      *
      * @param Request $request
-     * @param $id
-     * @return JsonResponse|FormInterface
+     * @param Picture $picture
      */
     public function uploadAction(Picture $picture, Request $request, EntityManagerInterface $manager)
     {
@@ -69,7 +67,7 @@ class AdminPictureController extends AbstractController
         $manager->flush();
 
         return $this->render('admin/trick/picture.html.twig',[
-            'picture'  => $picture,
+            "picture"  => $picture,
         ]);
     }
 
