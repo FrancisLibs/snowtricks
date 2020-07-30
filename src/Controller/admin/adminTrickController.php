@@ -47,6 +47,8 @@ class AdminTrickController extends AbstractController
             $this->manager->persist($trick);
             $this->manager->flush();
 
+            $this->addFlash("notice", "Le trick a été créé !");
+
             return $this->redirectToRoute('trick.show', [
                 'slug'  => $trick->getSlug(),
                 'id'    => $trick->getId(),
@@ -85,9 +87,9 @@ class AdminTrickController extends AbstractController
                 $this->manager->flush();
                 $this->addFlash('success', 'trick modifié');
 
-                return $this->redirectToRoute('admin.trick.edit', [
-                    'id' =>  $trick->getId(),
-                ]);
+                $this->addFlash("notice", "Les modifications ont été enregistrées !");
+
+                return $this->redirectToRoute('home');
         }
 
         return $this->render('admin/trick/edit.html.twig', [

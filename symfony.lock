@@ -188,7 +188,10 @@
             "branch": "master",
             "version": "1.0",
             "ref": "71599f5b0fdeeeec0fb90e9b17c85e6f5e1350c1"
-        }
+        },
+        "files": [
+            "./public/.htaccess"
+        ]
     },
     "symfony/asset": {
         "version": "v4.4.10"
@@ -249,7 +252,7 @@
         "version": "v4.4.10"
     },
     "symfony/dotenv": {
-        "version": "v4.4.10"
+        "version": "v4.4.11"
     },
     "symfony/error-handler": {
         "version": "v4.4.10"

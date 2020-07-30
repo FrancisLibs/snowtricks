@@ -373,10 +373,6 @@ ul.photos {
   width: 70%;
 }
 
-.custom-file-input {
-  opacity: 1;
-}
-
 #ajout_photo {
   border: 1px solid red;
   height: 2rem;

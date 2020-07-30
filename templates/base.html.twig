@@ -21,7 +21,7 @@
     </head>
     <body>
         {% if app.request.get('_route') == 'home' or app.request.get('_route') == 'user.password.reset' 
-            or app.request.get('_route') == 'user' %}
+            or app.request.get('_route') == 'user' or app.request.get('_route') =='app_register' %}
             <div class="header-hp">
         {% else %}
             <div class="header">{# la div header contient l'image de banière #}
@@ -32,7 +32,13 @@
                     {% block mainPicture %}{% endblock %}
 
                     {% for message in app.flashes('danger') %}
-                        <div class="alert alert-success">
+                        <div class="alert alert-success w-50 mx-auto text-center pt-5">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+
+                    {% for message in app.flashes('notice') %}
+                        <div class="alert alert-success w-50 mx-auto text-center  pt-5">
                             {{ message }}
                         </div>
                     {% endfor %}

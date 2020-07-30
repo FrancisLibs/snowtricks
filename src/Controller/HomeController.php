@@ -24,67 +24,47 @@ class HomeController extends AbstractController
 
     /**
      * @Route("/", name="home")
-     * @Route("/home/trick/{nbTricks}", name="tricks.index")
      * @return Response
      */
-    public function index(TrickRepository $repository, int $nbTricks = 0): Response
+    public function index(TrickRepository $repository, int $tricksDisplay = 0): Response
     {
-        $nbTricksCount = $repository->countAll();
-        $restTricks = $nbTricksCount - $nbTricks;
+        $nbTricks = $repository->countAll();
+        $button = true;
+        $tricksDisplay = 4;
 
-        $tricksToRead = $nbTricks + 4;
-        // Mise à zéro de la variable page si plus de tricks à afficher
-        $displayBtn = false;
-        $nbTricks = $nbTricks + $restTricks;
+        $tricks = $repository->findBy([], [], $tricksDisplay, 0 );
 
-        if ($restTricks > 4) {
-            $displayBtn = true;
-            $nbTricks = $nbTricks + 4;
-        } 
-        
-        $tricks = $repository->findBy([], [], $tricksToRead, 0);
-        
+        if($nbTricks <= 4 )
+        {
+            $button = false;
+        }
+
         return $this->render('pages/home.html.twig', [
-            'tricks'        =>  $tricks,
-            'displayBtn'    =>  $displayBtn,
-            'nbTricks'      =>  $nbTricks
+            'tricks'    =>  $tricks,
+            'button'    =>  $button,
+            'tricksDisplay'   =>  $tricksDisplay,
         ]);
     }
 
     /**
-     * @Route("/tricks/home/ajax", name="home.tricks.more")
-     * @param $page_var
+     * @Route("/home/trick/more/{tricksDisplay}", name="tricks.index.more")
      * @return Response
      */
-    public function moreTricks(TrickRepository $repository, Request $request): Response
+    public function indexMore(TrickRepository $repository, int $tricksDisplay = 0): Response
     {
         $nbTricks = $repository->countAll();
-        $tricksDisplaying = $request->query->get('nbTricks');
-        $tricksToDisplay = $nbTricks - $tricksDisplaying;
-        $tricks = $repository->findBy([], [], 4, $tricksDisplaying);
+        $button = true;
+        $tricksDisplay++;
+        $tricks = $repository->findBy([], [], $tricksDisplay, 0 );
 
-        // Mise à zéro de la variable page si plus de tricks à afficher
-        if ($tricksToDisplay >= 5) {
-            $displayBtn = true;
-        } else {
-            $displayBtn = false;
+        if ($nbTricks <= $tricksDisplay ) {
+            $button = false;
         }
 
-        $tricksArray = array();
-        $counter = 0;
-        if ($tricks) {
-            foreach ($tricks as $trick) {
-                $tricksArray[$counter]['id'] = $trick->getId();
-                $tricksArray[$counter]['name'] = $trick->getName();
-                $tricksArray[$counter]['slug'] = $trick->getSlug();
-                $counter++;
-            }
-        }
-        $results = array(
-            'tricks'      => $tricksArray,
-            'displayBtn'    =>  $displayBtn,
-        );
-
-        return new Response(json_encode($results));
+        return $this->render('pages/home.html.twig', [
+            'tricks'    =>  $tricks,
+            'button'    =>  $button,
+            'tricksDisplay'   =>  $tricksDisplay,
+        ]);
     }
 }

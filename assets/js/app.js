@@ -47,13 +47,14 @@ $(function () {
                 processData: false,
                 async: false,
                 dataType: "json",
-                error: function (erreur) {
-                },
+                error: function (erreur) {},
                 success: function (data) {
-                    if (data["success"]) {$("#BlocTrickToDelete").remove();}
+                    if (data["success"]) 
+                    {
+                        $("#BlocTrickToDelete").remove();
+                    }
                 },
-                complete: function () {
-                }
+                complete: function () {}
             });
         }
     });
@@ -90,13 +91,11 @@ $(function () {
             processData: false,
             async: false,
             dataType: "html",
-            error: function (erreur) {
-            },
+            error: function (erreur) {},
             success: function (data) {
                 ancienneImage.html(data);
             },
-            complete: function () {
-            }
+            complete: function () {}
         });
     });
 });
@@ -121,13 +120,11 @@ $(function () {
                 processData: false,
                 async: false,
                 dataType: "json",
-                error: function (erreur) {
-                },
+                error: function (erreur) {},
                 success: function (data) {
                     image.remove();
                 },
-                complete: function () {
-                }
+                complete: function () {}
             });
         }
     });
@@ -143,7 +140,7 @@ $(function () {
         $(this).hide("slow");
         $(this).next().hide("slow");
         var form = $(this).parent().find(".upload-video-form");
-        $('input[name=uploadVideoName]').val("");
+        $("input[name=uploadVideoName]").val("");
         form.show("slow");
     });
 });
@@ -154,7 +151,9 @@ $(function () {
 
         var path = $(this).attr("controller-path");
         var link = $(this).find("input").val();
-        var lien = {"link": link};
+        var lien = {
+            "link": link
+        };
         lien = JSON.stringify(lien);
         var blocARemplacer = $(this).parent().parent();
 
@@ -167,13 +166,11 @@ $(function () {
             processData: false,
             async: false,
             dataType: "html",
-            error: function (erreur) {
-            },
+            error: function (erreur) {},
             success: function (data) {
                 blocARemplacer.html(data);
             },
-            complete: function () {
-            }
+            complete: function () {}
         });
     });
 });
@@ -240,13 +237,11 @@ $(function () {
                 processData: false,
                 async: false,
                 dataType: "html",
-                error: function (erreur) {
-                },
+                error: function (erreur) {},
                 success: function (data) {
                     oldPicture.html(data);
                 },
-                complete: function () {
-                }
+                complete: function () {}
             });
         });
     });
