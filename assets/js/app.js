@@ -32,11 +32,13 @@ $("#btn_edit_main_picture").click(function () {
 $(function () {
     $("#delete-trick").on("click", function (e) { 
         e.preventDefault();
+
         var path = $(this).parent().parent().find(".tricks_delete_form").attr("action");
         var token = $(this).prev().val();
         if (confirm("Etes-vous certain de vouloir supprimer cette image ?")) {
            var jsonToken = {"token": token};
            jsonToken = JSON.stringify(jsonToken);
+
 
             $.ajax({
                 type: "DELETE",
@@ -66,12 +68,14 @@ $(function () {
     $("#delegation").on("click", ("#btn_edit_picture"), function (e) {
         e.preventDefault();
 
+
         var btnEditPicture = $(this).hide("slow");
         btnEditPicture.next().hide("slow");
         var form = $(this).next().next();
         form.show("slow");
     });
 });
+
 
 $(function () {
     var selector = document.getElementsByName("uploadPictureFile");
@@ -130,8 +134,6 @@ $(function () {
     });
 });
 
-
-
 // Remplacement d'une vidéo dans la page edit
 $(function () {
     $("#delegation").on("click", ".btn-edit-video", function (e) {
@@ -146,6 +148,7 @@ $(function () {
 });
 
 $(function () {
+
     $("#delegation").on("submit", "form.upload-video-form", function (e) {
         e.preventDefault();
 
