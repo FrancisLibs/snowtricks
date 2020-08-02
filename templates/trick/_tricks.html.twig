@@ -19,10 +19,11 @@
                         <a href="{{ path('admin.trick.edit', {id : trick.id}) }}">
                             <i class="fas fa-pencil-alt mt-2"></i>
                         </a>
-                        <form class="tricks_delete_form" method="post" action="{{ path('admin.trick.delete', {id : trick.id}) }}">
+                        <form class="tricks_delete_form" method="post" action="">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="token" value="{{ csrf_token('delete' ~ trick.id) }}">
-                            <button id="delete-trick" class="btn"><i class="far fa-trash-alt"></i></button>
+                            <button id="delete-trick-link" class="btn"><i class="fas fa-trash-alt"></i></button>
+                            <span data-path="{{ path('admin.trick.delete', {id : trick.id}) }}"></span>
                         </form>
                     {% endif %}
                 </div>

@@ -36,7 +36,7 @@ class AdminTrickController extends AbstractController
      * @Route("/admin/trick/new", name="admin.trick.create")
      * @return Symfony\Component\HttpFoundation\Response
      */
-    public function new(Request $request, UserInterface $user) 
+    public function newTrick(Request $request, UserInterface $user) 
     {
         $trick = new Trick();
         $form2 = $this->createForm(TrickType::class, $trick);
@@ -49,10 +49,7 @@ class AdminTrickController extends AbstractController
 
             $this->addFlash("notice", "Le trick a été créé !");
 
-            return $this->redirectToRoute('trick.show', [
-                'slug'  => $trick->getSlug(),
-                'id'    => $trick->getId(),
-            ]);
+            return $this->redirectToRoute('home');
         }
 
         return $this->render('admin/trick/new.html.twig', [
@@ -66,7 +63,7 @@ class AdminTrickController extends AbstractController
      * @param Trick $trick
      * @return Symfony\Component\HttpFoundation\Response
      */
-    public function edit(Trick $trick, Request $request, EntityManagerInterface $manager): Response
+    public function editTrick(Trick $trick, Request $request, EntityManagerInterface $manager): Response
     {
         // Modification de l'image à la une
         $form1 = $this->createForm(MainPictureType::class, $trick);
@@ -104,7 +101,7 @@ class AdminTrickController extends AbstractController
      * @param Trick $trick
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function delete(Trick $trick, Request $request, EntityManagerInterface $manager): Response
+    public function deleteTrick(Trick $trick, Request $request, EntityManagerInterface $manager): Response
     {
         $data = json_decode($request->getContent(), true);
         $token = $data['token'];

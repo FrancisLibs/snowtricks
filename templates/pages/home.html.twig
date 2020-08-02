@@ -7,12 +7,46 @@
     <div class ="arrow_b d-flex flex-row-reverse" >
         <a href="#haut"><img class="arrow_high" src="{{ asset('build/fleche_haut.png') }}" alt="Fleche haut"></a>
     </div>
-
-    {{ button }}
      
 {% endblock %}
 
 {% block javascripts %}
+    <script>
+    // Effacement d'un trick home page
+    $(function () {
+        $("button#delete-trick-link").on("click", function (e) {
+            e.preventDefault();
+
+            var path = $(this).next().attr("data-path");
+            var token = $(this).prev().val();
+            var blockToDelete = $(this).parent().parent().parent().parent();
+            if (confirm("Etes-vous certain de vouloir supprimer cette image ?")) {
+                var jsonToken = {
+                    "token": token
+                };
+                jsonToken = JSON.stringify(jsonToken);
+
+                $.ajax({
+                    type: "DELETE",
+                    url: path,
+                    data: jsonToken,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    async: false,
+                    dataType: "json",
+                    error: function (erreur) {},
+                    success: function (data) {
+                        if (data["success"]) {
+                            blockToDelete.remove();
+                        }
+                    },
+                    complete: function () {}
+                });
+            }
+        });
+    });
+    </script>
 {% endblock %}
 
  

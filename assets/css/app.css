@@ -428,6 +428,10 @@ fieldset .col-form-label {
   display: inline;
 }
 
+.forgotten-password {
+  color: white;
+}
+
 @media (min-width: 576px) { /* ----------------------------------- */
   .header-hp {
     height: 628px;

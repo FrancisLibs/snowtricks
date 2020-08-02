@@ -5,6 +5,7 @@ namespace App\Controller\admin;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,19 +24,6 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/picture/delete", name="delete.picture")
-     */
-    public function delete(?UserInterface $user)
-    {
-        $user = $this->getUser();
-
-        $user->setUserPicture('');
-        
-        return $this->render('user/profil.html.twig', [
-            'user' => $user,
-        ]);
-    }
 
     /**
      * @Route("/picture/replace/{id}", name="change.picture")
@@ -47,11 +35,7 @@ class UserController extends AbstractController
         if($file)
         {
             // Effacement de l'ancienne image
-            $oldPicture = $user->getUserPicture();
-            if($oldPicture)
-            {
-                unlink($this->getParameter('user_pictures'). $oldPicture);
-            }
+            $this->deleteUserPicture($user);
 
             // Traitement du nom du nouveau fichier
             $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
@@ -71,6 +55,19 @@ class UserController extends AbstractController
         return $this->render('user/newUserPicture.html.twig', [
             'user'  =>  $user,
         ]);
+    }
+
+    public function deleteUserPicture($user) // fonction d'effacement d'image
+    {
+        $user = $this->getUser();
+        $picture = $user->getUserPicture();
+
+        if($picture)
+        {
+            unlink($this->getParameter('user_pictures'). $picture);
+        }
+
+        return new Response('true');
     }
 
 }

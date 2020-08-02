@@ -11,6 +11,8 @@ require("../css/app.css");
 // Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
 // import $ from 'jquery';
 
+//console.log("Hello Webpack Encore! Edit me in assets/js/app.js");
+
 // Gestion du bouton de l'affichage des médias
 $(function () {
     var bouton = $("#btn-affichage-media");
@@ -24,6 +26,38 @@ $(function () {
 $("#btn_edit_main_picture").click(function () {
     $("#main_trick_name").fadeOut();
     $("#main_picture_upload_form").delay("slow").show("slow");
+});
+
+// Effacement d'un trick page edit
+$(function () {
+    $("#delete-trick").on("click", function (e) { 
+        e.preventDefault();
+        var path = $(this).parent().parent().find(".tricks_delete_form").attr("action");
+        var token = $(this).prev().val();
+        if (confirm("Etes-vous certain de vouloir supprimer cette image ?")) {
+           var jsonToken = {"token": token};
+           jsonToken = JSON.stringify(jsonToken);
+
+            $.ajax({
+                type: "DELETE",
+                url: path,
+                data: jsonToken,
+                cache: false,
+                contentType: false,
+                processData: false,
+                async: false,
+                dataType: "json",
+                error: function (erreur) {},
+                success: function (data) {
+                    if (data["success"]) 
+                    {
+                        $("#BlocTrickToDelete").remove();
+                    }
+                },
+                complete: function () {}
+            });
+        }
+    });
 });
 
 // Upload picture in the edit trick template
@@ -95,6 +129,8 @@ $(function () {
         }
     });
 });
+
+
 
 // Remplacement d'une vidéo dans la page edit
 $(function () {

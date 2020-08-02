@@ -122,34 +122,6 @@ class SecurityController extends AbstractController
         return $this->render('security/forgotten_password.html.twig');
     }
 
-    /**
-     * @Route("/reset_password/{token}", name="app_reset_password")
-     */
-    public function resetPassword(Request $request, string $token, UserPasswordEncoderInterface $passwordEncoder,
-        EntityManagerInterface $manager )
-    {
-
-        if ($request->isMethod('POST')) {
-
-            $user = $manager->getRepository(User::class)->findOneBy(['resetToken' =>  $token]);
-            /* @var $user User */
-
-            if ($user === null) {
-                $this->addFlash('danger', 'Token Inconnu');
-                return $this->redirectToRoute('tricks.index');
-            }
-
-            $user->setResetToken(null);
-            $user->setPassword($passwordEncoder->encodePassword($user, $request->request->get('password')));
-            $manager->flush();
-
-            $this->addFlash('notice', 'Mot de passe mis à jour');
-
-            return $this->redirectToRoute('tricks.index');
-        } 
-
-        return $this->render('security/reset_password.html.twig', ['token' => $token]);
-    }
 
     /**
      * Affiche et traite le formulaire de reset du password

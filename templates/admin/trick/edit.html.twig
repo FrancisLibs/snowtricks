@@ -56,15 +56,11 @@
                                     data-delete-video  data-token="{{csrf_token('delete' ~ video.id) }}">
                                     <i class="far fa-trash-alt  mb-1 mr-1"></i>
                                 </a>
+                                
                                 <form class="mt-2 upload-video-form" method="post" action="" style="display: none;" controller-path="{{ path('admin.video.edit', {id : video.id}) }}">
                                     <input type="text" name="uploadVideoName" placeholder="Lien vidéo...">
-<<<<<<< HEAD
                                     <br />
                                     <button type="submit" class="btn btn-primary mt-2">Valider</button>
-=======
-                                    {# <a class="btn btn-outline-primary btn-sm mt-1" type="submit">Valider</a> #}
-                                    <span id="pathToVideoController" data-path="{{ path('admin.video.edit', {id: trick.id, videoId: video.id}) }}"></span>
->>>>>>> fc5c647be9f485abdb0d7a7488949f49d0102926
                                 </form>
 
                             </div>

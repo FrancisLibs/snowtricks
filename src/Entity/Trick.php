@@ -318,6 +318,11 @@ class Trick
         return $this;
     }
 
+    public function getVideoFile()
+    {
+        return $this->videoFile;
+    }
+
     public function setVideoFile($videoFile)
     {
         $video = new Video();
@@ -328,12 +333,6 @@ class Trick
 
         return $this;
     }
-
-    public function getVideoFile()
-    {
-        return $this->videoFile;
-    }
-
 
     /**
      * @return string|null

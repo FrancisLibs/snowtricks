@@ -8,17 +8,10 @@
             <h2 class="registration_title text-center mt-3">Connexion</h2>
             <div class="row">
                 <div class="col-md-4 mx-auto pt-4 pb-4 registration_box">
-                   <form method="post">
+                    <form method="post">
                         {% if error %}
                             <div class="alert alert-danger">
                                 {{ error.messageKey | trans(error.messageData, 'security') }}
-                            </div>
-                        {% endif %}
-
-                        {% if app.user %}
-                            <div class="mb-3">
-                                Vous êtes connécté en tant que  {{ app.user.username }}, 
-                                    <a href="{{ path('app_logout') }}">Déconnexion</a>
                             </div>
                         {% endif %}
 
@@ -32,7 +25,7 @@
                                 class="form-control" required>
                         </div>
 
-                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
                         <div class="form-group">
                             <button type="submmit" class="btn btn-primary">
@@ -41,10 +34,12 @@
                         </div>
 
                     </form>
+                    <div class="text-right">
+                        <a class="forgotten-password" href="{{ path('app_forgotten_password') }}">Mot de passe oublié</a>
+                    </div>
+                    
                 </div>
-                <div class="col-md-4 mx-auto">
-                    <a href="{{ path('app_forgotten_password') }}">Mot de passe oublié</a>
-                </div>
+                
             </div>
         </div>
     </div>
