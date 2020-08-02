@@ -110,6 +110,7 @@ $(function () {
 });
 
 $(function () {
+
     $("#delegation").on("submit", "form.upload-video-form", function (e) {
         e.preventDefault();
 
