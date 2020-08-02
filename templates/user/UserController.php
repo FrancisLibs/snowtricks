@@ -36,12 +36,11 @@ class UserController extends AbstractController
         $user->setUserPicture('');
 
         $manager->flush();
-
+        
         return $this->render('user/profil.html.twig', [
             'user' => $user,
         ]);
     }
-
 
     /**
      * @Route("/picture/replace/{id}", name="change.picture")
@@ -75,7 +74,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    public function deleteUserPicture($user) // fonction d'effacement d'image
+    public function deleteUserPicture($user)
     {
         $user = $this->getUser();
         $picture = $user->getUserPicture();

@@ -33,7 +33,7 @@ class TricksFixtures extends Fixture
             $user->setUsername($username);
             $user->setPassword($this->passwordEncoder->encodePassword($user, 'password'));
             $user->setEmail($faker->email);
-            $index = rand(0, 11);
+            $index = rand(1, 11);
             $user->setUserPicture('profil'.$index.'.jpg');
             $manager->persist($user);
 
