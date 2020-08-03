@@ -158,7 +158,7 @@ h1 {
   width: 96%;
   font-size: 0.6em;
   font-weight: bold;
-}   
+}
 
 .show_info {
   text-align: center;
@@ -346,7 +346,7 @@ h1 {
   width: 141px;
   margin: auto;
   color: white;
-  margin-top: 14px; 
+  margin-top: 14px;
   display: block;
 }
 
@@ -706,7 +706,7 @@ fieldset .col-form-label {
     margin-top: 20px;
     height: 200px;
   }
-    
+  
   .reset-form-input {
     width: 63%;
     background-color: transparent;
