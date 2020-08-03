@@ -6,15 +6,15 @@ This site was created in order to study the Symfony framework (V4.4), as part of
 The principal goal of this training is to learn the development with Symfony’s framework.
 
 Environnement 
-* WampServer 3.2.3.0
-* Apache 2.4.41
-* PHP 7.4.6
-* MySQL 8.0.18
-* Composer 1.10.8
-* Git 2.27
-* Symfony 4.4.1
-* JQuery 3.4.1
-* Bootstrap 4.4.1
+*   WampServer 3.2.3.0
+*   Apache 2.4.41
+*   PHP 7.4.6
+*   MySQL 8.0.18
+*   Composer 1.10.8
+*   Git 2.27
+*   Symfony 4.4.1
+*   JQuery 3.4.1
+*   Bootstrap 4.4.1
 
 Environnement
 The installation of an apache environment, with min. PHP 7.4 is necessary to work with Symfony 4.4.
@@ -26,8 +26,8 @@ Git is not necessary but he facilitate the download from GitHub by your system. 
 
 Files deployments
 It Is possible to use 2 different methods:
-* By hand: copy the entire repository from GitHub to your PC repository. Repository by GitHub address: <https://github.com/FrancisLibs/snowtricks>
-* Or (easier) clone the repository from GitHub by your Pc with a git command(it need to install first Git) : <https://github.com/FrancisLibs/snowtricks.git>
+*   By hand: copy the entire repository from GitHub to your PC repository. Repository by GitHub address: <https://github.com/FrancisLibs/snowtricks>
+*   Or (easier) clone the repository from GitHub by your Pc with a git command(it need to install first Git) : <https://github.com/FrancisLibs/snowtricks.git>
 After installing the files, it is necessary to install the dependencies. Use the composer command: "composer install"
 
 Database 
@@ -40,8 +40,8 @@ If you encounter some problems, feel free to visit the doctrine site: <https://s
 For the creation of the database: "php bin/console doctrine:database:create"
 
 Open a new console, and create the database with 2 commands:
-* php bin/console doctrine:migrations:diff 
-* php bin/console doctrine:migrations:migrate
+*   php bin/console doctrine:migrations:diff 
+*   php bin/console doctrine:migrations:migrate
 
 If the first command not works, verify if the php -ver command is functional and show the version of php. If the command not work, be sure that the system variable PATH, contain the php.exe route. 
 
@@ -52,8 +52,7 @@ php bin/console doctrine:fixtures:load
 Mailer address
 The .env file is to modify:
 Find the line that begin with Mailer and modify it with your personal data :
-Per example:
-MAILER_URL=gmail://yourEmaiAdress:@localhost
+Per example: "MAILER_URL=gmail://yourEmaiAdress:@localhost"
 Take care, but by using an gmail address, you need an application code, who’s give you access to send email with your account.
 
 For more info, see <https://symfony.com/doc/current/mailer.html#transport-setup>
