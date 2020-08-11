@@ -1,20 +1,22 @@
 
     <div class="unCommentaire row justify-content-center mb-3">
-        {% if comment.user.userPicture %}
-            <div class="col-md-1">
+        <div class="col-md-1">
+            {% if comment.user.userPicture %}
                 <img class="photoProfil" src="{{ vich_uploader_asset(comment.user) }}" alt="comment.user.username">
-            </div>
-        {% else %}
-            <div class="col-md-1">
+            {% else %}
                 <img class="photoProfil" src="{{ '/media/tricks/empty.jpg' }}" alt="">
+            {% endif %}
+        </div>
+
+        <div class="col-md-10 ml-2">
+            <div class="ligne_date font-weight-bold">
+                Le {{ comment.createdAt | date("m/d/Y à H:i") }}h
             </div>
-        {% endif %}
-        <div class="ligne_date col-md-2 font-weight-bold">
-            Créé le : {{ comment.createdAt | date("m/d/Y à H:i") }}h
+            <div class="ligne_content text-justify mt-1">
+                {{ comment.content | raw }}
+            </div>
         </div>
-        <div class="ligne_content col-md-8 border text-justify">
-            {{ comment.content | raw }}
-        </div>
+
     </div>
     {# button more #}
     <div class="show_more_comment_btn mx-auto mb-3 d-flex justify-content-center">

@@ -18,13 +18,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class TrickController extends AbstractController
 {
     /**
-     * @Route("/trick/{slug}-{id}/{nbComments=0}", name="trick.show", requirements={"slug": "[a-z0-9\-]*"})
+     * @Route("/trick/{slug}-{id}", name="trick.show", requirements={"slug": "[a-z0-9\-]*"})
      * @param Trick $trick
      * @param string $slug
-     * @param int $nbComments
      * @return Response
      */
-    public function trickShow( Trick $trick, string $slug, int $nbComments = 0, CommentRepository $commentRepository,
+    public function trickShow( Trick $trick, string $slug, CommentRepository $commentRepository,
         EntityManagerInterface $manager, Request $request, ?UserInterface $user): Response 
     {
         if ($trick->getSlug() !== $slug) {

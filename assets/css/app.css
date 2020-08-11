@@ -194,9 +194,14 @@ h1 {
   margin-bottom: 1px;
 }
 
+.ligne_content{
+  line-height: 1rem;
+}
+
 .photoProfil {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
 }
 
 .profil-picture {
@@ -399,7 +404,6 @@ fieldset .col-form-label {
 .reset-password-form {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
   height: 439px;
   background-color: #eee;
   padding: 20px;
@@ -408,7 +412,6 @@ fieldset .col-form-label {
 .registration-form {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
   height: 439px;
   background-color: #eee;
   padding: 20px;

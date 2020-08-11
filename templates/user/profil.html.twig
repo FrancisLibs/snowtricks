@@ -5,14 +5,14 @@
 {% block insert %}
    <div class="row align-items-center" id="content-panel">
 		<div class="offset-1 col-10 offset-sm-3 col-sm-6 offset-md-3 col-md-4 offset-lg-4 col-lg-3 offset-xl-4 col-xl-3 text-center reset-password-form">
-			<h4>Mon compte</h4>
-            <div class="row">
-                <div class="col-12 text-left">
-                    <h4>Identifiant : {{ user.username}}</h4>
-                    <h5>Email : {{ user.email }}</h5>
-                </div>
+            <h4>Mon compte</h4>
+
+            <div class="text-left mt-5">
+                <h4>Identifiant : {{ user.username }}</h4>
+                <h5>Email : {{ user.email }}</h5>
             </div>
-            <div id="user-picture-bloc-to-replace">
+
+            <div id="user-picture-bloc-to-replace" class="mt-3">
                 {% if user.userPicture %}
                     <img class="profil-picture" src="{{ vich_uploader_asset(user) }}" alt="{{ user.username }}">
                 {% else %}
@@ -25,13 +25,13 @@
                     </form>
                 </div>
             </div>
-            <div>
+             <div class="mt-3">
                 <a href="{{ path('user.password.reset') }}">Reset mot de passe</a><br />
                 <a id="delete-user-picture" href="{{ path('delete.picture') }}">Effacer image</a><br />
                 <a id="replace-user-picture" href="">Remplacer image</a>
             </div>
+    
 		</div>
-        
 	</div>
 {% endblock %}
 
